@@ -122,12 +122,12 @@ def train_net():
             optimizer.step()
             global_step += 1
             # write results to tensorboard
-            summary = tf.Summary(value=[tf.Summary.Value(tag='learning_rate', simple_value=current_lr),
-                                        tf.Summary.Value(tag='train_loss', simple_value=loss),
-                                        tf.Summary.Value(tag='corr_loss', simple_value=corr_loss),
-                                        tf.Summary.Value(tag='cd_loss', simple_value=cd_loss),
-                                        tf.Summary.Value(tag='entropy_loss', simple_value=entropy_loss),
-                                        tf.Summary.Value(tag='deform_loss', simple_value=deform_loss)])
+            summary = tf.summary(value=[tf.summary.Value(tag='learning_rate', simple_value=current_lr),
+                                        tf.summary.Value(tag='train_loss', simple_value=loss),
+                                        tf.summary.Value(tag='corr_loss', simple_value=corr_loss),
+                                        tf.summary.Value(tag='cd_loss', simple_value=cd_loss),
+                                        tf.summary.Value(tag='entropy_loss', simple_value=entropy_loss),
+                                        tf.summary.Value(tag='deform_loss', simple_value=deform_loss)])
             tb_writer.add_summary(summary, global_step)
             if i % 10 == 0:
                 logger.info('Batch {0} Loss:{1:f}, corr_loss:{2:f}, cd_loss:{3:f}, entropy_loss:{4:f}, deform_loss:{5:f}'.format(
@@ -202,10 +202,10 @@ def train_net():
         easy_acc = np.mean(easy_acc)
         iou_acc = np.mean(iou_acc)
         val_loss = val_loss / val_size
-        summary = tf.Summary(value=[tf.Summary.Value(tag='val_loss', simple_value=val_loss),
-                                    tf.Summary.Value(tag='5^o5cm_acc', simple_value=strict_acc),
-                                    tf.Summary.Value(tag='10^o5cm_acc', simple_value=easy_acc),
-                                    tf.Summary.Value(tag='iou_acc', simple_value=iou_acc)])
+        summary = tf.summary(value=[tf.summary.Value(tag='val_loss', simple_value=val_loss),
+                                    tf.summary.Value(tag='5^o5cm_acc', simple_value=strict_acc),
+                                    tf.summary.Value(tag='10^o5cm_acc', simple_value=easy_acc),
+                                    tf.summary.Value(tag='iou_acc', simple_value=iou_acc)])
         tb_writer.add_summary(summary, global_step)
         logger.info('Epoch {0:02d} test average loss: {1:06f}'.format(epoch, val_loss))
         logger.info('Overall accuracies:')

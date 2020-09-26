@@ -75,8 +75,8 @@ def train_net():
                 optimizer.zero_grad()
                 embedding, point_cloud = estimator(batch_xyz)
                 loss, _, _ = criterion(point_cloud, batch_xyz)
-                summary = tf.Summary(value=[tf.Summary.Value(tag='learning_rate', simple_value=current_lr),
-                                            tf.Summary.Value(tag='train_loss', simple_value=loss)])
+                summary = tf.summary(value=[tf.summary.Value(tag='learning_rate', simple_value=current_lr),
+                                            tf.summary.Value(tag='train_loss', simple_value=loss)])
                 # backward
                 loss.backward()
                 optimizer.step()
@@ -100,7 +100,7 @@ def train_net():
             val_loss += loss.item()
             logger.info('Batch {0} Loss:{1:f}'.format(i, loss))
         val_loss = val_loss / i
-        summary = tf.Summary(value=[tf.Summary.Value(tag='val_loss', simple_value=val_loss)])
+        summary = tf.summary(value=[tf.summary.Value(tag='val_loss', simple_value=val_loss)])
         tb_writer.add_summary(summary, global_step)
         logger.info('Epoch {0:02d} test average loss: {1:06f}'.format(epoch, val_loss))
         logger.info('>>>>>>>>----------Epoch {:02d} test finish---------<<<<<<<<'.format(epoch))
