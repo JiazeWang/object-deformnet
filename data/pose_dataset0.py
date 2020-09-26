@@ -90,7 +90,7 @@ class PoseDataset(data.Dataset):
     def __len__(self):
         return self.length
 
-    def __getitem__(self, index)
+    def __getitem__(self, index):
         img_path = os.path.join(self.data_dir, self.img_list[index])
         rgb = cv2.imread(img_path + '_color.png')
         if rgb is None:
