@@ -118,7 +118,7 @@ def train_net():
         #                                             num_workers=opt.num_workers, pi#n_memory=True)
         estimator.eval()#
         for i, data in enumerate(val_dataloader, 1):
-            print(i)
+            logger.info(i)
             points, rgb, choose, cat_id, model, prior, sRT, nocs = data
             points = points.cuda()
             rgb = rgb.cuda()
