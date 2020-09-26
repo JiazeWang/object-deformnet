@@ -32,7 +32,8 @@ def train_net():
     # set result directory
     if not os.path.exists(opt.result_dir):
         os.makedirs(opt.result_dir)
-    tb_writer = tf.summary.FileWriter(opt.result_dir)
+    #tb_writer = tf.summary.FileWriter(opt.result_dir)
+    tb_writer = tf.summary.create_file_writer(opt.result_dir)
     logger = setup_logger('train_log', os.path.join(opt.result_dir, 'log.txt'))
     for key, value in vars(opt).items():
         logger.info(key + ': ' + str(value))
