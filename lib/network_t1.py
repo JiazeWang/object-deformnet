@@ -103,11 +103,11 @@ class DeformNet(nn.Module):
         cat_local = self.category_local(cat_prior)    # bs x 64 x n_pts
         cat_global = self.category_global(cat_local)  # bs x 1024 x 1
         # assignemnt matrix
-        print("inst_global.shape", inst_global.shape)
-        print("cat_global.shape", cat_global.shape)
+        #print("inst_global.shape", inst_global.shape)
+        #print("cat_global.shape", cat_global.shape)
         inst_global_p, cat_global_p = self.transformer128(inst_global, cat_global)
-        print("inst_global_p.shape", inst_global_p.shape)
-        print("cat_global_p.shape", cat_global_p.shape)
+        #print("inst_global_p.shape", inst_global_p.shape)
+        #print("cat_global_p.shape", cat_global_p.shape)
         inst_global = inst_global + inst_global_p
         cat_global = cat_global + cat_global_p
         assign_feat = inst_global
