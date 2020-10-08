@@ -89,10 +89,10 @@ class DeformNet(nn.Module):
         choose = choose.unsqueeze(1).repeat(1, di, 1)
         emb = torch.gather(emb, 2, choose).contiguous()
         emb = self.instance_color(emb)
-        print("point.shape:", point.shape)
+        print("point.shape:", points.shape)
         print("emb.shape", emb.shape)
         points_p, emb_p = self.transformer64(points, emb)
-        print("point_p.shape:", point_p.shape)
+        print("point_p.shape:", points_p.shape)
         print("emb_p.shape", emb_p.shape)
         points = points + points_p
         emb = emb + emb_p
