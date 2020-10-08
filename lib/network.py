@@ -75,6 +75,8 @@ class DeformNet(nn.Module):
             log_assign: bs x n_pts x nv, for numerical stability
 
         """
+        print("points.shape:", points.shape)
+        print("img.shape:", img.shape)
         bs, n_pts = points.size()[:2]
         nv = prior.size()[1]
         # instance-specific features

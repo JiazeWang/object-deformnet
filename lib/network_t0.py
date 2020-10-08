@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 from lib.pspnet import PSPNet
-
+from transformer import Transformer
 
 class DeformNet(nn.Module):
     def __init__(self, n_cat=6, nv_prior=1024):
