@@ -8,6 +8,7 @@ from lib.auto_encoder import PointCloudAE
 from data.shape_dataset import ShapeDataset
 from tools.tsne import tsne
 
+matplotlib.use('Agg')
 
 def visualize_shape(name, shape_list, result_dir):
     """ Visualization and save image.
@@ -106,7 +107,7 @@ for i in range(opt.n_cat):
     # save point cloud and visualize
     pcd = o3d.geometry.PointCloud()
     pcd.points = o3d.utility.Vector3dVector(mean_shape)
-    #visualize_shape(catId_to_name[i], [pcd], opt.result_dir)
+    visualize_shape(catId_to_name[i], [pcd], opt.result_dir)
 # save results
 np.save(os.path.join(opt.result_dir, 'mean_embedding'), mean_emb)
 np.save(os.path.join(opt.result_dir, 'mean_points_emb'), mean_points)
