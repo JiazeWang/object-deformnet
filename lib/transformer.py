@@ -216,10 +216,10 @@ class Identity(nn.Module):
 
 
 class Transformer(nn.Module):
-    def __init__(self, emb_dims=512):
+    def __init__(self, emb_dims=512, N=1):
         super(Transformer, self).__init__()
         self.emb_dims = emb_dims
-        self.N = 1
+        self.N = N
         self.dropout = 0
         self.ff_dims = 1024
         self.n_heads = 4
