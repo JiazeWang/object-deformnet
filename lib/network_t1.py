@@ -24,8 +24,8 @@ class DeformNet(nn.Module):
         self.instance_global = nn.Sequential(
             nn.Conv1d(128, 128, 1),
             nn.ReLU(),
-            nn.Conv1d(128, 1024, 1),
-            nn.ReLU(),
+            #nn.Conv1d(128, 1024, 1),
+            #nn.ReLU(),
             #nn.AdaptiveAvgPool1d(1),
         )
         self.category_local = nn.Sequential(
@@ -39,8 +39,8 @@ class DeformNet(nn.Module):
         self.category_global = nn.Sequential(
             nn.Conv1d(64, 128, 1),
             nn.ReLU(),
-            nn.Conv1d(128, 1024, 1),
-            nn.ReLU(),
+            #nn.Conv1d(128, 1024, 1),
+            #nn.ReLU(),
             #nn.AdaptiveAvgPool1d(1),
         )
         self.assignment = nn.Sequential(
@@ -58,7 +58,7 @@ class DeformNet(nn.Module):
             nn.Conv1d(256, n_cat*3, 1),
         )
         self.transformer64 = Transformer(emb_dims=64)
-        self.transformer1024 = Transformer(emb_dims=1024)
+        self.transformer128 = Transformer(emb_dims=128)
         # Initialize weights to be small so initial deformations aren't so big
         self.deformation[4].weight.data.normal_(0, 0.0001)
 
@@ -105,7 +105,7 @@ class DeformNet(nn.Module):
         # assignemnt matrix
         print("inst_global.shape", inst_global.shape)
         print("cat_global.shape", cat_global.shape)
-        inst_global_p, cat_global_p = self.transformer1024(inst_global, cat_global)
+        inst_global_p, cat_global_p = self.transformer128(inst_global, cat_global)
         print("inst_global_p.shape", inst_global_p.shape)
         print("cat_global_p.shape", cat_global_p.shape)
         inst_global = inst_global + inst_global_p
