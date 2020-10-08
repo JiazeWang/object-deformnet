@@ -9,7 +9,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.autograd import Variable
-
+import time
+import datetime
 
 # Part of the code is referred from: http://nlp.seas.harvard.edu/2018/04/03/attention.html#positional-encoding
 
@@ -262,11 +263,17 @@ class Transformer(nn.Module):
         return src_embedding, tgt_embedding
 
 if __name__ == '__main__':
-      src_embedding = torch.rand(8, 512, 1024)
-      tgt_embedding = torch.rand(8, 512, 1024)
-      model = Transformer()
-      src_embedding_p, tgt_embedding_p = model(src_embedding, tgt_embedding)
-      src_embedding = src_embedding + src_embedding_p
-      tgt_embedding = tgt_embedding + tgt_embedding_p
-      print("src_embedding.shape:", src_embedding.shape)
-      print("tgt_embedding.shape:", tgt_embedding.shape)
+    src_embedding = torch.rand(8, 512, 1024)
+    tgt_embedding = torch.rand(8, 512, 1024)
+    model = Transformer()
+    starttime = time.time()
+    src_embedding_p, tgt_embedding_p = model(src_embedding, tgt_embedding)
+    endtime = time.time()
+    print("total_time:", endtime - starttime)
+    src_embedding = src_embedding + src_embedding_p
+    tgt_embedding = tgt_embedding + tgt_embedding_p
+    print("src_embedding.shape:", src_embedding.shape)
+    print("tgt_embedding.shape:", tgt_embedding.shape)
+    for param in model.parameters():
+        num_params += param.reshape((-1, 1)).shape[0]
+    print("Model Size is {:.3f}M".format(num_params/1000000))
