@@ -6,9 +6,9 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 import tensorflow as tf
-from lib.network import DeformNet
+from lib.network_t0 import DeformNet
 from lib.loss import Loss
-from data.pose_dataset0 import PoseDataset
+from data.pose_dataset import PoseDataset
 from lib.utils import setup_logger, compute_sRT_errors
 from lib.align import estimateSimilarityTransform
 
@@ -27,7 +27,7 @@ parser.add_argument('--lr', type=float, default=0.0001, help='initial learning r
 parser.add_argument('--start_epoch', type=int, default=1, help='which epoch to start')
 parser.add_argument('--max_epoch', type=int, default=50, help='max number of epochs to train')
 parser.add_argument('--resume_model', type=str, default='', help='resume from saved model')
-parser.add_argument('--result_dir', type=str, default='results/camera', help='directory to save train results')
+parser.add_argument('--result_dir', type=str, default='results/camera_t0', help='directory to save train results')
 opt = parser.parse_args()
 
 opt.decay_epoch = [0, 10, 20, 30, 40]
@@ -103,6 +103,40 @@ def train_net():
         train_sampler = torch.utils.data.sampler.SubsetRandomSampler(train_idx)
         train_dataloader = torch.utils.data.DataLoader(train_dataset, batch_size=opt.batch_size, sampler=train_sampler,
                                                        num_workers=opt.num_workers, pin_memory=True)
+        estimator.train()
+        for i, data in enumerate(train_dataloader, 1):
+            points, rgb, choose, cat_id, model, prior, sRT, nocs = data
+            points = points.cuda()
+            rgb = rgb.cuda()
+            choose = choose.cuda()
+            cat_id = cat_id.cuda()
+            model = model.cuda()
+            prior = prior.cuda()
+            sRT = sRT.cuda()
+            nocs = nocs.cuda()
+            assign_mat, deltas = estimator(points, rgb, choose, cat_id, prior)
+            loss, corr_loss, cd_loss, entropy_loss, deform_loss = criterion(assign_mat, deltas, prior, nocs, model)
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+            global_step += 1
+            # write results to tensorboard
+            summary = tf.Summary(value=[tf.Summary.Value(tag='learning_rate', simple_value=current_lr),
+                                        tf.Summary.Value(tag='train_loss', simple_value=loss),
+                                        tf.Summary.Value(tag='corr_loss', simple_value=corr_loss),
+                                        tf.Summary.Value(tag='cd_loss', simple_value=cd_loss),
+                                        tf.Summary.Value(tag='entropy_loss', simple_value=entropy_loss),
+                                        tf.Summary.Value(tag='deform_loss', simple_value=deform_loss)])
+            tb_writer.add_summary(summary, global_step)
+            if i % 10 == 0:
+                logger.info('Batch {0} Loss:{1:f}, corr_loss:{2:f}, cd_loss:{3:f}, entropy_loss:{4:f}, deform_loss:{5:f}'.format(
+                    i, loss.item(), corr_loss.item(), cd_loss.item(), entropy_loss.item(), deform_loss.item()))
+
+        logger.info('>>>>>>>>----------Epoch {:02d} train finish---------<<<<<<<<'.format(epoch))
+
+        # evaluate one epoch
+        logger.info('Time {0}'.format(time.strftime("%Hh %Mm %Ss", time.gmtime(time.time() - st_time)) +
+                    ', ' + 'Epoch %02d' % epoch + ', ' + 'Testing started'))
         val_loss = 0.0
         total_count = np.zeros((opt.n_cat,), dtype=int)
         strict_success = np.zeros((opt.n_cat,), dtype=int)    # 5 degree and 5 cm
@@ -111,14 +145,13 @@ def train_net():
         # sample validation subset
         val_size = 1500
         val_idx = random.sample(list(range(val_dataset.length)), val_size)
-        #val_sampler = torch.utils.data.sampler.SubsetRandomSampler(val_idx)
-        val_dataloader = torch.utils.data.DataLoader(val_dataset, batch_size=1,
+        val_sampler = torch.utils.data.sampler.SubsetRandomSampler(val_idx)
+        #val_dataloader = torch.utils.data.DataLoader(val_dataset, batch_size=1,
+        #                                         num_workers=opt.num_workers, pin_memory=True)
+        val_dataloader = torch.utils.data.DataLoader(val_dataset, batch_size=1, sampler=val_sampler,
                                                  num_workers=opt.num_workers, pin_memory=True)
-        #val_dataloader = torch.utils.data.DataLoader(val_dataset, batch_size=1, sampler=val_sampler,
-        #                                             num_workers=opt.num_workers, pi#n_memory=True)
-        estimator.eval()#
+        estimator.eval()
         for i, data in enumerate(val_dataloader, 1):
-            #logger.info(i, '\n')
             points, rgb, choose, cat_id, model, prior, sRT, nocs = data
             points = points.cuda()
             rgb = rgb.cuda()

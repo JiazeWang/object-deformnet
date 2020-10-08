@@ -57,6 +57,7 @@ class DeformNet(nn.Module):
             nn.ReLU(),
             nn.Conv1d(256, n_cat*3, 1),
         )
+        self.transformer = Transformer64(emb_dims=64)
         # Initialize weights to be small so initial deformations aren't so big
         self.deformation[4].weight.data.normal_(0, 0.0001)
 
@@ -87,6 +88,9 @@ class DeformNet(nn.Module):
         choose = choose.unsqueeze(1).repeat(1, di, 1)
         emb = torch.gather(emb, 2, choose).contiguous()
         emb = self.instance_color(emb)
+        points_p, emb_p = self.transformer64(points, emb)
+        points = points + points_p
+        emb = emb + emb_p
         inst_local = torch.cat((points, emb), dim=1)     # bs x 128 x n_pts
         inst_global = self.instance_global(inst_local)    # bs x 1024 x 1
         # category-specific features
