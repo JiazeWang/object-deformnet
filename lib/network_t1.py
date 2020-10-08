@@ -58,7 +58,7 @@ class DeformNet(nn.Module):
             nn.Conv1d(256, n_cat*3, 1),
         )
         self.transformer64 = Transformer(emb_dims=64, N=1)
-        self.transformer128 = Transformer(emb_dims=128, N=3)
+        self.transformer128 = Transformer(emb_dims=128, N=1)
         # Initialize weights to be small so initial deformations aren't so big
         self.deformation[4].weight.data.normal_(0, 0.0001)
 
@@ -102,9 +102,6 @@ class DeformNet(nn.Module):
         cat_prior = prior.permute(0, 2, 1)
         cat_local = self.category_local(cat_prior)    # bs x 64 x n_pts
         cat_global = self.category_global(cat_local)  # bs x 1024 x 1
-        # assignemnt matrix
-        #print("inst_global.shape", inst_global.shape)
-        #print("cat_global.shape", cat_global.shape)
         inst_global_p, cat_global_p = self.transformer128(inst_global, cat_global)
         #print("inst_global_p.shape", inst_global_p.shape)
         #print("cat_global_p.shape", cat_global_p.shape)
