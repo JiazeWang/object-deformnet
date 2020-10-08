@@ -57,7 +57,7 @@ class DeformNet(nn.Module):
             nn.ReLU(),
             nn.Conv1d(256, n_cat*3, 1),
         )
-        self.transformer = Transformer64(emb_dims=64)
+        self.transformer64 = Transformer(emb_dims=64)
         # Initialize weights to be small so initial deformations aren't so big
         self.deformation[4].weight.data.normal_(0, 0.0001)
 
