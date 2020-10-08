@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 from lib.pspnet import PSPNet
-from transformer import Transformer
+from lib.transformer import Transformer
 #add one transformer on point and image fusion
 
 class DeformNet(nn.Module):
