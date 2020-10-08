@@ -26,7 +26,7 @@ class DeformNet(nn.Module):
             nn.ReLU(),
             nn.Conv1d(128, 1024, 1),
             nn.ReLU(),
-            nn.AdaptiveAvgPool1d(1),
+            #nn.AdaptiveAvgPool1d(1),
         )
         self.category_local = nn.Sequential(
             nn.Conv1d(3, 64, 1),
@@ -41,7 +41,7 @@ class DeformNet(nn.Module):
             nn.ReLU(),
             nn.Conv1d(128, 1024, 1),
             nn.ReLU(),
-            nn.AdaptiveAvgPool1d(1),
+            #nn.AdaptiveAvgPool1d(1),
         )
         self.assignment = nn.Sequential(
             nn.Conv1d(2176, 512, 1),
@@ -89,11 +89,11 @@ class DeformNet(nn.Module):
         choose = choose.unsqueeze(1).repeat(1, di, 1)
         emb = torch.gather(emb, 2, choose).contiguous()
         emb = self.instance_color(emb)
-        print("point.shape:", points.shape)
-        print("emb.shape", emb.shape)
+        #print("point.shape:", points.shape)
+        #print("emb.shape", emb.shape)
+        #point.shape: torch.Size([20, 64, 1024])
+        #emb.shape torch.Size([20, 64, 1024])
         points_p, emb_p = self.transformer64(points, emb)
-        print("point_p.shape:", points_p.shape)
-        print("emb_p.shape", emb_p.shape)
         points = points + points_p
         emb = emb + emb_p
         inst_local = torch.cat((points, emb), dim=1)     # bs x 128 x n_pts
