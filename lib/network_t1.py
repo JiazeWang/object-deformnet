@@ -89,7 +89,11 @@ class DeformNet(nn.Module):
         choose = choose.unsqueeze(1).repeat(1, di, 1)
         emb = torch.gather(emb, 2, choose).contiguous()
         emb = self.instance_color(emb)
+        print("point.shape:", point.shape)
+        print("emb.shape", emb.shape)
         points_p, emb_p = self.transformer64(points, emb)
+        print("point_p.shape:", point_p.shape)
+        print("emb_p.shape", emb_p.shape)
         points = points + points_p
         emb = emb + emb_p
         inst_local = torch.cat((points, emb), dim=1)     # bs x 128 x n_pts
@@ -99,7 +103,11 @@ class DeformNet(nn.Module):
         cat_local = self.category_local(cat_prior)    # bs x 64 x n_pts
         cat_global = self.category_global(cat_local)  # bs x 1024 x 1
         # assignemnt matrix
+        print("inst_global.shape", inst_global.shape)
+        print("cat_global.shape", cat_global.shape)
         inst_global_p, cat_global_p = self.transformer1024(inst_global, cat_global)
+        print("inst_global_p.shape", inst_global_p.shape)
+        print("cat_global_p.shape", cat_global_p.shape)
         inst_global = inst_global + inst_global_p
         cat_global = cat_global + cat_global_p
         assign_feat = torch.cat((inst_local, inst_global.repeat(1, 1, n_pts), cat_global.repeat(1, 1, n_pts)), dim=1)     # bs x 2176 x n_pts
