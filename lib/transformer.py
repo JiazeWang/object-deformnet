@@ -237,9 +237,9 @@ class Identity(nn.Module):
 
 
 class Transformer(nn.Module):
-    def __init__(self):
+    def __init__(self, emb_dims=512):
         super(Transformer, self).__init__()
-        self.emb_dims = 512
+        self.emb_dims = emb_dims
         self.N = 1
         self.dropout = 0
         self.ff_dims = 1024
@@ -266,6 +266,22 @@ if __name__ == '__main__':
     src_embedding = torch.rand(8, 512, 1024)
     tgt_embedding = torch.rand(8, 512, 1024)
     model = Transformer()
+    starttime = time.time()
+    src_embedding_p, tgt_embedding_p = model(src_embedding, tgt_embedding)
+    endtime = time.time()
+    print("total_time:", endtime - starttime)
+    src_embedding = src_embedding + src_embedding_p
+    tgt_embedding = tgt_embedding + tgt_embedding_p
+    print("src_embedding.shape:", src_embedding.shape)
+    print("tgt_embedding.shape:", tgt_embedding.shape)
+    num_params=0
+    for param in model.parameters():
+        num_params += param.reshape((-1, 1)).shape[0]
+    print("Model Size is {:.3f}M".format(num_params/1000000))
+
+    src_embedding = torch.rand(8, 64, 1024)
+    tgt_embedding = torch.rand(8, 64, 1024)
+    model = Transformer(emb_dims=64)
     starttime = time.time()
     src_embedding_p, tgt_embedding_p = model(src_embedding, tgt_embedding)
     endtime = time.time()

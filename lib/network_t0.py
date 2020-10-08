@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 from lib.pspnet import PSPNet
 from transformer import Transformer
+#add one transformer on point and image fusion
 
 class DeformNet(nn.Module):
     def __init__(self, n_cat=6, nv_prior=1024):
@@ -107,3 +108,5 @@ class DeformNet(nn.Module):
         deltas = deltas.permute(0, 2, 1).contiguous()   # bs x nv x 3
 
         return assign_mat, deltas
+        #points.shape: torch.Size([32, 1024, 3])
+        #img.shape: torch.Size([32, 3, 192, 192])
