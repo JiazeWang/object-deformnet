@@ -30,7 +30,7 @@ parser.add_argument('--resume_model', type=str, default='', help='resume from sa
 parser.add_argument('--result_dir', type=str, default='results/camera_t0', help='directory to save train results')
 opt = parser.parse_args()
 
-opt.decay_epoch = [0, 10, 20, 30, 40]
+opt.decay_epoch = [0, 20, 40, 60, 80]
 opt.decay_rate = [1.0, 0.6, 0.3, 0.1, 0.01]
 opt.corr_wt = 1.0
 opt.cd_wt = 5.0
