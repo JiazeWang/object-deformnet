@@ -44,14 +44,14 @@ class DeformNet(nn.Module):
             #nn.AdaptiveAvgPool1d(1),
         )
         self.assignment = nn.Sequential(
-            nn.Conv1d(2176, 512, 1),
+            nn.Conv1d(128, 512, 1),
             nn.ReLU(),
             nn.Conv1d(512, 256, 1),
             nn.ReLU(),
             nn.Conv1d(256, n_cat*nv_prior, 1),
         )
         self.deformation = nn.Sequential(
-            nn.Conv1d(2112, 512, 1),
+            nn.Conv1d(128, 512, 1),
             nn.ReLU(),
             nn.Conv1d(512, 256, 1),
             nn.ReLU(),
@@ -110,14 +110,16 @@ class DeformNet(nn.Module):
         print("cat_global_p.shape", cat_global_p.shape)
         inst_global = inst_global + inst_global_p
         cat_global = cat_global + cat_global_p
-        assign_feat = torch.cat((inst_local, inst_global.repeat(1, 1, n_pts), cat_global.repeat(1, 1, n_pts)), dim=1)     # bs x 2176 x n_pts
+        assign_feat = inst_global
+        #assign_feat = torch.cat((inst_local, inst_global.repeat(1, 1, n_pts), cat_global.repeat(1, 1, n_pts)), dim=1)     # bs x 2176 x n_pts
         assign_mat = self.assignment(assign_feat)
         assign_mat = assign_mat.view(-1, nv, n_pts).contiguous()   # bs, nc*nv, n_pts -> bs*nc, nv, n_pts
         index = cat_id + torch.arange(bs, dtype=torch.long).cuda() * self.n_cat
         assign_mat = torch.index_select(assign_mat, 0, index)   # bs x nv x n_pts
         assign_mat = assign_mat.permute(0, 2, 1).contiguous()    # bs x n_pts x nv
         # deformation field
-        deform_feat = torch.cat((cat_local, cat_global.repeat(1, 1, nv), inst_global.repeat(1, 1, nv)), dim=1)       # bs x 2112 x n_pts
+        deform_feat = cat_global
+        #deform_feat = torch.cat((cat_local, cat_global.repeat(1, 1, nv), inst_global.repeat(1, 1, nv)), dim=1)       # bs x 2112 x n_pts
         deltas = self.deformation(deform_feat)
         deltas = deltas.view(-1, 3, nv).contiguous()   # bs, nc*3, nv -> bs*nc, 3, nv
         deltas = torch.index_select(deltas, 0, index)   # bs x 3 x nv
