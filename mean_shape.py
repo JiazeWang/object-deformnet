@@ -7,7 +7,7 @@ import torch
 from lib.auto_encoder import PointCloudAE
 from data.shape_dataset import ShapeDataset
 from tools.tsne import tsne
-
+import matplotlib
 matplotlib.use('Agg')
 
 def visualize_shape(name, shape_list, result_dir):
