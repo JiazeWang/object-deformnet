@@ -274,6 +274,7 @@ if __name__ == '__main__':
     tgt_embedding = tgt_embedding + tgt_embedding_p
     print("src_embedding.shape:", src_embedding.shape)
     print("tgt_embedding.shape:", tgt_embedding.shape)
+    num_params=0
     for param in model.parameters():
         num_params += param.reshape((-1, 1)).shape[0]
     print("Model Size is {:.3f}M".format(num_params/1000000))
