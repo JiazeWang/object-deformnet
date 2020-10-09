@@ -141,12 +141,14 @@ def detect():
             inst_shape = f_prior + deltas
             assign_mat = F.softmax(assign_mat, dim=2)
             f_coords = torch.bmm(assign_mat, inst_shape)  # bs x n_pts x 3
+            del(assign_mat)
             torch.cuda.synchronize()
             t_inference += (time.time() - t_now)
             f_coords = f_coords.detach().cpu().numpy()
             f_points = f_points.cpu().numpy()
             f_choose = f_choose.cpu().numpy()
             f_insts = inst_shape.detach().cpu().numpy()
+            del(inst_shape)
             t_now = time.time()
             for i in range(len(valid_inst)):
                 inst_idx = valid_inst[i]
