@@ -137,11 +137,15 @@ def detect():
             torch.cuda.synchronize()
             t_now = time.time()
             assign_mat, deltas = estimator(f_points, f_rgb, f_choose, f_catId, f_prior)
+            del(f_rgb)
+            del(f_catId)
             # assign_mat, deltas = estimator(f_rgb, f_choose, f_catId, f_prior)
             inst_shape = f_prior + deltas
             assign_mat = F.softmax(assign_mat, dim=2)
             f_coords = torch.bmm(assign_mat, inst_shape)  # bs x n_pts x 3
             del(assign_mat)
+            del(f_prior)
+            del(deltas)
             torch.cuda.synchronize()
             t_inference += (time.time() - t_now)
             f_coords = f_coords.detach().cpu().numpy()
@@ -161,6 +165,8 @@ def detect():
                 if pred_sRT is None:
                     pred_sRT = np.identity(4, dtype=float)
                 f_sRT[inst_idx] = pred_sRT
+            del(f_points)
+            del(f_choose)
             t_umeyama += (time.time() - t_now)
             img_count += 1
             inst_count += len(valid_inst)
