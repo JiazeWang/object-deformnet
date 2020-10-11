@@ -125,9 +125,13 @@ class PSPNet(nn.Module):
     def forward(self, x):
         f = self.feats(x)
         p = self.psp(f)
+        print("psp:", p.shape)
         p = self.up_1(p)
+        print("up1:", p.shape)
         p = self.drop(p)
         p = self.up_2(p)
+        print("up2:", p.shape)
         p = self.drop(p)
         p = self.up_3(p)
+        print("up3:", p.shape)
         return self.final(p)
