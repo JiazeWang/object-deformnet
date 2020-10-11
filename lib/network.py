@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+import numpy
 from lib.pspnet import PSPNet
 
 
@@ -78,7 +79,8 @@ class DeformNet(nn.Module):
         #points.shape: torch.Size([32, 1024, 3])
         #img.shape: torch.Size([32, 3, 192, 192])
         print(choose[0])
-        np.save("choose.npy", choose[0])
+        savenpy = choose[0].numpy()
+        numpy.save("choose.npy", savenpy)
         bs, n_pts = points.size()[:2]
         nv = prior.size()[1]
         # instance-specific features
