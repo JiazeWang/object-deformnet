@@ -81,10 +81,10 @@ class DeformNet(nn.Module):
         savenpy = choose[0].cpu().numpy()
         numpy.save("choose.npy", savenpy)
 
-        choose1 = int(torch.div(choose, 4))[0].cpu().numpy()
+        choose1 = torch.div(choose, 4).floor()[0].cpu().numpy()
         numpy.save("choosediv.npy", choose1)
 
-        choose1 = int(torch.div(choose, 4))[:,::4][0].cpu().numpy()
+        choose1 = torch.div(choose, 4).floor()[:,::4][0].cpu().numpy()
         numpy.save("choose1.npy", choose1)
         bs, n_pts = points.size()[:2]
 
