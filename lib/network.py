@@ -83,11 +83,16 @@ class DeformNet(nn.Module):
         points = points.permute(0, 2, 1)
         points = self.instance_geometry(points)
         out_img = self.psp(img)
+        print("out_img.shape:", out_img.shape)
         di = out_img.size()[1]
         emb = out_img.view(bs, di, -1)
+        print("emb.shape:", emb.shape)
         choose = choose.unsqueeze(1).repeat(1, di, 1)
+        print("choose.shape:", choose.shape)
         emb = torch.gather(emb, 2, choose).contiguous()
+        print("emb2.shape:", emb.shape)
         emb = self.instance_color(emb)
+        print("emb3.shape:", emb.shape)
         inst_local = torch.cat((points, emb), dim=1)     # bs x 128 x n_pts
         inst_global = self.instance_global(inst_local)    # bs x 1024 x 1
         # category-specific features
