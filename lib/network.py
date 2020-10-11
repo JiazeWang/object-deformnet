@@ -78,9 +78,16 @@ class DeformNet(nn.Module):
         """
         #points.shape: torch.Size([32, 1024, 3])
         #img.shape: torch.Size([32, 3, 192, 192])
-        print(choose[0])
         savenpy = choose[0].cpu().numpy()
         numpy.save("choose.npy", savenpy)
+
+        choose1 = int(torch.div(choose, 4))[0].cpu().numpy()
+        numpy.save("choosediv.npy", choose1)
+
+        choose1 = int(torch.div(choose, 4))[:,::4][0].cpu().numpy()
+        numpy.save("choose1.npy", choose1)
+        bs, n_pts = points.size()[:2]
+
         bs, n_pts = points.size()[:2]
         nv = prior.size()[1]
         # instance-specific features
