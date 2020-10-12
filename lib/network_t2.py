@@ -13,6 +13,18 @@ class DeformNet(nn.Module):
             nn.Conv1d(32, 64, 1),
             nn.ReLU(),
         )
+        self.instance_color0 = nn.Sequential(
+            nn.Conv1d(1024, 64, 1),
+            nn.ReLU(),
+        )
+        self.instance_color1 = nn.Sequential(
+            nn.Conv1d(256, 64, 1),
+            nn.ReLU(),
+        )
+        self.instance_color2 = nn.Sequential(
+            nn.Conv1d(64, 64, 1),
+            nn.ReLU(),
+        )
         self.instance_geometry = nn.Sequential(
             nn.Conv1d(3, 64, 1),
             nn.ReLU(),
@@ -93,20 +105,43 @@ class DeformNet(nn.Module):
         # instance-specific features
         points = points.permute(0, 2, 1)
         points = self.instance_geometry(points)
-        out_img = self.psp(img)
+        p0, p1, p2, out_img = self.psp(img)
         #print("out_img.shape:", out_img.shape)
         #out_img.shape: torch.Size([32, 32, 192, 192])
+
         di = out_img.size()[1]
         emb = out_img.view(bs, di, -1)
+        choose = choose.unsqueeze(1).repeat(1, di, 1)
+        emb = torch.gather(emb, 2, choose).contiguous()
+        emb = self.instance_color(emb)
+
+        di2 = p2.size()[1]
+        emb2 = p2.view(bs, di2, -1)
+        choose2 = torch.div(choose, 4).type(torch.cuda.IntTensor)[:,::4].unsqueeze(1).repeat(1, di2, 1)
+        emb2 = torch.gather(emb2, 2, choose2).contiguous()
+        emb2 = self.instance_color2(emb2)
+
+        di1 = p1.size()[1]
+        emb1 = p1.view(bs, di1, -1)
+        choose1 = torch.div(choose2, 4).type(torch.cuda.IntTensor)[:,::4].unsqueeze(1).repeat(1, di1, 1)
+        emb1 = torch.gather(emb1, 2, choose1).contiguous()
+        emb1 = self.instance_color1(emb1)
+
+        di0 = p0.size()[1]
+        emb0 = p0.view(bs, di0, -1)
+        choose0 = torch.div(choose1, 4).type(torch.cuda.IntTensor)[:,::4].unsqueeze(1).repeat(1, di0, 1)
+        emb0 = torch.gather(emb0, 2, choose0).contiguous()
+        emb0 = self.instance_color0(emb0)
+        print("emb.shape:", emb.shape)
+        print("emb0.shape:", emb.shape)
+        print("emb1.shape:", emb.shape)
+        print("emb2.shape:", emb.shape)
         #print("emb.shape:", emb.shape)
         #emb.shape: torch.Size([32, 32, 36864])
-        choose = choose.unsqueeze(1).repeat(1, di, 1)
         #print("choose.shape:", choose.shape)
         #choose.shape: torch.Size([32, 32, 1024])
-        emb = torch.gather(emb, 2, choose).contiguous()
         #print("emb2.shape:", emb.shape)
         #emb2.shape: torch.Size([32, 32, 1024])
-        emb = self.instance_color(emb)
         #print("emb3.shape:", emb.shape)
         #emb3.shape: torch.Size([32, 64, 1024])
         inst_local = torch.cat((points, emb), dim=1)     # bs x 128 x n_pts
