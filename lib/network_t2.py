@@ -138,7 +138,14 @@ class DeformNet(nn.Module):
 
         di2 = p2.size()[1]
         emb2 = p2.view(bs, di2, -1)
-        choose2ori = torch.div(chooseori, 4)
+        img_width = out_img.size()[2]
+        choose2ori = torch.div(chooseori, img_width*2)*(img_width/2)+torch.div(torch.remainder(chooseori, img_width), 2)
+
+        savenpy = choose[0].cpu().numpy()
+        numpy.save("choose.npy", savenpy)
+        choose1 = choose2ori[0].cpu().numpy()
+        numpy.save("choose2ori.npy", choose1)
+
         choose2 = choose2ori.type(torch.cuda.IntTensor).unsqueeze(1).repeat(1, di2, 1).type(torch.cuda.LongTensor)
         emb2 = torch.gather(emb2, 2, choose2).contiguous()
 
