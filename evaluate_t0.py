@@ -7,6 +7,7 @@ import numpy as np
 from tqdm import tqdm
 import _pickle as cPickle
 import torch
+import torch.nn as nn
 import torch.nn.functional as F
 import torchvision.transforms as transforms
 from lib.network_t2 import DeformNet
