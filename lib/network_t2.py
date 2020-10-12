@@ -111,13 +111,17 @@ class DeformNet(nn.Module):
 
         di = out_img.size()[1]
         emb = out_img.view(bs, di, -1)
+        print("embview:", emb.shape)
         choose = choose.unsqueeze(1).repeat(1, di, 1)
+        print("choose:", choose.shape)
         emb = torch.gather(emb, 2, choose).contiguous()
         emb = self.instance_color(emb)
 
         di2 = p2.size()[1]
         emb2 = p2.view(bs, di2, -1)
-        choose2 = torch.div(choose, 4).type(torch.cuda.IntTensor)[:,::4].unsqueeze(1).repeat(1, di2, 1)
+        choose2 = torch.div(choose, 4).type(torch.cuda.IntTensor)[:,::4]
+        print("choose2:", choose2.shape)
+        choose2 = choose2.unsqueeze(1).repeat(1, di2, 1)
         emb2 = torch.gather(emb2, 2, choose2).contiguous()
         emb2 = self.instance_color2(emb2)
 
