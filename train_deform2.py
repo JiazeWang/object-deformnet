@@ -20,17 +20,17 @@ parser.add_argument('--n_pts', type=int, default=1024, help='number of foregroun
 parser.add_argument('--n_cat', type=int, default=6, help='number of object categories')
 parser.add_argument('--nv_prior', type=int, default=1024, help='number of vertices in shape priors')
 parser.add_argument('--img_size', type=int, default=192, help='cropped image size')
-parser.add_argument('--batch_size', type=int, default=32, help='batch size')
+parser.add_argument('--batch_size', type=int, default=128, help='batch size')
 parser.add_argument('--num_workers', type=int, default=10, help='number of data loading workers')
 parser.add_argument('--gpu', type=str, default='0', help='GPU to use')
 parser.add_argument('--lr', type=float, default=0.0001, help='initial learning rate')
 parser.add_argument('--start_epoch', type=int, default=1, help='which epoch to start')
-parser.add_argument('--max_epoch', type=int, default=50, help='max number of epochs to train')
+parser.add_argument('--max_epoch', type=int, default=100, help='max number of epochs to train')
 parser.add_argument('--resume_model', type=str, default='', help='resume from saved model')
 parser.add_argument('--result_dir', type=str, default='results/camera_t2', help='directory to save train results')
 opt = parser.parse_args()
 
-opt.decay_epoch = [0, 10, 20, 30, 40]
+opt.decay_epoch = [0, 20, 40, 60, 80]
 opt.decay_rate = [1.0, 0.6, 0.3, 0.1, 0.01]
 opt.corr_wt = 1.0
 opt.cd_wt = 5.0
@@ -46,10 +46,11 @@ def train_net():
     logger = setup_logger('train_log', os.path.join(opt.result_dir, 'log.txt'))
     for key, value in vars(opt).items():
         logger.info(key + ': ' + str(value))
-    os.environ['CUDA_VISIBLE_DEVICES'] = opt.gpu
+    #os.environ['CUDA_VISIBLE_DEVICES'] = opt.gpu
     # model & loss
     estimator = DeformNet(opt.n_cat, opt.nv_prior)
     estimator.cuda()
+    estimator = nn.DataParallel(estimator)
     criterion = Loss(opt.corr_wt, opt.cd_wt, opt.entropy_wt, opt.deform_wt)
     if opt.resume_model != '':
         estimator.load_state_dict(torch.load(opt.resume_model))
