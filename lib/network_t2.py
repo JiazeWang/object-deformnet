@@ -131,8 +131,8 @@ class DeformNet(nn.Module):
         emb1 = self.instance_color1(emb1)
 
 
-        print("emb.shape:", emb0.shape)
-        #print("emb0.shape:", emb1.shape)
+        #print("emb.shape:", emb0.shape)
+        print("emb0.shape:", emb1.shape)
         print("emb1.shape:", emb2.shape)
         print("emb2.shape:", emb.shape)
 
