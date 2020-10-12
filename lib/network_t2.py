@@ -176,15 +176,16 @@ class DeformNet(nn.Module):
 
         inst_local1 = torch.cat((points, emb1), dim=1)     # bs x 128 x n_pts
         inst_local1 = inst_local1 + inst_global0
-        inst_global1 = self.instance_global1(inst_local1)    # bs x 1024 x 1
+        inst_global1 = self.instance_global0(inst_local1)    # bs x 1024 x 1
 
         inst_local2 = torch.cat((points, emb2), dim=1)     # bs x 128 x n_pts
         inst_local2 = inst_local2 + inst_global1
-        inst_global2 = self.instance_global2(inst_local2)    # bs x 1024 x 1
+        inst_global2 = self.instance_global0(inst_local2)    # bs x 1024 x 1
 
         inst_local3 = torch.cat((points, emb3), dim=1)     # bs x 128 x n_pts
         inst_local3 = inst_local3 + inst_global2
-        inst_global3 = self.instance_global3(inst_local3)    # bs x 1024 x 1
+        inst_global3 = self.instance_global0(inst_local3)    # bs x 1024 x 1
+        inst_global3 = self.instance_global3(inst_local3)
         #print("inst_global3.shape:", inst_global3.shape)
         #print("emb.shape:", emb.shape)
         #emb.shape: torch.Size([32, 32, 36864])
