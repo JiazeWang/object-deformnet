@@ -4,6 +4,7 @@ import argparse
 import random
 import numpy as np
 import torch
+import torch.nn as nn
 import torch.nn.functional as F
 import tensorflow as tf
 from lib.network_t2 import DeformNet
