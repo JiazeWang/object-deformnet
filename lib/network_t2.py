@@ -140,25 +140,31 @@ class DeformNet(nn.Module):
         emb2 = p2.view(bs, di2, -1)
         img_width = out_img.size()[2]
         choose2ori = torch.div(chooseori, img_width*2)*(img_width/2)+torch.div(torch.remainder(chooseori, img_width), 2)
-
-        savenpy = choose[0].cpu().numpy()
-        numpy.save("choose.npy", savenpy)
-        choose1 = choose2ori[0].cpu().numpy()
-        numpy.save("choose2ori.npy", choose1)
-
         choose2 = choose2ori.type(torch.cuda.IntTensor).unsqueeze(1).repeat(1, di2, 1).type(torch.cuda.LongTensor)
         emb2 = torch.gather(emb2, 2, choose2).contiguous()
 
         di1 = p1.size()[1]
         emb1 = p1.view(bs, di1, -1)
-        choose1ori = torch.div(choose2ori, 4)
+        img_width = p2.size()[2]
+        choose1ori = torch.div(choose2ori, img_width*2)*(img_width/2)+torch.div(torch.remainder(choose2ori, img_width), 2)
         choose1 = choose1ori.type(torch.cuda.IntTensor).unsqueeze(1).repeat(1, di1, 1).type(torch.cuda.LongTensor)
         emb1 = torch.gather(emb1, 2, choose1).contiguous()
 
         di0 = p0.size()[1]
         emb0 = p0.view(bs, di0, -1)
-        choose0 = torch.div(choose1ori, 4).type(torch.cuda.IntTensor).unsqueeze(1).repeat(1, di0, 1).type(torch.cuda.LongTensor)
+        img_width = p1.size()[2]
+        choose0ori = torch.div(choose1ori, img_width*2)*(img_width/2)+torch.div(torch.remainder(choose1ori, img_width), 2)
+        choose0 = choose0ori.type(torch.cuda.IntTensor).unsqueeze(1).repeat(1, di0, 1).type(torch.cuda.LongTensor)
         emb0 = torch.gather(emb0, 2, choose0).contiguous()
+
+        savenpy = choose[0].cpu().numpy()
+        numpy.save("choose.npy", savenpy)
+        choose2ori = choose2ori[0].cpu().numpy()
+        numpy.save("choose2.npy", choose2ori)
+        choose1ori = choose1ori[0].cpu().numpy()
+        numpy.save("choose1.npy", choose1ori)
+        choose0ori = choose0ori[0].cpu().numpy()
+        numpy.save("choose0.npy", choose0ori)
 
         emb0 = self.instance_color0(emb0)
         emb1 = self.instance_color1(emb1)
