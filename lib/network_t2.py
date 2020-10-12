@@ -118,31 +118,28 @@ class DeformNet(nn.Module):
 
         di2 = p2.size()[1]
         emb2 = p2.view(bs, di2, -1)
-        choose2ori = torch.div(chooseori, 4)[:,::4]
+        choose2ori = torch.div(chooseori, 4)
         choose2 = choose2ori.type(torch.cuda.IntTensor).unsqueeze(1).repeat(1, di2, 1).type(torch.cuda.LongTensor)
         emb2 = torch.gather(emb2, 2, choose2).contiguous()
         emb2 = self.instance_color2(emb2)
 
         di1 = p1.size()[1]
         emb1 = p1.view(bs, di1, -1)
-        choose1ori = torch.div(choose2ori, 4)[:,::4]
+        choose1ori = torch.div(choose2ori, 4)
         choose1 = choose1ori.type(torch.cuda.IntTensor).unsqueeze(1).repeat(1, di1, 1).type(torch.cuda.LongTensor)
         emb1 = torch.gather(emb1, 2, choose1).contiguous()
         emb1 = self.instance_color1(emb1)
 
+        di0 = p0.size()[1]
+        emb0 = p0.view(bs, di0, -1)
+        choose0 = torch.div(choose1ori, 4).type(torch.cuda.IntTensor).unsqueeze(1).repeat(1, di0, 1).type(torch.cuda.LongTensor)
+        emb0 = torch.gather(emb0, 2, choose0).contiguous()
+        emb0 = self.instance_color0(emb0)
 
-        #print("emb.shape:", emb0.shape)
+        print("emb.shape:", emb0.shape)
         print("emb0.shape:", emb1.shape)
         print("emb1.shape:", emb2.shape)
         print("emb2.shape:", emb.shape)
-
-        di0 = p0.size()[1]
-        emb0 = p0.view(bs, di0, -1)[:,::4]
-        choose0 = torch.div(choose1ori, 4).type(torch.cuda.IntTensor).unsqueeze(1).repeat(1, di0, 1).type(torch.cuda.LongTensor)
-        print("emb0:", emb0.shape)
-        print("choose0:", choose0.shape)
-        emb0 = torch.gather(emb0, 2, choose0).contiguous()
-        emb0 = self.instance_color0(emb0)
         #print("emb.shape:", emb.shape)
         #emb.shape: torch.Size([32, 32, 36864])
         #print("choose.shape:", choose.shape)
