@@ -156,7 +156,7 @@ class DeformNet(nn.Module):
         choose0ori = torch.div(choose1ori, img_width*2)*(img_width/2)+torch.div(torch.remainder(choose1ori, img_width), 2)
         choose0 = choose0ori.type(torch.cuda.IntTensor).unsqueeze(1).repeat(1, di0, 1).type(torch.cuda.LongTensor)
         emb0 = torch.gather(emb0, 2, choose0).contiguous()
-
+        """
         savenpy = choose[0].cpu().numpy()
         numpy.save("choose.npy", savenpy)
         choose2ori = choose2ori[0].cpu().numpy()
@@ -165,7 +165,7 @@ class DeformNet(nn.Module):
         numpy.save("choose1.npy", choose1ori)
         choose0ori = choose0ori[0].cpu().numpy()
         numpy.save("choose0.npy", choose0ori)
-
+        """
         emb0 = self.instance_color0(emb0)
         emb1 = self.instance_color1(emb1)
         emb2 = self.instance_color2(emb2)
