@@ -9,7 +9,7 @@ import _pickle as cPickle
 import torch
 import torch.nn.functional as F
 import torchvision.transforms as transforms
-from lib.network_t1 import DeformNet
+from lib.network_t2 import DeformNet
 from lib.align import estimateSimilarityTransform
 from lib.utils import load_depth, get_bbox, compute_mAP, plot_mAP
 
@@ -19,7 +19,7 @@ parser.add_argument('--data', type=str, default='val', help='val, real_test')
 parser.add_argument('--data_dir', type=str, default='data', help='data directory')
 parser.add_argument('--n_cat', type=int, default=6, help='number of object categories')
 parser.add_argument('--nv_prior', type=int, default=1024, help='number of vertices in shape priors')
-parser.add_argument('--model', type=str, default='results/camera_t1/model_50.pth', help='resume from saved model')
+parser.add_argument('--model', type=str, default='results/camera_t2/model_50.pth', help='resume from saved model')
 parser.add_argument('--n_pts', type=int, default=1024, help='number of foreground points')
 parser.add_argument('--img_size', type=int, default=192, help='cropped image size')
 parser.add_argument('--gpu', type=str, default='3', help='GPU to use')
@@ -29,11 +29,11 @@ mean_shapes = np.load('assets/mean_points_emb.npy')
 
 assert opt.data in ['val', 'real_test']
 if opt.data == 'val':
-    result_dir = 'results/eval_camera_t1'
+    result_dir = 'results/eval_camera_t2'
     file_path = 'CAMERA/val_list.txt'
     cam_fx, cam_fy, cam_cx, cam_cy = 577.5, 577.5, 319.5, 239.5
 else:
-    result_dir = 'results/eval_real_t1'
+    result_dir = 'results/eval_real_t2'
     file_path = 'Real/test_list.txt'
     cam_fx, cam_fy, cam_cx, cam_cy = 591.0125, 590.16775, 322.525, 244.11084
 
@@ -51,9 +51,10 @@ norm_color = transforms.Compose(
 
 def detect():
     # resume model
-    os.environ['CUDA_VISIBLE_DEVICES'] = opt.gpu
+    #os.environ['CUDA_VISIBLE_DEVICES'] = opt.gpu
     estimator = DeformNet(opt.n_cat, opt.nv_prior)
     estimator.cuda()
+    estimator = nn.DataParallel(estimator)
     estimator.load_state_dict(torch.load(opt.model))
     estimator.eval()
     # get test data list
