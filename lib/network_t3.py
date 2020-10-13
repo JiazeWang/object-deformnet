@@ -2,7 +2,14 @@ import torch
 import torch.nn as nn
 import numpy
 from lib.pspnet_t2 import PSPNet
+from lib.loss import Loss
 import torch.nn.functional as F
+from .nn_distance.chamfer_loss import ChamferLoss
+
+opt.corr_wt = 1.0
+opt.cd_wt = 5.0
+opt.entropy_wt = 0.0001
+opt.deform_wt = 0.01
 
 class DeformNet(nn.Module):
     def __init__(self, n_cat=6, nv_prior=1024):
@@ -141,8 +148,9 @@ class DeformNet(nn.Module):
         self.deformation1[4].weight.data.normal_(0, 0.0001)
         self.deformation2[4].weight.data.normal_(0, 0.0001)
         self.deformation3[4].weight.data.normal_(0, 0.0001)
+        self.loss = Loss(opt.corr_wt, opt.cd_wt, opt.entropy_wt, opt.deform_wt)
 
-    def forward(self, points, img, choose, cat_id, prior):
+    def forward(self, points, img, choose, cat_id, prior, nocs, model):
         """
         Args:
             points: bs x n_pts x 3
@@ -273,14 +281,16 @@ class DeformNet(nn.Module):
         assign_mat3 = torch.bmm(assign_mat2, assign_mat3.permute(0, 2, 1))
         deltas3 = deltas2 + deltas3
 
-        #print("assign_feat0.shape:", assign_feat0.shape)
-        #print("assign_feat1.shape:", assign_feat1.shape)
-        #print("assign_feat2.shape:", assign_feat2.shape)
-        #print("assign_feat3.shape:", assign_feat3.shape)
-        #print("deltas0.shape:", deltas0.shape)
-        #print("deltas1.shape:", deltas1.shape)
-        #print("deltas2.shape:", deltas2.shape)
-        #print("deltas3.shape:", deltas3.shape)
-        #assign_feat3.shape: torch.Size([32, 2176, 1024])
-        #deltas0.shape: torch.Size([32, 1024, 3])
-        return assign_mat0, deltas0, assign_mat1, deltas1, assign_mat2, deltas2, assign_mat3, deltas3
+        # Loss calculation
+        loss0, corr_loss0, cd_loss0, entropy_loss0, deform_loss0 = self.loss(assign_mat0, deltas0, prior, nocs, model)
+        loss1, corr_loss1, cd_loss1, entropy_loss1, deform_loss1 = self.loss(assign_mat1, deltas1, prior, nocs, model)
+        loss2, corr_loss2, cd_loss2, entropy_loss2, deform_loss2 = self.loss(assign_mat2, deltas2, prior, nocs, model)
+        loss3, corr_loss3, cd_loss3, entropy_loss3, deform_loss3 = self.loss(assign_mat3, deltas3, prior, nocs, model)
+
+        loss = loss0 + loss1 + loss2 + cd_loss3
+        corr_loss = corr_loss0 + corr_loss1 + corr_loss2 + corr_loss3
+        cd_loss = cd_loss0 + cd_loss1 + cd_loss2 + cd_loss3
+        entropy_loss = entropy_loss0 + entropy_loss1 + entropy_loss2 + entropy_loss3
+        deform_loss = deform_loss0 + deform_loss1 + deform_loss2 + deform_loss3
+
+        return assign_mat3, deltas3, loss, corr_loss, cd_loss, entropy_loss, deform_loss
