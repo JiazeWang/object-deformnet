@@ -265,7 +265,7 @@ class DeformNet(nn.Module):
         deltas2 = deltas2.view(-1, 3, nv).contiguous()   # bs, nc*3, nv -> bs*nc, 3, nv
         deltas2 = torch.index_select(deltas2, 0, index2)   # bs x 3 x nv
         deltas2 = deltas2.permute(0, 2, 1).contiguous()   # bs x nv x 3
-        assign_mat2 = torch.bmm(assign_mat1, assign_mat2))
+        assign_mat2 = torch.bmm(assign_mat1, assign_mat2)
         #assign_mat2 = assign_mat1 + assign_mat2
         deltas2 = deltas1 + deltas2
 
