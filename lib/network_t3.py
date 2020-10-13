@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import numpy
 from lib.pspnet_t2 import PSPNet
-
+import torch.nn.functional as F
 
 class DeformNet(nn.Module):
     def __init__(self, n_cat=6, nv_prior=1024):
@@ -225,6 +225,7 @@ class DeformNet(nn.Module):
         deltas0 = torch.index_select(deltas0, 0, index0)   # bs x 3 x nv
         deltas0 = deltas0.permute(0, 2, 1).contiguous()   # bs x nv x 3
 
+
         assign_feat1 = torch.cat((inst_local1, inst_global1.repeat(1, 1, n_pts), cat_global.repeat(1, 1, n_pts)), dim=1)     # bs x 2176 x n_pts
         assign_mat1 = self.assignment1(assign_feat1)
         assign_mat1 = assign_mat1.view(-1, nv, n_pts).contiguous()   # bs, nc*nv, n_pts -> bs*nc, nv, n_pts
@@ -237,6 +238,12 @@ class DeformNet(nn.Module):
         deltas1 = deltas1.view(-1, 3, nv).contiguous()   # bs, nc*3, nv -> bs*nc, 3, nv
         deltas1 = torch.index_select(deltas1, 0, index1)   # bs x 3 x nv
         deltas1 = deltas1.permute(0, 2, 1).contiguous()   # bs x nv x 3
+        print("assign_feat1.shape:", assign_feat1.shape)
+        print("deltas1.shape:", deltas1.shape)
+        assign_mat1 = torch.bmm(assign_mat0, assign_mat1.permute(0, 2, 1))
+        deltas1 = deltas0 + deltas1
+        print("assign_feat1new.shape:", assign_feat1.shape)
+        print("deltas1new.shape:", deltas1.shape)
 
 
         assign_feat2 = torch.cat((inst_local2, inst_global2.repeat(1, 1, n_pts), cat_global.repeat(1, 1, n_pts)), dim=1)     # bs x 2176 x n_pts
@@ -265,14 +272,14 @@ class DeformNet(nn.Module):
         deltas3 = torch.index_select(deltas3, 0, index3)   # bs x 3 x nv
         deltas3 = deltas3.permute(0, 2, 1).contiguous()   # bs x nv x 3
 
-        print("assign_feat0.shape:", assign_feat0.shape)
-        print("assign_feat1.shape:", assign_feat1.shape)
-        print("assign_feat2.shape:", assign_feat2.shape)
-        print("assign_feat3.shape:", assign_feat3.shape)
-        print("deltas0.shape:", deltas0.shape)
-        print("deltas1.shape:", deltas1.shape)
-        print("deltas2.shape:", deltas2.shape)
-        print("deltas3.shape:", deltas3.shape)
-
-
-        return assign_mat, deltas
+        #print("assign_feat0.shape:", assign_feat0.shape)
+        #print("assign_feat1.shape:", assign_feat1.shape)
+        #print("assign_feat2.shape:", assign_feat2.shape)
+        #print("assign_feat3.shape:", assign_feat3.shape)
+        #print("deltas0.shape:", deltas0.shape)
+        #print("deltas1.shape:", deltas1.shape)
+        #print("deltas2.shape:", deltas2.shape)
+        #print("deltas3.shape:", deltas3.shape)
+        #assign_feat3.shape: torch.Size([32, 2176, 1024])
+        #deltas0.shape: torch.Size([32, 1024, 3])
+        return assign_mat0, deltas0, assign_mat1, deltas1, assign_mat2, deltas2, assign_mat3, deltas3

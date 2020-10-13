@@ -116,7 +116,7 @@ def train_net():
             prior = prior.cuda()
             sRT = sRT.cuda()
             nocs = nocs.cuda()
-            assign_mat, deltas = estimator(points, rgb, choose, cat_id, prior)
+            assign_mat0, deltas0= estimator(points, rgb, choose, cat_id, prior)
             loss, corr_loss, cd_loss, entropy_loss, deform_loss = criterion(assign_mat, deltas, prior, nocs, model)
             optimizer.zero_grad()
             loss.backward()
