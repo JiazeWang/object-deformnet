@@ -269,6 +269,10 @@ class DeformNet(nn.Module):
         print("assign_feat1.shape:", assign_feat1.shape)
         print("assign_feat2.shape:", assign_feat2.shape)
         print("assign_feat3.shape:", assign_feat3.shape)
+        print("deltas0.shape:", deltas0.shape)
+        print("deltas1.shape:", deltas1.shape)
+        print("deltas2.shape:", deltas2.shape)
+        print("deltas3.shape:", deltas3.shape)
 
 
         return assign_mat, deltas
