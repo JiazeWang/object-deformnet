@@ -290,6 +290,7 @@ class DeformNet(nn.Module):
 
         loss = loss0 + loss1 + loss2 + cd_loss3
         print("loss.shape", loss.shape)
+        print("loss:", loss)
         corr_loss = corr_loss0 + corr_loss1 + corr_loss2 + corr_loss3
         cd_loss = cd_loss0 + cd_loss1 + cd_loss2 + cd_loss3
         entropy_loss = entropy_loss0 + entropy_loss1 + entropy_loss2 + entropy_loss3
