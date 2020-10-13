@@ -21,7 +21,7 @@ parser.add_argument('--n_pts', type=int, default=1024, help='number of foregroun
 parser.add_argument('--n_cat', type=int, default=6, help='number of object categories')
 parser.add_argument('--nv_prior', type=int, default=1024, help='number of vertices in shape priors')
 parser.add_argument('--img_size', type=int, default=192, help='cropped image size')
-parser.add_argument('--batch_size', type=int, default=128, help='batch size')
+parser.add_argument('--batch_size', type=int, default=64, help='batch size')
 parser.add_argument('--num_workers', type=int, default=20, help='number of data loading workers')
 parser.add_argument('--gpu', type=str, default='0', help='GPU to use')
 parser.add_argument('--lr', type=float, default=0.0001, help='initial learning rate')
@@ -116,8 +116,17 @@ def train_net():
             prior = prior.cuda()
             sRT = sRT.cuda()
             nocs = nocs.cuda()
-            assign_mat0, deltas0= estimator(points, rgb, choose, cat_id, prior)
-            loss, corr_loss, cd_loss, entropy_loss, deform_loss = criterion(assign_mat, deltas, prior, nocs, model)
+            assign_mat0, deltas0, assign_mat1, deltas1, assign_mat2, deltas2, assign_mat3, deltas3 = \
+                                                            estimator(points, rgb, choose, cat_id, prior)
+            loss0, corr_loss0, cd_loss0, entropy_loss0, deform_loss0 = criterion(assign_mat0, deltas0, prior, nocs, model)
+            loss1, corr_loss1, cd_loss1, entropy_loss1, deform_loss1 = criterion(assign_mat1, deltas1, prior, nocs, model)
+            loss2, corr_loss2, cd_loss2, entropy_loss2, deform_loss2 = criterion(assign_mat2, deltas2, prior, nocs, model)
+            loss3, corr_loss3, cd_loss3, entropy_loss3, deform_loss3 = criterion(assign_mat3, deltas3, prior, nocs, model)
+            loss = loss0 + loss1 + loss2 + cd_loss3
+            corr_loss = corr_loss0 + corr_loss1 + corr_loss2 + corr_loss3
+            cd_loss = cd_loss0 + cd_loss1 + cd_loss2 + cd_loss3
+            entropy_loss = entropy_loss0 + entropy_loss1 + entropy_loss2 + entropy_loss3
+            deform_loss = deform_loss0 + deform_loss1 + deform_loss2 + deform_loss3
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
