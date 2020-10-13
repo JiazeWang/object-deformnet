@@ -129,7 +129,12 @@ def train_net():
             deform_loss = deform_loss0 + deform_loss1 + deform_loss2 + deform_loss3
             """
             optimizer.zero_grad()
-            loss.sum().backward()
+            loss = loss.sum()
+            corr_loss = corr_loss.sum()
+            cd_loss = cd_loss.sum()
+            entropy_loss = entropy_loss.sum()
+            deform_loss = deform_loss.sum()
+            loss.backward()
             optimizer.step()
             global_step += 1
             # write results to tensorboard
