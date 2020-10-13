@@ -6,10 +6,7 @@ from lib.loss import Loss
 import torch.nn.functional as F
 from .nn_distance.chamfer_loss import ChamferLoss
 
-opt.corr_wt = 1.0
-opt.cd_wt = 5.0
-opt.entropy_wt = 0.0001
-opt.deform_wt = 0.01
+
 
 class DeformNet(nn.Module):
     def __init__(self, n_cat=6, nv_prior=1024):
@@ -148,7 +145,11 @@ class DeformNet(nn.Module):
         self.deformation1[4].weight.data.normal_(0, 0.0001)
         self.deformation2[4].weight.data.normal_(0, 0.0001)
         self.deformation3[4].weight.data.normal_(0, 0.0001)
-        self.loss = Loss(opt.corr_wt, opt.cd_wt, opt.entropy_wt, opt.deform_wt)
+        self.corr_wt = 1.0
+        self.cd_wt = 5.0
+        self.entropy_wt = 0.0001
+        self.deform_wt = 0.01
+        self.loss = Loss(self.corr_wt, self.cd_wt, self.entropy_wt, self.deform_wt)
 
     def forward(self, points, img, choose, cat_id, prior, nocs, model):
         """
