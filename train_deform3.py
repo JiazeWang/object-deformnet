@@ -60,7 +60,7 @@ def train_net():
     val_dataset = PoseDataset(opt.dataset, 'test', opt.data_dir, opt.n_pts, opt.img_size)
     # start training
     st_time = time.time()
-    train_steps = 1500
+    train_steps = 100
     global_step = train_steps * (opt.start_epoch - 1)
     n_decays = len(opt.decay_epoch)
     assert len(opt.decay_rate) == n_decays
@@ -160,7 +160,7 @@ def train_net():
         easy_success = np.zeros((opt.n_cat,), dtype=int)      # 10 degree and 5 cm
         iou_success = np.zeros((opt.n_cat,), dtype=int)       # relative scale error < 0.1
         # sample validation subset
-        val_size = 1500
+        val_size = 100
         val_idx = random.sample(list(range(val_dataset.length)), val_size)
         val_sampler = torch.utils.data.sampler.SubsetRandomSampler(val_idx)
         #val_dataloader = torch.utils.data.DataLoader(val_dataset, batch_size=1,
@@ -178,8 +178,9 @@ def train_net():
             prior = prior.cuda()
             sRT = sRT.cuda()
             nocs = nocs.cuda()
-            assign_mat, deltas = estimator(points, rgb, choose, cat_id, prior)
-            loss, _, _, _, _ = criterion(assign_mat, deltas, prior, nocs, model)
+            assign_mat, deltas, loss, corr_loss, cd_loss, entropy_loss, deform_loss = estimator(points, rgb, choose, cat_id, prior, nocs, model)
+            #loss, _, _, _, _ = criterion(assign_mat, deltas, prior, nocs, model)
+            loss = loss.sum()
             # estimate pose and scale
             inst_shape = prior + deltas
             assign_mat = F.softmax(assign_mat, dim=2)
