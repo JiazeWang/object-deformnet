@@ -7,6 +7,7 @@ import numpy as np
 from tqdm import tqdm
 import _pickle as cPickle
 import torch
+import torch.nn as nn
 import torch.nn.functional as F
 import torchvision.transforms as transforms
 from lib.network import DeformNet
@@ -19,7 +20,7 @@ parser.add_argument('--data', type=str, default='val', help='val, real_test')
 parser.add_argument('--data_dir', type=str, default='data', help='data directory')
 parser.add_argument('--n_cat', type=int, default=6, help='number of object categories')
 parser.add_argument('--nv_prior', type=int, default=1024, help='number of vertices in shape priors')
-parser.add_argument('--model', type=str, default='results/camera/model_50.pth', help='resume from saved model')
+parser.add_argument('--model', type=str, default='results/camera_more/model_50.pth', help='resume from saved model')
 parser.add_argument('--n_pts', type=int, default=1024, help='number of foreground points')
 parser.add_argument('--img_size', type=int, default=192, help='cropped image size')
 parser.add_argument('--gpu', type=str, default='1', help='GPU to use')
@@ -54,6 +55,7 @@ def detect():
     os.environ['CUDA_VISIBLE_DEVICES'] = opt.gpu
     estimator = DeformNet(opt.n_cat, opt.nv_prior)
     estimator.cuda()
+    estimator = nn.DataParallel(estimator)
     estimator.load_state_dict(torch.load(opt.model))
     estimator.eval()
     # get test data list
