@@ -30,7 +30,7 @@ mean_shapes = np.load('assets/mean_points_emb.npy')
 
 assert opt.data in ['val', 'real_test']
 if opt.data == 'val':
-    result_dir = 'results/eval_camera_more_epoch'
+    result_dir = 'results/eval_camera_more_epoch_twice'
     file_path = 'CAMERA/val_list.txt'
     cam_fx, cam_fy, cam_cx, cam_cy = 577.5, 577.5, 319.5, 239.5
 else:
