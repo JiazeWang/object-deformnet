@@ -47,7 +47,7 @@ def train_net():
     logger = setup_logger('train_log', os.path.join(opt.result_dir, 'log.txt'))
     for key, value in vars(opt).items():
         logger.info(key + ': ' + str(value))
-    os.environ['CUDA_VISIBLE_DEVICES'] = opt.gpu
+    #os.environ['CUDA_VISIBLE_DEVICES'] = opt.gpu
     # model & loss
     estimator = DeformNet(opt.n_cat, opt.nv_prior)
     estimator.cuda()
