@@ -52,7 +52,7 @@ norm_color = transforms.Compose(
 
 def detect():
     # resume model
-    os.environ['CUDA_VISIBLE_DEVICES'] = opt.gpu
+    #os.environ['CUDA_VISIBLE_DEVICES'] = opt.gpu
     estimator = DeformNet(opt.n_cat, opt.nv_prior)
     estimator.cuda()
     estimator = nn.DataParallel(estimator)
