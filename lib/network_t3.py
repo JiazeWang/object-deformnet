@@ -223,6 +223,7 @@ class DeformNet(nn.Module):
         # assignemnt matrix
         assign_feat0 = torch.cat((inst_local0, inst_global0.repeat(1, 1, n_pts), cat_global.repeat(1, 1, n_pts)), dim=1)     # bs x 2176 x n_pts
         assign_mat0 = self.assignment0(assign_feat0)
+        print("assign_mat0.shape:",assign_mat0.shape)
         assign_mat0 = assign_mat0.view(-1, nv, n_pts).contiguous()   # bs, nc*nv, n_pts -> bs*nc, nv, n_pts
         index0 = cat_id + torch.arange(bs, dtype=torch.long).cuda() * self.n_cat
         assign_mat0 = torch.index_select(assign_mat0, 0, index0)   # bs x nv x n_pts
