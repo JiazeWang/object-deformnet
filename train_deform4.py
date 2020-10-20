@@ -145,7 +145,7 @@ def train_net():
                                         tf.Summary.Value(tag='entropy_loss', simple_value=entropy_loss),
                                         tf.Summary.Value(tag='deform_loss', simple_value=deform_loss)])
             tb_writer.add_summary(summary, global_step)
-            if i % 10 == 0:
+            if i % 1000 == 0:
                 logger.info('Batch {0} Loss:{1:f}, corr_loss:{2:f}, cd_loss:{3:f}, entropy_loss:{4:f}, deform_loss:{5:f}'.format(
                     i, loss.item(), corr_loss.item(), cd_loss.item(), entropy_loss.item(), deform_loss.item()))
 
@@ -206,7 +206,7 @@ def train_net():
                     iou_success[cat_id] += 1
             total_count[cat_id] += 1
             val_loss += loss.item()
-            if i % 100 == 0:
+            if i % 1000 == 0:
                 logger.info('Batch {0} Loss:{1:f}'.format(i, loss.item()))
         # compute accuracy
         strict_acc = 100 * (strict_success / total_count)
