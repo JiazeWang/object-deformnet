@@ -250,10 +250,12 @@ class DeformNet(nn.Module):
         #assign_feat0 = torch.cat((inst_local0, inst_global0.repeat(1, 1, n_pts), cat_global.repeat(1, 1, n_pts)), dim=1)     # bs x 2176 x n_pts
         inst_global_p, cat_global_p = self.transformer128_0(inst_global0, cat_global)
         inst_global0 = inst_global0 + inst_global_p
+        print("inst_global0.shape:", inst_global0.shape)
+        print("inst_global_p.shape:", inst_global_p.shape)
         cat_global0 = cat_global + cat_global_p
         assign_feat0 = inst_global0
         deform_feat0 = cat_global0
-
+        print("assign_mat0_B.shape:",assign_mat0.shape)
         assign_mat0 = self.assignment0(assign_feat0)
         print("assign_mat0.shape:",assign_mat0.shape)
         assign_mat0 = assign_mat0.view(-1, nv, n_pts).contiguous()   # bs, nc*nv, n_pts -> bs*nc, nv, n_pts

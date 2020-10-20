@@ -96,6 +96,8 @@ class DeformNet(nn.Module):
         points_p, emb_p = self.transformer64(points, emb)
         points = points + points_p
         emb = emb + emb_p
+        print("points.shape:", inst_global0.shape)
+        print("inst_global_p.shape:", inst_global_p.shape)
         inst_local = torch.cat((points, emb), dim=1)     # bs x 128 x n_pts
         inst_global = self.instance_global(inst_local)    # bs x 1024 x 1
         # category-specific features
