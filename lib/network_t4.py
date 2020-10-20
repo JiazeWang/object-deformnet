@@ -164,7 +164,7 @@ class DeformNet(nn.Module):
         self.deform_wt = 0.01
         self.loss = Loss(self.corr_wt, self.cd_wt, self.entropy_wt, self.deform_wt)
 
-    def forward(self, points, img, choose, cat_id, prior):
+    def forward(self, points, img, choose, cat_id, prior, nocs, model):
         """
         Args:
             points: bs x n_pts x 3
