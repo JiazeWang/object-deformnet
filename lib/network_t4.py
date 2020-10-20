@@ -207,6 +207,7 @@ class DeformNet(nn.Module):
         points2 = points + points_p
         emb2 = emb2 + emb_p
 
+
         di1 = p1.size()[1]
         emb1 = p1.view(bs, di1, -1)
         img_width = p2.size()[2]
@@ -228,12 +229,15 @@ class DeformNet(nn.Module):
         points_p, emb_p = self.transformer64_0(points, emb0)
         points0 = points + points_p
         emb0 = emb0 + emb_p
+        print("points.shape:", points0.shape)
+        print("emb.shape:", emb0.shape)
 
 
 
         inst_local0 = torch.cat((points0, emb0), dim=1)     # bs x 128 x n_pts
         inst_global0 = self.instance_global0(inst_local0)    # bs x 1024 x 1
-
+        print("inst_global0.shape:", inst_global0.shape)
+        print("inst_global_p.shape:", inst_global_p.shape)
         inst_local1 = torch.cat((points1, emb1), dim=1)     # bs x 128 x n_pts
         inst_global1 = self.instance_global1(inst_local1)    # bs x 1024 x 1
 
@@ -255,7 +259,6 @@ class DeformNet(nn.Module):
         cat_global0 = cat_global + cat_global_p
         assign_feat0 = inst_global0
         deform_feat0 = cat_global0
-        print("assign_mat0_B.shape:",assign_mat0.shape)
         assign_mat0 = self.assignment0(assign_feat0)
         print("assign_mat0.shape:",assign_mat0.shape)
         assign_mat0 = assign_mat0.view(-1, nv, n_pts).contiguous()   # bs, nc*nv, n_pts -> bs*nc, nv, n_pts
