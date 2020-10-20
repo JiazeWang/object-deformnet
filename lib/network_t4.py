@@ -41,7 +41,7 @@ class DeformNet(nn.Module):
         self.instance_global0 = nn.Sequential(
             nn.Conv1d(128, 128, 1),
             nn.ReLU(),
-            nn.Conv1d(128, 1024, 1),
+            nn.Conv1d(128, 128, 1),
             nn.ReLU(),
             nn.AdaptiveAvgPool1d(1),
         )
@@ -49,21 +49,21 @@ class DeformNet(nn.Module):
         self.instance_global1 = nn.Sequential(
             nn.Conv1d(128, 128, 1),
             nn.ReLU(),
-            nn.Conv1d(128, 1024, 1),
+            nn.Conv1d(128, 128, 1),
             nn.ReLU(),
             nn.AdaptiveAvgPool1d(1),
         )
         self.instance_global2 = nn.Sequential(
             nn.Conv1d(128, 128, 1),
             nn.ReLU(),
-            nn.Conv1d(128, 1024, 1),
+            nn.Conv1d(128, 128, 1),
             nn.ReLU(),
             nn.AdaptiveAvgPool1d(1),
         )
         self.instance_global3 = nn.Sequential(
             nn.Conv1d(128, 128, 1),
             nn.ReLU(),
-            nn.Conv1d(128, 1024, 1),
+            nn.Conv1d(128, 128, 1),
             nn.ReLU(),
             nn.AdaptiveAvgPool1d(1),
         )
@@ -83,14 +83,14 @@ class DeformNet(nn.Module):
             #nn.AdaptiveAvgPool1d(1),
         )
         self.assignment0 = nn.Sequential(
-            nn.Conv1d(2176, 512, 1),
+            nn.Conv1d(128, 512, 1),
             nn.ReLU(),
             nn.Conv1d(512, 256, 1),
             nn.ReLU(),
             nn.Conv1d(256, n_cat*nv_prior, 1),
         )
         self.assignment1 = nn.Sequential(
-            nn.Conv1d(2176, 512, 1),
+            nn.Conv1d(128, 512, 1),
             nn.ReLU(),
             nn.Conv1d(512, 256, 1),
             nn.ReLU(),
@@ -98,7 +98,7 @@ class DeformNet(nn.Module):
         )
 
         self.assignment2 = nn.Sequential(
-            nn.Conv1d(2176, 512, 1),
+            nn.Conv1d(128, 512, 1),
             nn.ReLU(),
             nn.Conv1d(512, 256, 1),
             nn.ReLU(),
@@ -106,14 +106,14 @@ class DeformNet(nn.Module):
         )
 
         self.assignment3 = nn.Sequential(
-            nn.Conv1d(2176, 512, 1),
+            nn.Conv1d(128, 512, 1),
             nn.ReLU(),
             nn.Conv1d(512, 256, 1),
             nn.ReLU(),
             nn.Conv1d(256, n_cat*nv_prior, 1),
         )
         self.deformation0 = nn.Sequential(
-            nn.Conv1d(2112, 512, 1),
+            nn.Conv1d(128, 512, 1),
             nn.ReLU(),
             nn.Conv1d(512, 256, 1),
             nn.ReLU(),
@@ -121,21 +121,21 @@ class DeformNet(nn.Module):
         )
 
         self.deformation1 = nn.Sequential(
-            nn.Conv1d(2112, 512, 1),
+            nn.Conv1d(128, 512, 1),
             nn.ReLU(),
             nn.Conv1d(512, 256, 1),
             nn.ReLU(),
             nn.Conv1d(256, n_cat*3, 1),
         )
         self.deformation2 = nn.Sequential(
-            nn.Conv1d(2112, 512, 1),
+            nn.Conv1d(128, 512, 1),
             nn.ReLU(),
             nn.Conv1d(512, 256, 1),
             nn.ReLU(),
             nn.Conv1d(256, n_cat*3, 1),
         )
         self.deformation3 = nn.Sequential(
-            nn.Conv1d(2112, 512, 1),
+            nn.Conv1d(128, 512, 1),
             nn.ReLU(),
             nn.Conv1d(512, 256, 1),
             nn.ReLU(),
@@ -191,6 +191,7 @@ class DeformNet(nn.Module):
         emb = out_img.view(bs, di, -1)
         choose = choose.unsqueeze(1).repeat(1, di, 1)
         emb = torch.gather(emb, 2, choose).contiguous()
+        emb3 = self.instance_color(emb)
         points_p, emb_p = self.transformer64_3(points, emb)
         points3 = points + points_p
         emb3 = emb + emb_p
@@ -201,6 +202,7 @@ class DeformNet(nn.Module):
         choose2ori = torch.div(chooseori, img_width*2)*(img_width/2)+torch.div(torch.remainder(chooseori, img_width), 2)
         choose2 = choose2ori.type(torch.cuda.IntTensor).unsqueeze(1).repeat(1, di2, 1).type(torch.cuda.LongTensor)
         emb2 = torch.gather(emb2, 2, choose2).contiguous()
+        emb2 = self.instance_color2(emb2)
         points_p, emb_p = self.transformer64_2(points, emb2)
         points2 = points + points_p
         emb2 = emb2 + emb_p
@@ -211,6 +213,7 @@ class DeformNet(nn.Module):
         choose1ori = torch.div(choose2ori, img_width*2)*(img_width/2)+torch.div(torch.remainder(choose2ori, img_width), 2)
         choose1 = choose1ori.type(torch.cuda.IntTensor).unsqueeze(1).repeat(1, di1, 1).type(torch.cuda.LongTensor)
         emb1 = torch.gather(emb1, 2, choose1).contiguous()
+        emb1 = self.instance_color1(emb1)
         points_p, emb_p = self.transformer64_1(points, emb1)
         points1 = points + points_p
         emb1 = emb1 + emb_p
@@ -221,14 +224,12 @@ class DeformNet(nn.Module):
         choose0ori = torch.div(choose1ori, img_width*2)*(img_width/2)+torch.div(torch.remainder(choose1ori, img_width), 2)
         choose0 = choose0ori.type(torch.cuda.IntTensor).unsqueeze(1).repeat(1, di0, 1).type(torch.cuda.LongTensor)
         emb0 = torch.gather(emb0, 2, choose0).contiguous()
+        emb0 = self.instance_color0(emb0)
         points_p, emb_p = self.transformer64_0(points, emb0)
         points0 = points + points_p
         emb0 = emb0 + emb_p
 
-        emb0 = self.instance_color0(emb0)
-        emb1 = self.instance_color1(emb1)
-        emb2 = self.instance_color2(emb2)
-        emb3 = self.instance_color(emb)
+
 
         inst_local0 = torch.cat((points0, emb0), dim=1)     # bs x 128 x n_pts
         inst_global0 = self.instance_global0(inst_local0)    # bs x 1024 x 1
