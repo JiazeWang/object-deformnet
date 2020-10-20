@@ -278,14 +278,14 @@ class DeformNet(nn.Module):
         assign_feat1 = inst_global1
         deform_feat1 = cat_global1
 
-        assign_feat1 = torch.cat((inst_local1, inst_global1.repeat(1, 1, n_pts), cat_global.repeat(1, 1, n_pts)), dim=1)     # bs x 2176 x n_pts
+        #assign_feat1 = torch.cat((inst_local1, inst_global1.repeat(1, 1, n_pts), cat_global.repeat(1, 1, n_pts)), dim=1)     # bs x 2176 x n_pts
         assign_mat1 = self.assignment1(assign_feat1)
         assign_mat1 = assign_mat1.view(-1, nv, n_pts).contiguous()   # bs, nc*nv, n_pts -> bs*nc, nv, n_pts
         index1 = cat_id + torch.arange(bs, dtype=torch.long).cuda() * self.n_cat
         assign_mat1 = torch.index_select(assign_mat1, 0, index1)   # bs x nv x n_pts
         assign_mat1 = assign_mat1.permute(0, 2, 1).contiguous()    # bs x n_pts x nv
         # deformation field
-        deform_feat1 = torch.cat((cat_local, cat_global.repeat(1, 1, nv), inst_global1.repeat(1, 1, nv)), dim=1)       # bs x 2112 x n_pts
+        #deform_feat1 = torch.cat((cat_local, cat_global.repeat(1, 1, nv), inst_global1.repeat(1, 1, nv)), dim=1)       # bs x 2112 x n_pts
         deltas1 = self.deformation1(deform_feat1)
         deltas1 = deltas1.view(-1, 3, nv).contiguous()   # bs, nc*3, nv -> bs*nc, 3, nv
         deltas1 = torch.index_select(deltas1, 0, index1)   # bs x 3 x nv
@@ -322,14 +322,14 @@ class DeformNet(nn.Module):
         assign_feat3 = inst_global3
         deform_feat3 = cat_global3
 
-        assign_feat3 = torch.cat((inst_local3, inst_global3.repeat(1, 1, n_pts), cat_global.repeat(1, 1, n_pts)), dim=1)     # bs x 2176 x n_pts
+        #assign_feat3 = torch.cat((inst_local3, inst_global3.repeat(1, 1, n_pts), cat_global.repeat(1, 1, n_pts)), dim=1)     # bs x 2176 x n_pts
         assign_mat3 = self.assignment3(assign_feat3)
         assign_mat3 = assign_mat3.view(-1, nv, n_pts).contiguous()   # bs, nc*nv, n_pts -> bs*nc, nv, n_pts
         index3 = cat_id + torch.arange(bs, dtype=torch.long).cuda() * self.n_cat
         assign_mat3 = torch.index_select(assign_mat3, 0, index3)   # bs x nv x n_pts
         assign_mat3 = assign_mat3.permute(0, 2, 1).contiguous()    # bs x n_pts x nv
         # deformation field
-        deform_feat3 = torch.cat((cat_local, cat_global.repeat(1, 1, nv), inst_global3.repeat(1, 1, nv)), dim=1)       # bs x 2112 x n_pts
+        #deform_feat3 = torch.cat((cat_local, cat_global.repeat(1, 1, nv), inst_global3.repeat(1, 1, nv)), dim=1)       # bs x 2112 x n_pts
         deltas3 = self.deformation3(deform_feat3)
         deltas3 = deltas3.view(-1, 3, nv).contiguous()   # bs, nc*3, nv -> bs*nc, 3, nv
         deltas3 = torch.index_select(deltas3, 0, index3)   # bs x 3 x nv
