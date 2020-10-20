@@ -194,7 +194,7 @@ class DeformNet(nn.Module):
         emb3 = self.instance_color(emb)
         points_p, emb_p = self.transformer64_3(points, emb3)
         points3 = points + points_p
-        emb3 = emb + emb_p
+        emb3 = emb3 + emb_p
 
         di2 = p2.size()[1]
         emb2 = p2.view(bs, di2, -1)
