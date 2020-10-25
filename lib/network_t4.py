@@ -5,7 +5,7 @@ from lib.pspnet_t2 import PSPNet
 from lib.loss import Loss
 import torch.nn.functional as F
 from .nn_distance.chamfer_loss import ChamferLoss
-
+from lib.transformer import Transformer
 
 
 class DeformNet(nn.Module):
@@ -313,6 +313,7 @@ class DeformNet(nn.Module):
         assign_mat3 = assign_mat3.permute(0, 2, 1).contiguous()    # bs x n_pts x nv
         # deformation field
         deform_feat3 = cat_global3
+        deltas3 = self.deformation3(deform_feat3)
         deltas3 = deltas3.view(-1, 3, nv).contiguous()   # bs, nc*3, nv -> bs*nc, 3, nv
         deltas3 = torch.index_select(deltas3, 0, index3)   # bs x 3 x nv
         deltas3 = deltas3.permute(0, 2, 1).contiguous()   # bs x nv x 3
