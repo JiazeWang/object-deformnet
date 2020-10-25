@@ -219,19 +219,19 @@ class DeformNet(nn.Module):
         inst_local0 = torch.cat((points0, emb0), dim=1)     # bs x 128 x n_pts
         inst_global0 = self.instance_global0(inst_local0)    # bs x 1024 x 1
 
-        points_p, emb_p = self.transformer64_1(points, emb1)
+        points_p, emb_p = self.transformer64_0(points, emb1)
         points1 = points + points_p
         emb1 = emb1 + emb_p
         inst_local1 = torch.cat((points1, emb1), dim=1)     # bs x 128 x n_pts
         inst_global1 = self.instance_global1(inst_local1)    # bs x 1024 x 1
 
-        points_p, emb_p = self.transformer64_2(points, emb2)
+        points_p, emb_p = self.transformer64_0(points, emb2)
         points2 = points + points_p
         emb2 = emb2 + emb_p
         inst_local2 = torch.cat((points2, emb2), dim=1)     # bs x 128 x n_pts
         inst_global2 = self.instance_global2(inst_local2)    # bs x 1024 x 1
 
-        points_p, emb_p = self.transformer64_3(points, emb3)
+        points_p, emb_p = self.transformer64_0(points, emb3)
         points3 = points + points_p
         emb3 = emb3 + emb_p
         inst_local3 = torch.cat((points3, emb3), dim=1)     # bs x 128 x n_pts
@@ -260,7 +260,7 @@ class DeformNet(nn.Module):
         deltas0 = deltas0.permute(0, 2, 1).contiguous()   # bs x nv x 3
 
 
-        inst_global_p, cat_global_p = self.transformer128_1(inst_global1, cat_global)
+        inst_global_p, cat_global_p = self.transformer128_0(inst_global1, cat_global)
         inst_global1 = inst_global1 + inst_global_p
         cat_global1 = cat_global + cat_global_p
         assign_feat1 = inst_global1
@@ -281,7 +281,7 @@ class DeformNet(nn.Module):
         deltas1 = deltas0 + deltas1
 
 
-        inst_global_p, cat_global_p = self.transformer128_2(inst_global2, cat_global)
+        inst_global_p, cat_global_p = self.transformer128_0(inst_global2, cat_global)
         inst_global2 = inst_global2 + inst_global_p
         cat_global2 = cat_global + cat_global_p
         assign_feat2 = inst_global2
@@ -301,7 +301,7 @@ class DeformNet(nn.Module):
         #assign_mat2 = assign_mat1 + assign_mat2
         deltas2 = deltas1 + deltas2
 
-        inst_global_p, cat_global_p = self.transformer128_3(inst_global3, cat_global)
+        inst_global_p, cat_global_p = self.transformer128_0(inst_global3, cat_global)
         inst_global3 = inst_global3 + inst_global_p
         cat_global3 = cat_global + cat_global_p
         assign_feat3 = inst_global3
