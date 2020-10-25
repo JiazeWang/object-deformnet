@@ -21,7 +21,7 @@ parser.add_argument('--n_pts', type=int, default=1024, help='number of foregroun
 parser.add_argument('--n_cat', type=int, default=6, help='number of object categories')
 parser.add_argument('--nv_prior', type=int, default=1024, help='number of vertices in shape priors')
 parser.add_argument('--img_size', type=int, default=192, help='cropped image size')
-parser.add_argument('--batch_size', type=int, default=16, help='batch size')
+parser.add_argument('--batch_size', type=int, default=18, help='batch size')
 parser.add_argument('--num_workers', type=int, default=20, help='number of data loading workers')
 parser.add_argument('--gpu', type=str, default='0', help='GPU to use')
 parser.add_argument('--lr', type=float, default=0.0001, help='initial learning rate')
@@ -60,7 +60,8 @@ def train_net():
     val_dataset = PoseDataset(opt.dataset, 'test', opt.data_dir, opt.n_pts, opt.img_size)
     # start training
     st_time = time.time()
-    train_steps = 12000
+    #train_steps = 10700 #12000
+    train_steps = 2000
     global_step = train_steps * (opt.start_epoch - 1)
     n_decays = len(opt.decay_epoch)
     assert len(opt.decay_rate) == n_decays
@@ -145,7 +146,7 @@ def train_net():
                                         tf.Summary.Value(tag='entropy_loss', simple_value=entropy_loss),
                                         tf.Summary.Value(tag='deform_loss', simple_value=deform_loss)])
             tb_writer.add_summary(summary, global_step)
-            if i % 1000 == 0:
+            if i % 100 == 0:
                 logger.info('Batch {0} Loss:{1:f}, corr_loss:{2:f}, cd_loss:{3:f}, entropy_loss:{4:f}, deform_loss:{5:f}'.format(
                     i, loss.item(), corr_loss.item(), cd_loss.item(), entropy_loss.item(), deform_loss.item()))
 
@@ -206,7 +207,7 @@ def train_net():
                     iou_success[cat_id] += 1
             total_count[cat_id] += 1
             val_loss += loss.item()
-            if i % 1000 == 0:
+            if i % 100 == 0:
                 logger.info('Batch {0} Loss:{1:f}'.format(i, loss.item()))
         # compute accuracy
         strict_acc = 100 * (strict_success / total_count)
