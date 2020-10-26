@@ -209,25 +209,25 @@ class DeformNet(nn.Module):
         points_p, emb_p = self.transformer64_0(points, emb0)
         points0 = points + points_p
         emb0 = emb0 + emb_p
-        inst_local0 = torch.cat((points, emb0), dim=1)     # bs x 128 x n_pts
+        inst_local0 = torch.cat((points0, emb0), dim=1)     # bs x 128 x n_pts
         inst_global0 = self.instance_global0(inst_local0)    # bs x 1024 x 1
 
         points_p, emb_p = self.transformer64_0(points, emb1)
         points1 = points + points_p
         emb1 = emb1 + emb_p
-        inst_local1 = torch.cat((points, emb1), dim=1)     # bs x 128 x n_pts
+        inst_local1 = torch.cat((points1, emb1), dim=1)     # bs x 128 x n_pts
         inst_global1 = self.instance_global1(inst_local1)    # bs x 1024 x 1
 
         points_p, emb_p = self.transformer64_0(points, emb2)
         points2 = points + points_p
         emb2 = emb2 + emb_p
-        inst_local2 = torch.cat((points, emb2), dim=1)     # bs x 128 x n_pts
+        inst_local2 = torch.cat((points2, emb2), dim=1)     # bs x 128 x n_pts
         inst_global2 = self.instance_global2(inst_local2)    # bs x 1024 x 1
 
         points_p, emb_p = self.transformer64_0(points, emb3)
         points3 = points + points_p
         emb3 = emb3 + emb_p
-        inst_local3 = torch.cat((points, emb3), dim=1)     # bs x 128 x n_pts
+        inst_local3 = torch.cat((points3, emb3), dim=1)     # bs x 128 x n_pts
         inst_global3 = self.instance_global3(inst_local3)    # bs x 1024 x 1
 
         cat_prior = prior.permute(0, 2, 1)
