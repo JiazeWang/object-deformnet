@@ -122,8 +122,8 @@ class PSPNet(nn.Module):
         self.psp = PSPModule(feat_dim, bins)
         self.drop = nn.Dropout2d(p=0.15)
         self.up_1 = PSPUpsample(512, 256)
-        self.up_2 = PSPUpsample(256, 64)
-        self.up_3 = PSPUpsample(64, 64)
+        self.up_2 = PSPUpsample(256, 128)
+        self.up_3 = PSPUpsample(128, 64)
         self.final = nn.Conv2d(64, 32, kernel_size=1)
 
     def forward(self, x):
