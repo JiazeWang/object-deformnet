@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import numpy
-from lib.pspnet_t2 import PSPNet
+from lib.pspnet_t3 import PSPNet
 from lib.loss import Loss
 import torch.nn.functional as F
 from .nn_distance.chamfer_loss import ChamferLoss
@@ -241,27 +241,26 @@ class DeformNet(nn.Module):
         cat_local = self.category_local(cat_prior)    # bs x 64 x n_pts
         cat_global = self.category_global(cat_local)  # bs x 1024 x 1
         # assignemnt matrix
-        """
+
         inst_global_p, cat_global_p = self.transformer128_0(inst_global0, cat_global)
         inst_global0 = inst_global0 + inst_global_p
         cat_global0 = cat_global + cat_global_p
         assign_feat0 = inst_global0
-        """
-        assign_feat0 = torch.cat((inst_local0, inst_global0.repeat(1, 1, n_pts), cat_global.repeat(1, 1, n_pts)), dim=1)
+
         assign_mat0 = self.assignment0(assign_feat0)
         assign_mat0 = assign_mat0.view(-1, nv, n_pts).contiguous()   # bs, nc*nv, n_pts -> bs*nc, nv, n_pts
         index0 = cat_id + torch.arange(bs, dtype=torch.long).cuda() * self.n_cat
         assign_mat0 = torch.index_select(assign_mat0, 0, index0)   # bs x nv x n_pts
         assign_mat0 = assign_mat0.permute(0, 2, 1).contiguous()    # bs x n_pts x nv
         # deformation field
-        #deform_feat0 = cat_global0
-        deform_feat0 = torch.cat((cat_local, cat_global.repeat(1, 1, nv), inst_global0.repeat(1, 1, nv)), dim=1)       # bs x 2112 x n_pts
+        deform_feat0 = cat_global0
+        #deform_feat0 = torch.cat((cat_local, cat_global.repeat(1, 1, nv), inst_global0.repeat(1, 1, nv)), dim=1)       # bs x 2112 x n_pts
         deltas0 = self.deformation0(deform_feat0)
         deltas0 = deltas0.view(-1, 3, nv).contiguous()   # bs, nc*3, nv -> bs*nc, 3, nv
         deltas0 = torch.index_select(deltas0, 0, index0)   # bs x 3 x nv
         deltas0 = deltas0.permute(0, 2, 1).contiguous()   # bs x nv x 3
 
-        """
+
         inst_global_p, cat_global_p = self.transformer128_0(inst_global1, cat_global)
         inst_global1 = inst_global1 + inst_global_p
         cat_global1 = cat_global + cat_global_p
@@ -281,7 +280,6 @@ class DeformNet(nn.Module):
         assign_mat1 = torch.bmm(assign_mat0, assign_mat1)
         #assign_mat1 = assign_mat0 + assign_mat1
         deltas1 = deltas0 + deltas1
-
 
         inst_global_p, cat_global_p = self.transformer128_0(inst_global2, cat_global)
         inst_global2 = inst_global2 + inst_global_p
@@ -322,10 +320,9 @@ class DeformNet(nn.Module):
         assign_mat3 = torch.bmm(assign_mat2, assign_mat3)
         #assign_mat3 = assign_mat2 + assign_mat3
         deltas3 = deltas2 + deltas3
-        """
+
         # Loss calculation
         loss0, corr_loss0, cd_loss0, entropy_loss0, deform_loss0 = self.loss(assign_mat0, deltas0, prior, nocs, model)
-        """
         loss1, corr_loss1, cd_loss1, entropy_loss1, deform_loss1 = self.loss(assign_mat1, deltas1, prior, nocs, model)
         loss2, corr_loss2, cd_loss2, entropy_loss2, deform_loss2 = self.loss(assign_mat2, deltas2, prior, nocs, model)
         loss3, corr_loss3, cd_loss3, entropy_loss3, deform_loss3 = self.loss(assign_mat3, deltas3, prior, nocs, model)
@@ -335,7 +332,6 @@ class DeformNet(nn.Module):
         cd_loss = cd_loss0 + cd_loss1 + cd_loss2 + cd_loss3
         entropy_loss = entropy_loss0 + entropy_loss1 + entropy_loss2 + entropy_loss3
         deform_loss = deform_loss0 + deform_loss1 + deform_loss2 + deform_loss3
-        """
 
         #return assign_mat3, deltas3, loss, corr_loss, cd_loss, entropy_loss, deform_loss
-        return assign_mat0, deltas0, loss0, corr_loss0, cd_loss0, entropy_loss0, deform_loss0
+        return assign_mat0, deltas0, loss3, corr_loss3, cd_loss3, entropy_loss3, deform_loss3
