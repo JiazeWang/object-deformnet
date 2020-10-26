@@ -167,11 +167,9 @@ def train_net():
         val_sampler = torch.utils.data.sampler.SubsetRandomSampler(val_idx)
         #val_dataloader = torch.utils.data.DataLoader(val_dataset, batch_size=1,
         #                                         num_workers=opt.num_workers, pin_memory=True)
-        #val_dataloader = torch.utils.data.DataLoader(val_dataset, batch_size=1, sampler=val_sampler,
-        #                                         num_workers=opt.num_workers, pin_memory=True)
+        val_dataloader = torch.utils.data.DataLoader(val_dataset, batch_size=1, sampler=val_sampler,
+                                                 num_workers=opt.num_workers, pin_memory=True)
 
-        val_dataloader = torch.utils.data.DataLoader(train_dataset, batch_size=1, sampler=train_sampler,
-                                                       num_workers=opt.num_workers, pin_memory=True)
         estimator.eval()
         for i, data in enumerate(val_dataloader, 1):
             points, rgb, choose, cat_id, model, prior, sRT, nocs = data
