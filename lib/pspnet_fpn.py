@@ -136,7 +136,7 @@ class PSPNet(nn.Module):
         p3 = f1 + p2
         p3 = self.up_3(p3)
         p4 = f0 + p3
-        p4 = self.final(f4)
+        p4 = self.final(p4)
         print("new:", p1.shape, p2.shape, p3.shape, p4.shape)
         #print("up3:", p.shape)
         #up3: torch.Size([32, 64, 192, 192])
