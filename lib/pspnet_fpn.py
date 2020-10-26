@@ -145,7 +145,7 @@ class PSPNet(nn.Module):
         self.up_3_1 = PSPUpsample(32, 32)
     def forward(self, x):
         f0, f1, f2, f3 = self.feats(x)
-        print("f:", f0.shape, f1.shape, f2.shape, f3.shape)
+        #print("f:", f0.shape, f1.shape, f2.shape, f3.shape)
         #torch.Size([4, 64, 48, 48]) torch.Size([4, 128, 24, 24]) torch.Size([4, 256, 12, 12]) torch.Size([4, 512, 6, 6])
         p0 = f3
         p1 = self.up_1(f3)
@@ -172,5 +172,5 @@ class PSPNet(nn.Module):
 
         p3output = self.up_3_0(p3)
         p3output = self.up_3_1(p3output)
-        print(p0output.shape, p1output.shape, p2output.shape, p3output.shape)
+        #print(p0output.shape, p1output.shape, p2output.shape, p3output.shape)
         return p0output, p1output, p2output, p3output
