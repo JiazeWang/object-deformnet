@@ -1,6 +1,7 @@
 from lib.network_t4_vis import DeformNet
 import numpy as np
 from torchviz import make_dot
+import torch
 
 estimator = DeformNet(6, 1024)
 choose = np.load("choose.npy")
@@ -9,7 +10,6 @@ points = np.load("points.npy")
 cat_id = np.load("cat_id.npy")
 prior = np.load("prior.npy")
 
-import torch
 choose = torch.from_numpy(choose)
 img = torch.from_numpy(img)
 prior = torch.from_numpy(prior)
