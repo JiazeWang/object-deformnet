@@ -323,6 +323,7 @@ class DeformNet(nn.Module):
 
         # Loss calculation
         loss0, corr_loss0, cd_loss0, entropy_loss0, deform_loss0 = self.loss(assign_mat0, deltas0, prior, nocs, model)
+        """
         loss1, corr_loss1, cd_loss1, entropy_loss1, deform_loss1 = self.loss(assign_mat1, deltas1, prior, nocs, model)
         loss2, corr_loss2, cd_loss2, entropy_loss2, deform_loss2 = self.loss(assign_mat2, deltas2, prior, nocs, model)
         loss3, corr_loss3, cd_loss3, entropy_loss3, deform_loss3 = self.loss(assign_mat3, deltas3, prior, nocs, model)
@@ -332,5 +333,7 @@ class DeformNet(nn.Module):
         cd_loss = cd_loss0 + cd_loss1 + cd_loss2 + cd_loss3
         entropy_loss = entropy_loss0 + entropy_loss1 + entropy_loss2 + entropy_loss3
         deform_loss = deform_loss0 + deform_loss1 + deform_loss2 + deform_loss3
+        """
 
-        return assign_mat3, deltas3, loss, corr_loss, cd_loss, entropy_loss, deform_loss
+        #return assign_mat3, deltas3, loss, corr_loss, cd_loss, entropy_loss, deform_loss
+        return assign_mat0, deltas0, loss0, corr_loss0, cd_loss0, entropy_loss0, deform_loss0

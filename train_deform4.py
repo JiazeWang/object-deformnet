@@ -7,7 +7,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import tensorflow as tf
-from lib.network_t4_vis import DeformNet
+from lib.network_t4 import DeformNet
 from lib.loss import Loss
 from data.pose_dataset import PoseDataset
 from lib.utils import setup_logger, compute_sRT_errors
@@ -117,8 +117,8 @@ def train_net():
             prior = prior.cuda()
             sRT = sRT.cuda()
             nocs = nocs.cuda()
-            #assign_mat3, deltas3, loss, corr_loss, cd_loss, entropy_loss, deform_loss = estimator(points, rgb, choose, cat_id, prior, nocs, model)
-            assign_mat3, deltas3 = estimator(points, rgb, choose, cat_id, prior)
+            assign_mat3, deltas3, loss, corr_loss, cd_loss, entropy_loss, deform_loss = estimator(points, rgb, choose, cat_id, prior, nocs, model)
+            #assign_mat3, deltas3 = estimator(points, rgb, choose, cat_id, prior)
             """
             loss0, corr_loss0, cd_loss0, entropy_loss0, deform_loss0 = criterion(assign_mat0, deltas0, prior, nocs, model)
             loss1, corr_loss1, cd_loss1, entropy_loss1, deform_loss1 = criterion(assign_mat1, deltas1, prior, nocs, model)
