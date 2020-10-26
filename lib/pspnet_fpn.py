@@ -119,37 +119,58 @@ class PSPNet(nn.Module):
             feat_dim = 512
         else:
             raise NotImplementedError
-        self.psp = PSPModule(feat_dim, bins)
+        #self.psp = PSPModule(feat_dim, bins)
         self.drop = nn.Dropout2d(p=0.15)
         self.up_1 = PSPUpsample(512, 256)
         self.up_2 = PSPUpsample(256, 128)
         self.up_3 = PSPUpsample(128, 64)
-        self.final = nn.Conv2d(64, 32, kernel_size=1)
+        #self.final = nn.Conv2d(64, 32, kernel_size=1)
 
+        self.up_0_0 = PSPUpsample(512, 256)
+        self.up_0_1 = PSPUpsample(256, 128)
+        self.up_0_2 = PSPUpsample(128, 64)
+        self.up_0_3 = PSPUpsample(64, 32)
+        self.up_0_4 = PSPUpsample(32, 32)
+
+        self.up_1_0 = PSPUpsample(256, 128)
+        self.up_1_1 = PSPUpsample(128, 64)
+        self.up_1_2 = PSPUpsample(64, 32)
+        self.up_1_3 = PSPUpsample(32, 32)
+
+        self.up_2_0 = PSPUpsample(128, 64)
+        self.up_2_1 = PSPUpsample(64, 32)
+        self.up_2_2 = PSPUpsample(32, 32)
+
+        self.up_3_0 = PSPUpsample(64, 32)
+        self.up_3_1 = PSPUpsample(32, 32)
     def forward(self, x):
         f0, f1, f2, f3 = self.feats(x)
         print("f:", f0.shape, f1.shape, f2.shape, f3.shape)
         #torch.Size([4, 64, 48, 48]) torch.Size([4, 128, 24, 24]) torch.Size([4, 256, 12, 12]) torch.Size([4, 512, 6, 6])
+        p0 = f3
         p1 = self.up_1(f3)
-        p2 = f2 + p1
-        p2 = self.up_2(p2)
-        p3 = f1 + p2
-        p3 = self.up_3(p3)
-        p4 = f0 + p3
-        p4 = self.final(p4)
-        print("new:", p1.shape, p2.shape, p3.shape, p4.shape)
-        #print("up3:", p.shape)
-        #up3: torch.Size([32, 64, 192, 192])
-        p0output = self.up_0_0(f0)
+        p1 = f2 + p1
+        p2 = self.up_2(p1)
+        p2 = f1 + p2
+        p3 = self.up_3(p2)
+        p3 = f0 + p3
+
+        p0output = self.up_0_0(f3)
         p0output = self.up_0_1(p0output)
         p0output = self.up_0_2(p0output)
         p0output = self.up_0_3(p0output)
+        p0output = self.up_0_4(p0output)
 
-        p1output = self.up_1_1(p1)
+        p1output = self.up_1_0(p1)
+        p1output = self.up_1_1(p1output)
         p1output = self.up_1_2(p1output)
         p1output = self.up_1_3(p1output)
 
-        p2output = self.up_2_1(p2)
+        p2output = self.up_2_0(p2)
+        p2output = self.up_2_1(p2output)
         p2output = self.up_2_2(p2output)
-        #print(p0output.shape, p1output.shape, p2output.shape, p3.shape)
-        return p0output, p1output, p2output, p3
+
+        p3output = self.up_3_0(p3)
+        p3output = self.up_3_1(p3output)
+        print(p0output.shape, p1output.shape, p2output.shape, p3output.shape)
+        return p0output, p1output, p2output, p3output
