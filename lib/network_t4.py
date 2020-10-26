@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import numpy
-from lib.pspnet_t3 import PSPNet
+from lib.pspnet_t2 import PSPNet
 from lib.loss import Loss
 import torch.nn.functional as F
 from .nn_distance.chamfer_loss import ChamferLoss
@@ -182,7 +182,7 @@ class DeformNet(nn.Module):
         points = points.permute(0, 2, 1)
         points = self.instance_geometry(points)
         p0, p1, p2, out_img = self.psp(img)
-        print(p0.shape, p1.shape, p2.shape, out_img.shape)
+        #print(p0.shape, p1.shape, p2.shape, out_img.shape)
         di = out_img.size()[1]
         emb = out_img.view(bs, di, -1)
         choose = choose.unsqueeze(1).repeat(1, di, 1)
