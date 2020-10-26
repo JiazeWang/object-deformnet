@@ -259,7 +259,7 @@ class DeformNet(nn.Module):
         deltas0 = torch.index_select(deltas0, 0, index0)   # bs x 3 x nv
         deltas0 = deltas0.permute(0, 2, 1).contiguous()   # bs x nv x 3
 
-
+        """
         inst_global_p, cat_global_p = self.transformer128_0(inst_global1, cat_global)
         inst_global1 = inst_global1 + inst_global_p
         cat_global1 = cat_global + cat_global_p
@@ -320,7 +320,7 @@ class DeformNet(nn.Module):
         assign_mat3 = torch.bmm(assign_mat2, assign_mat3)
         #assign_mat3 = assign_mat2 + assign_mat3
         deltas3 = deltas2 + deltas3
-
+        """
         # Loss calculation
         loss0, corr_loss0, cd_loss0, entropy_loss0, deform_loss0 = self.loss(assign_mat0, deltas0, prior, nocs, model)
         """
