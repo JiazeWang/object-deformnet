@@ -182,7 +182,6 @@ class DeformNet(nn.Module):
         points = points.permute(0, 2, 1)
         points = self.instance_geometry(points)
         p0, p1, p2, out_img = self.psp(img)
-        print(p0.shape, p1.shape, p2.shape, out_img.shape)
         di = out_img.size()[1]
         emb = out_img.view(bs, di, -1)
         choose = choose.unsqueeze(1).repeat(1, di, 1)
