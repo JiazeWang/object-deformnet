@@ -175,22 +175,22 @@ class DeformNet(nn.Module):
             log_assign: bs x n_pts x nv, for numerical stability
 
         """
-        """
-        savenpy = points[0].cpu().numpy()
+
+        savenpy = points.cpu().numpy()
         numpy.save("points.npy", savenpy)
 
-        savenpy = img[0].cpu().numpy()
+        savenpy = img.cpu().numpy()
         numpy.save("img.npy", savenpy)
 
-        savenpy = choose[0].cpu().numpy()
+        savenpy = choose.cpu().numpy()
         numpy.save("choose.npy", savenpy)
 
-        savenpy = cat_id[0].cpu().numpy()
+        savenpy = cat_id.cpu().numpy()
         numpy.save("cat_id.npy", savenpy)
 
-        savenpy = prior[0].cpu().numpy()
+        savenpy = prior.cpu().numpy()
         numpy.save("prior.npy", savenpy)
-        """
+
         chooseori = choose
         bs, n_pts = points.size()[:2]
         nv = prior.size()[1]
