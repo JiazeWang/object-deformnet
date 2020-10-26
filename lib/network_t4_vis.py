@@ -2,9 +2,9 @@ import torch
 import torch.nn as nn
 import numpy
 from lib.pspnet_t2 import PSPNet
-from lib.loss import Loss
+#from lib.loss import Loss
 import torch.nn.functional as F
-from .nn_distance.chamfer_loss import ChamferLoss
+#from .nn_distance.chamfer_loss import ChamferLoss
 from lib.transformer import Transformer
 
 
