@@ -3,7 +3,7 @@ import numpy as np
 from torchviz import make_dot
 import torch
 
-estimator = DeformNet(6, 1024)
+model = DeformNet(6, 1024)
 choose = np.load("choose.npy")
 img = np.load("img.npy")
 points = np.load("points.npy")

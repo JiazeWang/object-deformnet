@@ -264,7 +264,7 @@ class DeformNet(nn.Module):
         assign_mat0 = self.assignment0(assign_feat0)
 
         assign_mat0 = assign_mat0.view(-1, nv, n_pts).contiguous()   # bs, nc*nv, n_pts -> bs*nc, nv, n_pts
-        index0 = cat_id + torch.arange(bs, dtype=torch.long).cuda() * self.n_cat
+        index0 = cat_id + torch.arange(bs, dtype=torch.long) * self.n_cat
         assign_mat0 = torch.index_select(assign_mat0, 0, index0)   # bs x nv x n_pts
         assign_mat0 = assign_mat0.permute(0, 2, 1).contiguous()    # bs x n_pts x nv
         # deformation field
@@ -282,7 +282,7 @@ class DeformNet(nn.Module):
         assign_mat1 = self.assignment1(assign_feat1)
 
         assign_mat1 = assign_mat1.view(-1, nv, n_pts).contiguous()   # bs, nc*nv, n_pts -> bs*nc, nv, n_pts
-        index1 = cat_id + torch.arange(bs, dtype=torch.long).cuda() * self.n_cat
+        index1 = cat_id + torch.arange(bs, dtype=torch.long) * self.n_cat
         assign_mat1 = torch.index_select(assign_mat1, 0, index1)   # bs x nv x n_pts
         assign_mat1 = assign_mat1.permute(0, 2, 1).contiguous()    # bs x n_pts x nv
         # deformation field
@@ -302,7 +302,7 @@ class DeformNet(nn.Module):
         assign_mat2 = self.assignment2(assign_feat2)
 
         assign_mat2 = assign_mat2.view(-1, nv, n_pts).contiguous()   # bs, nc*nv, n_pts -> bs*nc, nv, n_pts
-        index2 = cat_id + torch.arange(bs, dtype=torch.long).cuda() * self.n_cat
+        index2 = cat_id + torch.arange(bs, dtype=torch.long) * self.n_cat
         assign_mat2 = torch.index_select(assign_mat2, 0, index2)   # bs x nv x n_pts
         assign_mat2 = assign_mat2.permute(0, 2, 1).contiguous()    # bs x n_pts x nv
         # deformation field
@@ -321,7 +321,7 @@ class DeformNet(nn.Module):
         assign_mat3 = self.assignment3(assign_feat3)
 
         assign_mat3 = assign_mat3.view(-1, nv, n_pts).contiguous()   # bs, nc*nv, n_pts -> bs*nc, nv, n_pts
-        index3 = cat_id + torch.arange(bs, dtype=torch.long).cuda() * self.n_cat
+        index3 = cat_id + torch.arange(bs, dtype=torch.long) * self.n_cat
         assign_mat3 = torch.index_select(assign_mat3, 0, index3)   # bs x nv x n_pts
         assign_mat3 = assign_mat3.permute(0, 2, 1).contiguous()    # bs x n_pts x nv
         # deformation field
