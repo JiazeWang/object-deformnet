@@ -149,9 +149,9 @@ class PSPNet(nn.Module):
         #print("up3:", p.shape)
         #up3: torch.Size([32, 64, 192, 192])
         p0output = self.up_0_0(p0)
-        p0output = self.up_0_1(p0utput)
-        p0output = self.up_0_2(p0utput)
-        p0output = self.up_0_3(p0utput)
+        p0output = self.up_0_1(p0output)
+        p0output = self.up_0_2(p0output)
+        p0output = self.up_0_3(p0output)
 
         p1output = self.up_1_1(p1)
         p1output = self.up_1_2(p1output)
@@ -159,5 +159,5 @@ class PSPNet(nn.Module):
 
         p2output = self.up_2_1(p2)
         p2output = self.up_2_2(p2output)
-        print(p0output.shape, p1output.shape, p2output.shape, p3.shape)
+        #print(p0output.shape, p1output.shape, p2output.shape, p3.shape)
         return p0output, p1output, p2output, p3
