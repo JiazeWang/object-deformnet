@@ -14,19 +14,19 @@ class DeformNet(nn.Module):
         self.n_cat = n_cat
         self.psp = PSPNet(bins=(1, 2, 3, 6), backend='resnet18')
         self.instance_color3 = nn.Sequential(
-            nn.Conv1d(64, 64, 1),
+            nn.Conv1d(32, 64, 1),
             nn.ReLU(),
         )
         self.instance_color0 = nn.Sequential(
-            nn.Conv1d(64, 64, 1),
+            nn.Conv1d(32, 64, 1),
             nn.ReLU(),
         )
         self.instance_color1 = nn.Sequential(
-            nn.Conv1d(64, 64, 1),
+            nn.Conv1d(32, 64, 1),
             nn.ReLU(),
         )
         self.instance_color2 = nn.Sequential(
-            nn.Conv1d(64, 64, 1),
+            nn.Conv1d(32, 64, 1),
             nn.ReLU(),
         )
         self.instance_geometry = nn.Sequential(
@@ -40,9 +40,9 @@ class DeformNet(nn.Module):
         self.instance_global0 = nn.Sequential(
             nn.Conv1d(128, 128, 1),
             nn.ReLU(),
-            nn.Conv1d(128, 1024, 1),
-            nn.ReLU(),
-            nn.AdaptiveAvgPool1d(1),
+            #nn.Conv1d(128, 1024, 1),
+            #nn.ReLU(),
+            #nn.AdaptiveAvgPool1d(1),
         )
 
         self.instance_global1 = nn.Sequential(
@@ -77,12 +77,12 @@ class DeformNet(nn.Module):
         self.category_global = nn.Sequential(
             nn.Conv1d(64, 128, 1),
             nn.ReLU(),
-            nn.Conv1d(128, 1024, 1),
-            nn.ReLU(),
-            nn.AdaptiveAvgPool1d(1),
+            #nn.Conv1d(128, 1024, 1),
+            #nn.ReLU(),
+            #nn.AdaptiveAvgPool1d(1),
         )
         self.assignment0 = nn.Sequential(
-            nn.Conv1d(2176, 512, 1),
+            nn.Conv1d(128, 512, 1),
             nn.ReLU(),
             nn.Conv1d(512, 256, 1),
             nn.ReLU(),
@@ -112,7 +112,7 @@ class DeformNet(nn.Module):
             nn.Conv1d(256, n_cat*nv_prior, 1),
         )
         self.deformation0 = nn.Sequential(
-            nn.Conv1d(2112, 512, 1),
+            nn.Conv1d(128, 512, 1),
             nn.ReLU(),
             nn.Conv1d(512, 256, 1),
             nn.ReLU(),
