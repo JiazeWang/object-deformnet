@@ -39,8 +39,8 @@ class ResNet(nn.Module):
         self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
         self.layer1 = self._make_layer(block, 64, layers[0])
         self.layer2 = self._make_layer(block, 128, layers[1], stride=2)
-        self.layer3 = self._make_layer(block, 256, layers[2], stride=1, dilation=2)
-        self.layer4 = self._make_layer(block, 512, layers[3], stride=1, dilation=4)
+        self.layer3 = self._make_layer(block, 256, layers[2], stride=2)
+        self.layer4 = self._make_layer(block, 512, layers[3], stride=2)
 
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
@@ -120,37 +120,24 @@ class PSPNet(nn.Module):
         else:
             raise NotImplementedError
         self.psp = PSPModule(feat_dim, bins)
-        self.up_0_0 = PSPUpsample(1024, 256)
-        self.up_0_1 = PSPUpsample(256, 64)
-        self.up_0_2 = PSPUpsample(64, 64)
-        self.up_0_3 = nn.Conv2d(64, 32, kernel_size=1)
         self.drop = nn.Dropout2d(p=0.15)
-        self.up_1 = PSPUpsample(1024, 256)
-        self.up_1_1 = PSPUpsample(256, 64)
-        self.up_1_2 = PSPUpsample(64, 64)
-        self.up_1_3 = nn.Conv2d(64, 32, kernel_size=1)
+        self.up_1 = PSPUpsample(512, 256)
         self.up_2 = PSPUpsample(256, 64)
-        self.up_2_1 = PSPUpsample(64, 64)
-        self.up_2_2 = nn.Conv2d(64, 32, kernel_size=1)
         self.up_3 = PSPUpsample(64, 64)
         self.final = nn.Conv2d(64, 32, kernel_size=1)
 
     def forward(self, x):
         f0, f1, f2, f3 = self.feats(x)
-        print(f0.shape, f1.shape, f2.shape, f3.shape)
-        #p0 = self.psp(f)
-        #print("psp:", p.shape)
-        #psp: torch.Size([32, 1024, 24, 24])
+        print("f:", f0.shape, f1.shape, f2.shape, f3.shape)
+        #torch.Size([4, 64, 48, 48]) torch.Size([4, 128, 24, 24]) torch.Size([4, 256, 12, 12]) torch.Size([4, 512, 6, 6])
         p1 = self.up_1(f3)
-        #up1: torch.Size([32, 256, 48, 48])
-        #print("up1:", p.shape)
-        p1 = self.drop(p1)
-        p2 = self.up_2(f2)
-        #print("up2:", p.shape)
-        #up2: torch.Size([32, 64, 96, 96])
-        p2 = self.drop(p2)
-        p3 = self.up_3(p2)
-        p3 = self.final(f1)
+        p2 = f2 + p1
+        p2 = self.up_2(p2)
+        p3 = f1 + p2
+        p3 = self.up_3(p3)
+        p4 = f0 + p3
+        p4 = self.final(f4)
+        print("new:", p1.shape, p2.shape, p3.shape, p4.shape)
         #print("up3:", p.shape)
         #up3: torch.Size([32, 64, 192, 192])
         p0output = self.up_0_0(f0)
