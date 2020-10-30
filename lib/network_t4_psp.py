@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import numpy
-from lib.pspnet_t3 import PSPNet
+from lib.pspnet_t3_test import PSPNet
 from lib.loss import Loss
 import torch.nn.functional as F
 from .nn_distance.chamfer_loss import ChamferLoss
