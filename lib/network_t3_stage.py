@@ -211,12 +211,12 @@ class DeformNet(nn.Module):
 
         inst_local3 = torch.cat((points, emb3), dim=1)     # bs x 128 x n_pts
         inst_global3 = self.instance_global3(inst_local3)    # bs x 1024 x 1
-
+        """
         cat_prior = prior.permute(0, 2, 1)
         cat_local = self.category_local(cat_prior)    # bs x 64 x n_pts
         cat_global = self.category_global(cat_local)  # bs x 1024 x 1
         # assignemnt matrix
-        """
+
         assign_feat0 = torch.cat((inst_local0, inst_global0.repeat(1, 1, n_pts), cat_global.repeat(1, 1, n_pts)), dim=1)     # bs x 2176 x n_pts
         assign_mat0 = self.assignment0(assign_feat0)
         #print("assign_mat0.shape:",assign_mat0.shape)
