@@ -157,6 +157,10 @@ def train_net():
         # evaluate one epoch
         logger.info('Time {0}'.format(time.strftime("%Hh %Mm %Ss", time.gmtime(time.time() - st_time)) +
                     ', ' + 'Epoch %02d' % epoch + ', ' + 'Testing started'))
+        logger.info('>>>>>>>>----------Epoch {:02d} model saved---------<<<<<<<<'.format(epoch))
+        # save model after each
+        torch.save(estimator.state_dict(), '{0}/model_{1:02d}.pth'.format(opt.result_dir, epoch))
+        """
         val_loss = 0.0
         total_count = np.zeros((opt.n_cat,), dtype=int)
         strict_success = np.zeros((opt.n_cat,), dtype=int)    # 5 degree and 5 cm
@@ -235,7 +239,9 @@ def train_net():
         logger.info('5^o 5cm: {:4f} 10^o 5cm: {:4f} IoU: {:4f}'.format(strict_acc, easy_acc, iou_acc))
         logger.info('>>>>>>>>----------Epoch {:02d} test finish---------<<<<<<<<'.format(epoch))
         # save model after each epoch
+
         torch.save(estimator.state_dict(), '{0}/model_{1:02d}.pth'.format(opt.result_dir, epoch))
+        """
 
 
 if __name__ == '__main__':
