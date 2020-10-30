@@ -116,18 +116,18 @@ class PSPNet(nn.Module):
         else:
             raise NotImplementedError
         self.psp = PSPModule(feat_dim, bins)
-        self.up_0_0 = PSPUpsample(1024, 64, scale_factor=8)
+        self.up_0_0 = PSPUpsample(1024, 32, scale_factor=8)
         #self.up_0_1 = PSPUpsample(256, 64)
         #self.up_0_2 = PSPUpsample(64, 64)
-        self.up_0_3 = nn.Conv2d(64, 32, kernel_size=1)
+        #self.up_0_3 = nn.Conv2d(64, 32, kernel_size=1)
         self.drop = nn.Dropout2d(p=0.15)
         self.up_1 = PSPUpsample(1024, 256)
-        self.up_1_1 = PSPUpsample(256, 64, scale_factor=4)
+        self.up_1_1 = PSPUpsample(256, 32, scale_factor=4)
         #self.up_1_2 = PSPUpsample(64, 64)
-        self.up_1_3 = nn.Conv2d(64, 32, kernel_size=1)
+        #self.up_1_3 = nn.Conv2d(64, 32, kernel_size=1)
         self.up_2 = PSPUpsample(256, 64)
-        self.up_2_1 = PSPUpsample(64, 64, scale_factor=2)
-        self.up_2_2 = nn.Conv2d(64, 32, kernel_size=1)
+        self.up_2_1 = PSPUpsample(64, 32, scale_factor=2)
+        #self.up_2_2 = nn.Conv2d(64, 32, kernel_size=1)
         self.up_3 = PSPUpsample(64, 64)
         self.final = nn.Conv2d(64, 32, kernel_size=1)
 
@@ -151,13 +151,14 @@ class PSPNet(nn.Module):
         p0output = self.up_0_0(p0)
         #p0output = self.up_0_1(p0output)
         #p0output = self.up_0_2(p0output)
-        p0output = self.up_0_3(p0output)
+        #p0output = self.up_0_3(p0output)
 
         p1output = self.up_1_1(p1)
         #p1output = self.up_1_2(p1output)
-        p1output = self.up_1_3(p1output)
+
+        #p1output = self.up_1_3(p1output)
 
         p2output = self.up_2_1(p2)
-        p2output = self.up_2_2(p2output)
+        #p2output = self.up_2_2(p2output)
         print(p0output.shape, p1output.shape, p2output.shape, p3.shape)
         return p0output, p1output, p2output, p3
