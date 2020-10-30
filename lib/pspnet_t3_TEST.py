@@ -126,7 +126,7 @@ class PSPNet(nn.Module):
         #self.up_1_2 = PSPUpsample(64, 64)
         self.up_1_3 = nn.Conv2d(64, 32, kernel_size=1)
         self.up_2 = PSPUpsample(256, 64)
-        self.up_2_1 = PSPUpsample(64, 64, scale_factor=2)
+        #self.up_2_1 = PSPUpsample(64, 64, scale_factor=2)
         self.up_2_2 = nn.Conv2d(64, 32, kernel_size=1)
         self.up_3 = PSPUpsample(64, 64)
         self.final = nn.Conv2d(64, 32, kernel_size=1)
