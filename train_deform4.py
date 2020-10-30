@@ -61,8 +61,8 @@ def train_net():
     # start training
     st_time = time.time()
     #train_steps =  3000
-    #train_steps = 10700
-    train_steps = 107
+    train_steps = 10700
+    #train_steps = 107
     global_step = train_steps * (opt.start_epoch - 1)
     n_decays = len(opt.decay_epoch)
     assert len(opt.decay_rate) == n_decays
