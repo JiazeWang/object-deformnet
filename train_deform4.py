@@ -35,7 +35,8 @@ opt.decay_epoch = [0, 10, 20, 30, 40]
 opt.decay_rate = [1.0, 0.6, 0.3, 0.1, 0.01]
 opt.corr_wt = 1.0
 opt.cd_wt = 5.0
-opt.entropy_wt = 0.0001
+#opt.entropy_wt = 0.0001
+opt.entropy_wt = 0.001
 opt.deform_wt = 0.01
 
 
