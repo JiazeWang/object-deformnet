@@ -8,7 +8,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import tensorflow as tf
 #from lib.network_t4_psp import DeformNet
-from lib.network_t1_four import DeformNet
+from lib.network_t5 import DeformNet
 from lib.loss import Loss
 from data.pose_dataset import PoseDataset
 from lib.utils import setup_logger, compute_sRT_errors
