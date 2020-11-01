@@ -92,6 +92,13 @@ class DeformNet(nn.Module):
         self.transformer128 = Transformer(emb_dims=128, N=1)
         # Initialize weights to be small so initial deformations aren't so big
         self.deformation[4].weight.data.normal_(0, 0.0001)
+        self.deformation0[4].weight.data.normal_(0, 0.0001)
+        self.deformation1[4].weight.data.normal_(0, 0.0001)
+        self.corr_wt = 1.0
+        self.cd_wt = 5.0
+        self.entropy_wt = 0.0001
+        self.deform_wt = 0.01
+        self.loss = Loss(self.corr_wt, self.cd_wt, self.entropy_wt, self.deform_wt)
 
     def forward(self, points, img, choose, cat_id, prior, nocs, model):
         """
