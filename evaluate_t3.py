@@ -16,11 +16,11 @@ from lib.utils import load_depth, get_bbox, compute_mAP, plot_mAP
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--data', type=str, default='real_test', help='val, real_test')
+parser.add_argument('--data', type=str, default='val', help='val, real_test')
 parser.add_argument('--data_dir', type=str, default='data', help='data directory')
 parser.add_argument('--n_cat', type=int, default=6, help='number of object categories')
 parser.add_argument('--nv_prior', type=int, default=1024, help='number of vertices in shape priors')
-parser.add_argument('--model', type=str, default='results/all_first_real_/model_12.pth', help='resume from saved model')
+parser.add_argument('--model', type=str, default='results/all_first_camera_/model_16.pth', help='resume from saved model')
 parser.add_argument('--n_pts', type=int, default=1024, help='number of foreground points')
 parser.add_argument('--img_size', type=int, default=192, help='cropped image size')
 parser.add_argument('--gpu', type=str, default='3', help='GPU to use')
@@ -30,11 +30,11 @@ mean_shapes = np.load('assets/mean_points_emb.npy')
 
 assert opt.data in ['val', 'real_test']
 if opt.data == 'val':
-    result_dir = 'results/eval_camera_t4'
+    result_dir = 'results/eval_camera_t4_16'
     file_path = 'CAMERA/val_list.txt'
     cam_fx, cam_fy, cam_cx, cam_cy = 577.5, 577.5, 319.5, 239.5
 else:
-    result_dir = 'results/eval_real_t4'
+    result_dir = 'results/eval_real_t4_16'
     file_path = 'Real/test_list.txt'
     cam_fx, cam_fy, cam_cx, cam_cy = 591.0125, 590.16775, 322.525, 244.11084
 
