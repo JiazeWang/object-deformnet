@@ -328,4 +328,4 @@ class DeformNet(nn.Module):
         deform_loss = deform_loss0 + deform_loss1 + deform_loss2 + deform_loss3
         """
         #return assign_mat3, deltas3, loss, corr_loss, cd_loss, entropy_loss, deform_loss
-        return assign_mat0, deltas0, loss, corr_loss, cd_loss, entropy_loss, deform_loss
+        return assign_mat0, deltas0#, loss, corr_loss, cd_loss, entropy_loss, deform_loss
