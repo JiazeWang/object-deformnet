@@ -60,6 +60,13 @@ class DeformNet(nn.Module):
             nn.ReLU(),
             nn.Conv1d(256, n_cat*nv_prior, 1),
         )
+        self.assignment1 = nn.Sequential(
+            nn.Conv1d(128, 512, 1),
+            nn.ReLU(),
+            nn.Conv1d(512, 256, 1),
+            nn.ReLU(),
+            nn.Conv1d(256, n_cat*nv_prior, 1),
+        )
         self.deformation = nn.Sequential(
             nn.Conv1d(128, 512, 1),
             nn.ReLU(),
@@ -68,6 +75,13 @@ class DeformNet(nn.Module):
             nn.Conv1d(256, n_cat*3, 1),
         )
         self.deformation0 = nn.Sequential(
+            nn.Conv1d(128, 512, 1),
+            nn.ReLU(),
+            nn.Conv1d(512, 256, 1),
+            nn.ReLU(),
+            nn.Conv1d(256, n_cat*3, 1),
+        )
+        self.deformation1 = nn.Sequential(
             nn.Conv1d(128, 512, 1),
             nn.ReLU(),
             nn.Conv1d(512, 256, 1),
