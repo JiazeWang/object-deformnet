@@ -63,8 +63,8 @@ def train_net():
     val_dataset = PoseDataset(opt.dataset, 'test', opt.data_dir, opt.n_pts, opt.img_size)
     # start training
     st_time = time.time()
-    train_steps =  4000
-    #train_steps = 100
+    #train_steps =  4000
+    train_steps = 100
     #train_steps = 107
     global_step = train_steps * (opt.start_epoch - 1)
     n_decays = len(opt.decay_epoch)
