@@ -7,7 +7,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import tensorflow as tf
-from lib.network_t4_t4 import DeformNet
+from lib.network_t4_psp import DeformNet
 from lib.loss import Loss
 from data.pose_dataset import PoseDataset
 from lib.utils import setup_logger, compute_sRT_errors
@@ -28,15 +28,15 @@ parser.add_argument('--lr', type=float, default=0.0001, help='initial learning r
 parser.add_argument('--start_epoch', type=int, default=1, help='which epoch to start')
 parser.add_argument('--max_epoch', type=int, default=50, help='max number of epochs to train')
 parser.add_argument('--resume_model', type=str, default='', help='resume from saved model')
-parser.add_argument('--result_dir', type=str, default='results/T4_four_transformer', help='directory to save train results')
+parser.add_argument('--result_dir', type=str, default='results/T4_four_112revised', help='directory to save train results')
 opt = parser.parse_args()
 
 opt.decay_epoch = [0, 10, 20, 30, 40]
 opt.decay_rate = [1.0, 0.6, 0.3, 0.1, 0.01]
 opt.corr_wt = 1.0
 opt.cd_wt = 5.0
-#opt.entropy_wt = 0.0001
-opt.entropy_wt = 0.001
+opt.entropy_wt = 0.0001
+#opt.entropy_wt = 0.001
 opt.deform_wt = 0.01
 
 
