@@ -30,7 +30,7 @@ parser.add_argument('--lr', type=float, default=0.0001, help='initial learning r
 parser.add_argument('--start_epoch', type=int, default=1, help='which epoch to start')
 parser.add_argument('--max_epoch', type=int, default=50, help='max number of epochs to train')
 parser.add_argument('--resume_model', type=str, default='', help='resume from saved model')
-parser.add_argument('--result_dir', type=str, default='results/T1_three_stage', help='directory to save train results')
+parser.add_argument('--result_dir', type=str, default='results/T5_three_stage', help='directory to save train results')
 opt = parser.parse_args()
 
 opt.decay_epoch = [0, 10, 20, 30, 40]
@@ -162,8 +162,8 @@ def train_net():
                     ', ' + 'Epoch %02d' % epoch + ', ' + 'Testing started'))
         logger.info('>>>>>>>>----------Epoch {:02d} model saved---------<<<<<<<<'.format(epoch))
         # save model after each
-        torch.save(estimator.state_dict(), '{0}/model_{1:02d}.pth'.format(opt.result_dir, epoch))
-        """
+        #torch.save(estimator.state_dict(), '{0}/model_{1:02d}.pth'.format(opt.result_dir, epoch))
+
         val_loss = 0.0
         total_count = np.zeros((opt.n_cat,), dtype=int)
         strict_success = np.zeros((opt.n_cat,), dtype=int)    # 5 degree and 5 cm
@@ -244,7 +244,7 @@ def train_net():
         # save model after each epoch
 
         torch.save(estimator.state_dict(), '{0}/model_{1:02d}.pth'.format(opt.result_dir, epoch))
-        """
+
 
 
 if __name__ == '__main__':
