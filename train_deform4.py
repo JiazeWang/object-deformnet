@@ -28,7 +28,7 @@ parser.add_argument('--lr', type=float, default=0.0001, help='initial learning r
 parser.add_argument('--start_epoch', type=int, default=1, help='which epoch to start')
 parser.add_argument('--max_epoch', type=int, default=50, help='max number of epochs to train')
 parser.add_argument('--resume_model', type=str, default='', help='resume from saved model')
-parser.add_argument('--result_dir', type=str, default='results/all_first_camera_', help='directory to save train results')
+parser.add_argument('--result_dir', type=str, default='results/all_first_camera_fast_test', help='directory to save train results')
 opt = parser.parse_args()
 
 opt.decay_epoch = [0, 10, 20, 30, 40]
@@ -60,7 +60,7 @@ def train_net():
     val_dataset = PoseDataset(opt.dataset, 'test', opt.data_dir, opt.n_pts, opt.img_size)
     # start training
     st_time = time.time()
-    train_steps =  10667
+    train_steps =  2667
     #train_steps = 100
     #train_steps = 107
     global_step = train_steps * (opt.start_epoch - 1)
@@ -148,7 +148,7 @@ def train_net():
                                         tf.Summary.Value(tag='entropy_loss', simple_value=entropy_loss),
                                         tf.Summary.Value(tag='deform_loss', simple_value=deform_loss)])
             tb_writer.add_summary(summary, global_step)
-            if i % 100 == 0:
+            if i % 10 == 0:
                 logger.info('Batch {0} Loss:{1:f}, corr_loss:{2:f}, cd_loss:{3:f}, entropy_loss:{4:f}, deform_loss:{5:f}'.format(
                     i, loss.item(), corr_loss.item(), cd_loss.item(), entropy_loss.item(), deform_loss.item()))
 
