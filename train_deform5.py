@@ -30,7 +30,7 @@ parser.add_argument('--lr', type=float, default=0.0001, help='initial learning r
 parser.add_argument('--start_epoch', type=int, default=1, help='which epoch to start')
 parser.add_argument('--max_epoch', type=int, default=50, help='max number of epochs to train')
 parser.add_argument('--resume_model', type=str, default='', help='resume from saved model')
-parser.add_argument('--result_dir', type=str, default='results/T5_three_stage_re', help='directory to save train results')
+parser.add_argument('--result_dir', type=str, default='results/T5_three_stage_re_real', help='directory to save train results')
 opt = parser.parse_args()
 
 opt.decay_epoch = [0, 10, 20, 30, 40]
@@ -160,7 +160,7 @@ def train_net():
         # evaluate one epoch
         logger.info('Time {0}'.format(time.strftime("%Hh %Mm %Ss", time.gmtime(time.time() - st_time)) +
                     ', ' + 'Epoch %02d' % epoch + ', ' + 'Testing started'))
-        logger.info('>>>>>>>>----------Epoch {:02d} model saved---------<<<<<<<<'.format(epoch))
+
         # save model after each
         #torch.save(estimator.state_dict(), '{0}/model_{1:02d}.pth'.format(opt.result_dir, epoch))
 
@@ -242,7 +242,7 @@ def train_net():
         logger.info('5^o 5cm: {:4f} 10^o 5cm: {:4f} IoU: {:4f}'.format(strict_acc, easy_acc, iou_acc))
         logger.info('>>>>>>>>----------Epoch {:02d} test finish---------<<<<<<<<'.format(epoch))
         # save model after each epoch
-
+        logger.info('>>>>>>>>----------Epoch {:02d} model saved---------<<<<<<<<'.format(epoch))
         torch.save(estimator.state_dict(), '{0}/model_{1:02d}.pth'.format(opt.result_dir, epoch))
 
 
