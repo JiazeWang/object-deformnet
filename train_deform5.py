@@ -23,7 +23,7 @@ parser.add_argument('--n_cat', type=int, default=6, help='number of object categ
 parser.add_argument('--nv_prior', type=int, default=1024, help='number of vertices in shape priors')
 parser.add_argument('--img_size', type=int, default=192, help='cropped image size')
 #parser.add_argument('--batch_size', type=int, default=18, help='batch size')
-parser.add_argument('--batch_size', type=int, default=48, help='batch size')
+parser.add_argument('--batch_size', type=int, default=36, help='batch size')
 parser.add_argument('--num_workers', type=int, default=24, help='number of data loading workers')
 parser.add_argument('--gpu', type=str, default='0', help='GPU to use')
 parser.add_argument('--lr', type=float, default=0.0001, help='initial learning rate')
@@ -63,8 +63,8 @@ def train_net():
     val_dataset = PoseDataset(opt.dataset, 'test', opt.data_dir, opt.n_pts, opt.img_size)
     # start training
     st_time = time.time()
-    train_steps =  4000
-    #train_steps = 100
+    #train_steps =  4000
+    train_steps = 5334
     #train_steps = 107
     global_step = train_steps * (opt.start_epoch - 1)
     n_decays = len(opt.decay_epoch)
