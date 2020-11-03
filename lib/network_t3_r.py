@@ -171,11 +171,11 @@ class DeformNet(nn.Module):
         deltas0 = torch.index_select(deltas0, 0, index)   # bs x 3 x nv
         deltas0 = deltas0.permute(0, 2, 1).contiguous()   # bs x nv x 3
 
-        #assign_mat0 = torch.bmm(assign_mat, assign_mat0)
-        #deltas0 = deltas + deltas0
+        assign_mat0 = torch.bmm(assign_mat, assign_mat0)
+        deltas0 = deltas + deltas0
 #stage2
 
-        prior1 = prior0 + deltas0
+        prior1 = prior + deltas0
         cat_prior1 = prior1.permute(0, 2, 1)
         cat_local1 = self.category_local(cat_prior1)    # bs x 64 x n_pts
         cat_global1 = self.category_global(cat_local1)  # bs x 1024 x 1
@@ -193,8 +193,9 @@ class DeformNet(nn.Module):
         deltas1 = torch.index_select(deltas1, 0, index)   # bs x 3 x nv
         deltas1 = deltas1.permute(0, 2, 1).contiguous()   # bs x nv x 3
 
-        #assign_mat1 = torch.bmm(assign_mat0, assign_mat1)
-        #deltas1 = deltas0 + deltas1
+        assign_mat1 = torch.bmm(assign_mat0, assign_mat1)
+        deltas1 = deltas0 + deltas1
+
         loss0, corr_loss0, cd_loss0, entropy_loss0, deform_loss0 = self.loss(assign_mat, deltas, prior, nocs, model)
         loss1, corr_loss1, cd_loss1, entropy_loss1, deform_loss1 = self.loss(assign_mat0, deltas0, prior, nocs, model)
         loss2, corr_loss2, cd_loss2, entropy_loss2, deform_loss2 = self.loss(assign_mat1, deltas1, prior, nocs, model)
@@ -203,6 +204,6 @@ class DeformNet(nn.Module):
         cd_loss = cd_loss0 + cd_loss1 + cd_loss2
         entropy_loss = entropy_loss0 + entropy_loss1 + entropy_loss2
         deform_loss = deform_loss0 + deform_loss1 + deform_loss2
-        return assign_mat, deltas, loss, corr_loss, cd_loss, entropy_loss, deform_loss
+        return assign_mat1, deltas1, loss, corr_loss, cd_loss, entropy_loss, deform_loss
         #points.shape: torch.Size([32, 1024, 3])
         #img.shape: torch.Size([32, 3, 192, 192])

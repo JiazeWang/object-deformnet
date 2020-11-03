@@ -9,7 +9,7 @@ import torch.nn.functional as F
 import tensorflow as tf
 #from lib.network_t4_psp import DeformNet
 #from lib.network_t5_r import DeformNet
-from lib.network_t3_r import DeformNet
+from lib.network_t3 import DeformNet
 #from lib.network_t5 import DeformNet
 from lib.loss import Loss
 from data.pose_dataset import PoseDataset
