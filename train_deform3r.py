@@ -33,7 +33,7 @@ parser.add_argument('--lr', type=float, default=0.0001, help='initial learning r
 parser.add_argument('--start_epoch', type=int, default=1, help='which epoch to start')
 parser.add_argument('--max_epoch', type=int, default=50, help='max number of epochs to train')
 parser.add_argument('--resume_model', type=str, default='', help='resume from saved model')
-parser.add_argument('--result_dir', type=str, default='results/T3_STAGE3_R_CAMERA', help='directory to save train results')
+parser.add_argument('--result_dir', type=str, default='results/T3_STAGE3_R_CAMERA_2_1_0.5', help='directory to save train results')
 opt = parser.parse_args()
 
 opt.decay_epoch = [0, 10, 20, 30, 40]
