@@ -84,7 +84,6 @@ def single_detect(estimator, raw_rgb, depth, segmentation):
     f_points, f_rgb, f_choose, f_catId, f_prior = [], [], [], [], []
 
     for i in range(num_insts):
-        print(i, "/", len(num_insts))
         cat_id = segmentation['class_ids'][i] - 1
 
         prior = mean_shapes[cat_id]
@@ -181,6 +180,7 @@ def detect():
         img_path = os.path.join(opt.data_dir, path)
         rgbimg_path = cv2.imread(img_path + '_color.png')
         depth_path = img_path + '_depth.png'
+        img_path_parsing = img_path.split('/')
         segmentation_path = os.path.join('results/mrcnn_results', opt.data, 'results_{}_{}_{}.pkl'.format(
             opt.data.split('_')[-1], img_path_parsing[-2], img_path_parsing[-1]))
         with open(img_path + '_label.pkl', 'rb') as f:
