@@ -828,7 +828,7 @@ def draw_detections(img, out_dir, data_name, img_id, intrinsics, pred_sRT, pred_
 
     # darw prediction - RED color
     for i in range(pred_class_ids.shape[0]):
-        print(pred_class_ids.shape[0], i)
+        #print(pred_class_ids.shape[0], i)
         if pred_class_ids[i] in [1, 2, 4]:
             sRT = align_rotation(pred_sRT[i, :, :])
         else:
@@ -883,7 +883,7 @@ def draw_detections2(img, out_dir, data_name, img_id, intrinsics, pred_sRT, pred
                 img = draw_axis(img, projected_endpoints)
 
     # darw prediction - RED color
-    for i in range(pred_sRT.shape[0]):
+    for i in range(pred_class_ids.shape[0]):
         if pred_class_ids[i] in [1, 2, 4]:
             sRT = align_rotation(pred_sRT[i, :, :])
         else:
