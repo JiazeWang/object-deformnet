@@ -883,22 +883,24 @@ def draw_detections2(img, out_dir, data_name, img_id, intrinsics, pred_sRT, pred
                 img = draw_axis(img, projected_endpoints)
 
     # darw prediction - RED color
-    for i in range(pred_class_ids.shape[0]):
-        if pred_class_ids[i] in [1, 2, 4]:
-            sRT = align_rotation(pred_sRT[i, :, :])
-        else:
-            sRT = pred_sRT[i, :, :]
-        bbox_3d = get_3d_bbox(pred_size[i, :], 0)
-        transformed_bbox_3d = transform_coordinates_3d(bbox_3d, sRT)
-        projected_bbox = calculate_2d_projections(transformed_bbox_3d, intrinsics)
-        img = draw_bboxes(img, projected_bbox, (0, 255, 255))
+    num_pred = len(pred_class_ids)
+    if num_pred:
+        for i in range(pred_class_ids.shape[0]):
+            if pred_class_ids[i] in [1, 2, 4]:
+                sRT = align_rotation(pred_sRT[i, :, :])
+            else:
+                sRT = pred_sRT[i, :, :]
+            bbox_3d = get_3d_bbox(pred_size[i, :], 0)
+            transformed_bbox_3d = transform_coordinates_3d(bbox_3d, sRT)
+            projected_bbox = calculate_2d_projections(transformed_bbox_3d, intrinsics)
+            img = draw_bboxes(img, projected_bbox, (0, 255, 255))
 
-        if need_draw_axis:
-            axis_endopoints = np.array([[0.0, 0.4, 0.0, 0.0], [0.0, 0.0, 0.4, 0.0], [0.0, 0.0, 0.0, 0.4]])
-            transformed_endpoints = transform_coordinates_3d(axis_endopoints, sRT)
-            projected_endpoints = calculate_2d_projections(transformed_endpoints, intrinsics)
-            img = draw_axis(img, projected_endpoints)
+            if need_draw_axis:
+                axis_endopoints = np.array([[0.0, 0.4, 0.0, 0.0], [0.0, 0.0, 0.4, 0.0], [0.0, 0.0, 0.0, 0.4]])
+                transformed_endpoints = transform_coordinates_3d(axis_endopoints, sRT)
+                projected_endpoints = calculate_2d_projections(transformed_endpoints, intrinsics)
+                img = draw_axis(img, projected_endpoints)
 
-    cv2.imwrite(out_path, img)
+        cv2.imwrite(out_path, img)
     # cv2.imshow('vis', img)
     # cv2.waitKey(0)
