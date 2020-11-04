@@ -200,7 +200,8 @@ def detect():
         gt['gt_scales'] = gts['size']
         name = path.split('/')
         savename = name[0]+'_'+name[1]+'_'+name[2]
-        visualize('./real_vis',savename, '0', raw_rgb, intrinsics, results, gt)
+        print(savename)
+        visualize('./real_vis', savename, '0', raw_rgb, intrinsics, results, gt)
 
     """
     rgbimg_path = "data/0001_color.png"
