@@ -3,7 +3,7 @@ import torch.nn as nn
 from lib.pspnet import PSPNet
 from lib.transformer import Transformer
 #add two transformer on point and image fusion
-
+from lib.non_local import NONLocalBlock1D
 class DeformNet(nn.Module):
     def __init__(self, n_cat=6, nv_prior=1024):
         super(DeformNet, self).__init__()
@@ -57,8 +57,8 @@ class DeformNet(nn.Module):
             nn.ReLU(),
             nn.Conv1d(256, n_cat*3, 1),
         )
-        self.transformer64 = Transformer(emb_dims=64, N=1)
-        self.transformer128 = Transformer(emb_dims=128, N=1)
+        self.transformer64 = NONLocalBlock1D(in_channels=2048)
+        self.transformer128 = NONLocalBlock1D(in_channels=2048)
         # Initialize weights to be small so initial deformations aren't so big
         self.deformation[4].weight.data.normal_(0, 0.0001)
 
@@ -89,11 +89,14 @@ class DeformNet(nn.Module):
         choose = choose.unsqueeze(1).repeat(1, di, 1)
         emb = torch.gather(emb, 2, choose).contiguous()
         emb = self.instance_color(emb)
-        print("point.shape:", points.shape)
-        print("emb.shape", emb.shape)
+        #print("point.shape:", points.shape) cat_local.shape: torch.Size([11, 64, 1024])
+        #print("emb.shape", emb.shape) cat_local.shape: torch.Size([11, 64, 1024])
         #point.shape: torch.Size([20, 64, 1024])
         #emb.shape torch.Size([20, 64, 1024])
-        points_p, emb_p = self.transformer64(points, emb)
+        input = torch.cat((points, emb), dim=2)
+        non_out= self.transformer64(input)
+        points_p = non_out[:,:,:1024]
+        emb_p = non_out[:,:,1024:]
         points = points + points_p
         emb = emb + emb_p
         inst_local = torch.cat((points, emb), dim=1)     # bs x 128 x n_pts
@@ -102,9 +105,12 @@ class DeformNet(nn.Module):
         cat_prior = prior.permute(0, 2, 1)
         cat_local = self.category_local(cat_prior)    # bs x 64 x n_pts
         cat_global = self.category_global(cat_local)  # bs x 1024 x 1
-        print("cat_local.shape:", cat_local.shape)
-        print("cat_global.shape:", cat_global.shape)
-        inst_global_p, cat_global_p = self.transformer128(inst_global, cat_global)
+        #print("cat_local.shape:", cat_local.shape)
+        #print("cat_global.shape:", cat_global.shape) cat_global.shape: torch.Size([11, 128, 1024])
+        input = torch.cat((inst_global, cat_global), dim=2)
+        global_output = self.transformer128(input)
+        inst_global_p = global_output[:,:,:1024]
+        cat_global_p = global_output[:,:,1024:]
         inst_global = inst_global + inst_global_p
         cat_global = cat_global + cat_global_p
         assign_feat = inst_global
