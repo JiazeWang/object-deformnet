@@ -7,7 +7,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import tensorflow as tf
-from lib.network_t1_non_local import DeformNet
+#from lib.network_t1_non_local import DeformNet
 from lib.loss import Loss
 from data.pose_dataset import PoseDataset
 from lib.utils import setup_logger, compute_sRT_errors
@@ -28,7 +28,8 @@ parser.add_argument('--lr', type=float, default=0.0001, help='initial learning r
 parser.add_argument('--start_epoch', type=int, default=1, help='which epoch to start')
 parser.add_argument('--max_epoch', type=int, default=50, help='max number of epochs to train')
 parser.add_argument('--resume_model', type=str, default='', help='resume from saved model')
-parser.add_argument('--result_dir', type=str, default='results/T1_non_local', help='directory to save train results')
+parser.add_argument('--result_dir', type=str, default='results/T1_non_local_fast', help='directory to save train results')
+parser.add_argument('--relation', type=str, default='non_local')
 opt = parser.parse_args()
 
 opt.decay_epoch = [0, 10, 20, 30, 40]
@@ -41,6 +42,12 @@ opt.deform_wt = 0.01
 
 def train_net():
     # set result directory
+    if opt.relation == "non_local":
+        from lib.network_t1_non_local import DeformNet
+    if opt.relation == "mlp":
+        from lib.network_t1_mlp import DeformNet
+    if opt.relation == "transformer":
+        from lib.network_t1 import DeformNet
     if not os.path.exists(opt.result_dir):
         os.makedirs(opt.result_dir)
     tb_writer = tf.summary.FileWriter(opt.result_dir)
@@ -61,7 +68,7 @@ def train_net():
     # start training
     st_time = time.time()
     #train_steps = 3000
-    train_steps = 1600
+    train_steps = 400
     global_step = train_steps * (opt.start_epoch - 1)
     n_decays = len(opt.decay_epoch)
     assert len(opt.decay_rate) == n_decays
