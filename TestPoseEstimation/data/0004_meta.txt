@@ -1,0 +1,7 @@
+1 6 mug_anastasia_norm
+2 1 bottle_red_stanford_norm
+3 1 bottle_shampoo_norm
+4 3 camera_canon_len_norm
+5 4 can_green_norm
+6 4 can_arizona_tea_norm
+7 5 laptop_mac_pro_norm
