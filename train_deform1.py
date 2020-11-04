@@ -155,7 +155,6 @@ def train_net():
         iou_success = np.zeros((opt.n_cat,), dtype=int)       # relative scale error < 0.1
         # sample validation subset
         val_size = 100
-        random.seed(int(i))
         val_idx = random.sample(list(range(val_dataset.length)), val_size)
         val_sampler = torch.utils.data.sampler.SubsetRandomSampler(val_idx)
         #val_dataloader = torch.utils.data.DataLoader(val_dataset, batch_size=1,
