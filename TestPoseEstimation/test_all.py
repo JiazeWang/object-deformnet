@@ -10,14 +10,15 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torchvision.transforms as transforms
-from lib.network import DeformNet
+#from lib.network import DeformNet
+from lib.network_t5_eval import DeformNet
 from lib.align import estimateSimilarityTransform
 from lib.utils import load_depth, get_bbox, compute_mAP, plot_mAP
 from lib.utils import draw_detections2
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--data', type=str, default='val', help='val, real_test')
-parser.add_argument('--data_dir', type=str, default='data', help='data directory')
+parser.add_argument('--data', type=str, default='real_test', help='val, real_test')
+parser.add_argument('--data_dir', type=str, default='../data', help='data directory')
 parser.add_argument('--n_cat', type=int, default=6, help='number of object categories')
 parser.add_argument('--nv_prior', type=int, default=1024, help='number of vertices in shape priors')
 parser.add_argument('--model', type=str, default='results/camera_more/model_50.pth', help='resume from saved model')
@@ -31,9 +32,18 @@ mean_shapes = np.load('assets/mean_points_emb.npy')
 # CAMERA
 # cam_fx, cam_fy, cam_cx, cam_cy = 577.5, 577.5, 319.5, 239.5
 # REAL
-cam_fx, cam_fy, cam_cx, cam_cy = 591.0125, 590.16775, 322.525, 244.11084
+assert opt.data in ['val', 'real_test']
+if opt.data == 'val':
+    result_dir = 'results/eval_T3_STAGE3_R_CAMERA_2_1_0.5'
+    file_path = 'CAMERA/val_list.txt'
+    cam_fx, cam_fy, cam_cx, cam_cy = 577.5, 577.5, 319.5, 239.5
+else:
+    result_dir = 'results/eval_T3_STAGE3_R_CAMERA_2_1_0.5'
+    file_path = 'Real/test_list.txt'
+    cam_fx, cam_fy, cam_cx, cam_cy = 591.0125, 590.16775, 322.525, 244.11084
 
-intrinsics = np.array([[cam_fx, 0.0, cam_cx], [0.0, cam_fy, cam_cy], [0.0, 0.0, 1.0]], dtype=np.float)
+if not os.path.exists(result_dir):
+    os.makedirs(result_dir)
 
 xmap = np.array([[i for i in range(640)] for j in range(480)])
 ymap = np.array([[j for i in range(640)] for j in range(480)])
@@ -59,7 +69,7 @@ def load_depth2(img_path):
 
 def single_detect(estimator, raw_rgb, depth, segmentation):
     '''
-    input: 
+    input:
         1. model file
         2. RGB image file
         3. depth file
@@ -75,7 +85,7 @@ def single_detect(estimator, raw_rgb, depth, segmentation):
 
     for i in range(num_insts):
         cat_id = segmentation['class_ids'][i] - 1
-        
+
         prior = mean_shapes[cat_id]
         rmin, rmax, cmin, cmax = get_bbox(segmentation['rois'][i])
         mask = np.logical_and(segmentation['masks'][:, :, i], depth > 0)
@@ -95,7 +105,7 @@ def single_detect(estimator, raw_rgb, depth, segmentation):
             choose = choose[c_mask.nonzero()]
         else:
             choose = np.pad(choose, (0, opt.n_pts-len(choose)), 'wrap')
-        
+
         depth_masked = depth[rmin:rmax, cmin:cmax].flatten()[choose][:, np.newaxis]
         xmap_masked = xmap[rmin:rmax, cmin:cmax].flatten()[choose][:, np.newaxis]
         ymap_masked = ymap[rmin:rmax, cmin:cmax].flatten()[choose][:, np.newaxis]
@@ -118,7 +128,7 @@ def single_detect(estimator, raw_rgb, depth, segmentation):
         f_choose.append(choose)
         f_catId.append(cat_id)
         f_prior.append(prior)
-    
+
     if len(valid_inst):
         f_points = torch.cuda.FloatTensor(f_points)
         f_rgb = torch.stack(f_rgb, dim=0).cuda()
@@ -152,13 +162,44 @@ def single_detect(estimator, raw_rgb, depth, segmentation):
 
 def detect():
     model_path = "lib/real_50.pth"
-
     estimator = DeformNet(opt.n_cat, opt.nv_prior)
     estimator.cuda()
     estimator = nn.DataParallel(estimator)
     estimator.load_state_dict(torch.load(model_path))
     estimator.eval()
+    # get test data list
+    img_list = [os.path.join(file_path.split('/')[0], line.rstrip('\n'))
+                for line in open(os.path.join(opt.data_dir, file_path))]
+    # frame by frame test
+    t_inference = 0.0
+    t_umeyama = 0.0
+    inst_count = 0
+    img_count = 0
+    t_start = time.time()
+    for path in tqdm(img_list):
+        img_path = os.path.join(opt.data_dir, path)
+        rgbimg_path = cv2.imread(img_path + '_color.png')
+        depth_path = img_path + '_depth.png'
+        segmentation_path = os.path.join('results/mrcnn_results', opt.data, 'results_{}_{}_{}.pkl'.format(
+            opt.data.split('_')[-1], img_path_parsing[-2], img_path_parsing[-1]))
+        with open(img_path + '_label.pkl', 'rb') as f:
+            gts = cPickle.load(f)
+        raw_rgb = cv2.imread(rgbimg_path)[:, :, :3]
+        raw_depth = load_depth2(depth_path)
 
+        with open(segmentation_path, 'rb') as f:
+            mrcnn_result = cPickle.load(f)
+
+        results = single_detect(estimator, raw_rgb, raw_depth, mrcnn_result)
+        gt = {}
+        gt['gt_class_ids'] = gts['class_ids']
+        gt['gt_RTs'] = gts['poses']
+        gt['gt_scales'] = gts['size']
+        name = path.split('/')
+        savename = name[0]+'_'+name[1]+'_'+name[2]
+        visualize('./real_vis', 'test', savename, raw_rgb, intrinsics, results, gt)
+
+    """
     rgbimg_path = "data/0001_color.png"
     depth_path = "data/0001_depth.png"
     segmentation_path = "data/results_test_scene_5_0001.pkl"
@@ -174,7 +215,7 @@ def detect():
 
     with open(segmentation_path, 'rb') as f:
         mrcnn_result = cPickle.load(f)
-    
+
     results = single_detect(estimator, raw_rgb, raw_depth, mrcnn_result)
     gt = {}
     gt['gt_class_ids'] = gts['class_ids']
@@ -182,7 +223,7 @@ def detect():
     gt['gt_scales'] = gts['size']
 
     visualize('./data', 'test', 'real3', raw_rgb, intrinsics, results, gt)
-
+    """
 
 def visualize(dir, name, id, rgb_img, intrinsics, estimation, gt):
     '''
@@ -195,10 +236,10 @@ def visualize(dir, name, id, rgb_img, intrinsics, estimation, gt):
         6. Ground truth
     '''
     draw_detections2(rgb_img, dir, name, id, intrinsics, estimation['predict_RT'], estimation['predict_Size'], \
-        estimation['predict_Category'], gt['gt_RTs'], gt['gt_scales'], 
+        estimation['predict_Category'], gt['gt_RTs'], gt['gt_scales'],
         gt['gt_class_ids'], None, None, None, False, False)
 
 
 if __name__ == '__main__':
-    
+
     detect()
