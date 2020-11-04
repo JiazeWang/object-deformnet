@@ -57,8 +57,8 @@ class DeformNet(nn.Module):
             nn.ReLU(),
             nn.Conv1d(256, n_cat*3, 1),
         )
-        self.transformer64 = NONLocalBlock1D(in_channels=2048)
-        self.transformer128 = NONLocalBlock1D(in_channels=2048)
+        self.transformer64 = NONLocalBlock1D(in_channels=64)
+        self.transformer128 = NONLocalBlock1D(in_channels=128)
         # Initialize weights to be small so initial deformations aren't so big
         self.deformation[4].weight.data.normal_(0, 0.0001)
 
