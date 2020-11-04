@@ -10,8 +10,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torchvision.transforms as transforms
-#from lib.network import DeformNet
-from lib.network_t5_eval import DeformNet
+from lib.network import DeformNet
+#from lib.network_t5_eval import DeformNet
 from lib.align import estimateSimilarityTransform
 from lib.utils import load_depth, get_bbox, compute_mAP, plot_mAP
 from lib.utils import draw_detections2
