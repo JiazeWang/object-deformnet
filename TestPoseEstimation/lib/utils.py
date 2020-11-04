@@ -759,7 +759,7 @@ def align_rotation(sRT):
     s_map = np.array([[theta_x/r_norm, 0.0, -theta_y/r_norm],
                       [0.0,            1.0,  0.0           ],
                       [theta_y/r_norm, 0.0,  theta_x/r_norm]])
-    
+
     rotation = R @ s_map
     aligned_sRT = np.identity(4, dtype=np.float32)
     aligned_sRT[:3, :3] = s * rotation
@@ -827,7 +827,7 @@ def draw_detections(img, out_dir, data_name, img_id, intrinsics, pred_sRT, pred_
             img = draw_bboxes(img, projected_bbox, (0, 255, 0))
 
     # darw prediction - RED color
-    for i in range(pred_sRT.shape[0]):
+    for i in range(pred_class_ids.shape[0]):
         if pred_class_ids[i] in [1, 2, 4]:
             sRT = align_rotation(pred_sRT[i, :, :])
         else:
