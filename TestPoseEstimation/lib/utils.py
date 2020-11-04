@@ -828,6 +828,7 @@ def draw_detections(img, out_dir, data_name, img_id, intrinsics, pred_sRT, pred_
 
     # darw prediction - RED color
     for i in range(pred_class_ids.shape[0]):
+        print(pred_class_ids.shape[0], i)
         if pred_class_ids[i] in [1, 2, 4]:
             sRT = align_rotation(pred_sRT[i, :, :])
         else:
