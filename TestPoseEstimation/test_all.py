@@ -84,6 +84,7 @@ def single_detect(estimator, raw_rgb, depth, segmentation):
     f_points, f_rgb, f_choose, f_catId, f_prior = [], [], [], [], []
 
     for i in range(num_insts):
+        print(i, "/", len(num_insts))
         cat_id = segmentation['class_ids'][i] - 1
 
         prior = mean_shapes[cat_id]
