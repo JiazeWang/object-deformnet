@@ -10,14 +10,14 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torchvision.transforms as transforms
-from lib.network import DeformNet
-#from lib.network_t5_eval import DeformNet
+#from lib.network import DeformNet
+from lib.network_t5_eval import DeformNet
 from lib.align import estimateSimilarityTransform
 from lib.utils import load_depth, get_bbox, compute_mAP, plot_mAP
 from lib.utils import draw_detections2
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--data', type=str, default='real_test', help='val, real_test')
+parser.add_argument('--data', type=str, default='val', help='val, real_test')
 parser.add_argument('--data_dir', type=str, default='../data', help='data directory')
 parser.add_argument('--n_cat', type=int, default=6, help='number of object categories')
 parser.add_argument('--nv_prior', type=int, default=1024, help='number of vertices in shape priors')
@@ -163,7 +163,7 @@ def single_detect(estimator, raw_rgb, depth, segmentation):
     return {'predict_RT': f_sRT, 'predict_Size': f_size, 'predict_Category': f_catId}
 
 def detect():
-    model_path = "lib/real_50.pth"
+    model_path = "lib/model_50.pth"
     estimator = DeformNet(opt.n_cat, opt.nv_prior)
     estimator.cuda()
     estimator = nn.DataParallel(estimator)
@@ -200,8 +200,8 @@ def detect():
         gt['gt_scales'] = gts['size']
         name = path.split('/')
         savename = name[-3]+'_'+name[-2]+'_'+name[-1]
-        print(savename)
-        visualize('./real_vis', savename, '0', raw_rgb, intrinsics, results, gt)
+        #print(savename)
+        visualize('./T5_CAMERA_vis', savename, '0', raw_rgb, intrinsics, results, gt)
 
     """
     rgbimg_path = "data/0001_color.png"

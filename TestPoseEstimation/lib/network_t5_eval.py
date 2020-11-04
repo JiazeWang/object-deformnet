@@ -3,9 +3,9 @@ import torch.nn as nn
 from lib.pspnet import PSPNet
 from lib.transformer import Transformer
 #add two transformer on point and image fusion and four stages
-from lib.loss import Loss
+#from lib.loss import Loss
 import torch.nn.functional as F
-from .nn_distance.chamfer_loss import ChamferLoss
+#from .nn_distance.chamfer_loss import ChamferLoss
 
 class DeformNet(nn.Module):
     def __init__(self, n_cat=6, nv_prior=1024):
@@ -98,7 +98,7 @@ class DeformNet(nn.Module):
         self.cd_wt = 5.0
         self.entropy_wt = 0.0001
         self.deform_wt = 0.01
-        self.loss = Loss(self.corr_wt, self.cd_wt, self.entropy_wt, self.deform_wt)
+        #self.loss = Loss(self.corr_wt, self.cd_wt, self.entropy_wt, self.deform_wt)
 
     def forward(self, points, img, choose, cat_id, prior):
         """
