@@ -185,8 +185,7 @@ def detect():
             opt.data.split('_')[-1], img_path_parsing[-2], img_path_parsing[-1]))
         with open(img_path + '_label.pkl', 'rb') as f:
             gts = cPickle.load(f)
-        print(rgbimg_path)
-        raw_rgb = cv2.imread(rgbimg_path)[:, :, :3]
+        raw_rgb = rgbimg_path[:, :, :3]
         raw_depth = load_depth2(depth_path)
 
         with open(segmentation_path, 'rb') as f:
