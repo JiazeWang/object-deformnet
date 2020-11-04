@@ -21,15 +21,15 @@ parser.add_argument('--n_pts', type=int, default=1024, help='number of foregroun
 parser.add_argument('--n_cat', type=int, default=6, help='number of object categories')
 parser.add_argument('--nv_prior', type=int, default=1024, help='number of vertices in shape priors')
 parser.add_argument('--img_size', type=int, default=192, help='cropped image size')
-parser.add_argument('--batch_size', type=int, default=120, help='batch size')
+parser.add_argument('--batch_size', type=int, default=96, help='batch size')
 parser.add_argument('--num_workers', type=int, default=20, help='number of data loading workers')
 parser.add_argument('--gpu', type=str, default='1', help='GPU to use')
 parser.add_argument('--lr', type=float, default=0.0001, help='initial learning rate')
 parser.add_argument('--start_epoch', type=int, default=1, help='which epoch to start')
 parser.add_argument('--max_epoch', type=int, default=50, help='max number of epochs to train')
 parser.add_argument('--resume_model', type=str, default='', help='resume from saved model')
-parser.add_argument('--result_dir', type=str, default='results/T1_non_local_fast', help='directory to save train results')
-parser.add_argument('--relation', type=str, default='non_local')
+parser.add_argument('--result_dir', type=str, default='results/T1_transformer_fast', help='directory to save train results')
+parser.add_argument('--relation', type=str, default='transformer')
 opt = parser.parse_args()
 
 opt.decay_epoch = [0, 10, 20, 30, 40]
@@ -68,7 +68,8 @@ def train_net():
     # start training
     st_time = time.time()
     #train_steps = 3000
-    train_steps = 400
+    #train_steps = 400
+    train_steps = 5000
     global_step = train_steps * (opt.start_epoch - 1)
     n_decays = len(opt.decay_epoch)
     assert len(opt.decay_rate) == n_decays
