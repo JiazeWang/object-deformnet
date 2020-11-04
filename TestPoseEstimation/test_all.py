@@ -181,7 +181,7 @@ def detect():
         rgbimg_path = cv2.imread(img_path + '_color.png')
         depth_path = img_path + '_depth.png'
         img_path_parsing = img_path.split('/')
-        segmentation_path = os.path.join('results/mrcnn_results', opt.data, 'results_{}_{}_{}.pkl'.format(
+        segmentation_path = os.path.join('../results/mrcnn_results', opt.data, 'results_{}_{}_{}.pkl'.format(
             opt.data.split('_')[-1], img_path_parsing[-2], img_path_parsing[-1]))
         with open(img_path + '_label.pkl', 'rb') as f:
             gts = cPickle.load(f)
