@@ -37,10 +37,13 @@ if opt.data == 'val':
     result_dir = 'results/eval_T3_STAGE3_R_CAMERA_2_1_0.5'
     file_path = 'CAMERA/val_list.txt'
     cam_fx, cam_fy, cam_cx, cam_cy = 577.5, 577.5, 319.5, 239.5
+    intrinsics =
 else:
     result_dir = 'results/eval_T3_STAGE3_R_CAMERA_2_1_0.5'
     file_path = 'Real/test_list.txt'
     cam_fx, cam_fy, cam_cx, cam_cy = 591.0125, 590.16775, 322.525, 244.11084
+    
+intrinsics = np.array([[cam_fx, 0.0, cam_cx], [0.0, cam_fy, cam_cy], [0.0, 0.0, 1.0]], dtype=np.float)
 
 if not os.path.exists(result_dir):
     os.makedirs(result_dir)
