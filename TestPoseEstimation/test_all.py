@@ -199,7 +199,7 @@ def detect():
         gt['gt_RTs'] = gts['poses']
         gt['gt_scales'] = gts['size']
         name = path.split('/')
-        savename = name[0]+'_'+name[1]+'_'+name[2]
+        savename = name[-3]+'_'+name[-2]+'_'+name[-1]
         print(savename)
         visualize('./real_vis', savename, '0', raw_rgb, intrinsics, results, gt)
 
