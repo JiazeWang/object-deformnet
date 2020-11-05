@@ -1,6 +1,5 @@
 import torch
 import torch.nn as nn
-import numpy
 from lib.pspnet import PSPNet
 
 
@@ -68,47 +67,23 @@ class DeformNet(nn.Module):
             choose: bs x n_pts
             cat_id: bs
             prior: bs x nv x 3
-
         Returns:
             assign_mat: bs x n_pts x nv
             inst_shape: bs x nv x 3
             deltas: bs x nv x 3
             log_assign: bs x n_pts x nv, for numerical stability
-
         """
-        #points.shape: torch.Size([32, 1024, 3])
-        #img.shape: torch.Size([32, 3, 192, 192])
-        """
-        #choose select
-        #savenpy = choose[0].cpu().numpy()
-        #numpy.save("choose.npy", savenpy)
-        #choose1 = torch.div(choose, 4).type(torch.cuda.IntTensor)[0].cpu().numpy()
-        #numpy.save("choosediv.npy", choose1)
-
-        choose1 = torch.div(choose, 4).type(torch.cuda.IntTensor)[:,::4][0].cpu().numpy()
-        """
-        #numpy.save("choose1.npy", choose1)
         bs, n_pts = points.size()[:2]
         nv = prior.size()[1]
         # instance-specific features
         points = points.permute(0, 2, 1)
         points = self.instance_geometry(points)
         out_img = self.psp(img)
-        #print("out_img.shape:", out_img.shape)
-        #out_img.shape: torch.Size([32, 32, 192, 192])
         di = out_img.size()[1]
         emb = out_img.view(bs, di, -1)
-        #print("emb.shape:", emb.shape)
-        #emb.shape: torch.Size([32, 32, 36864])
         choose = choose.unsqueeze(1).repeat(1, di, 1)
-        #print("choose.shape:", choose.shape)
-        #choose.shape: torch.Size([32, 32, 1024])
         emb = torch.gather(emb, 2, choose).contiguous()
-        #print("emb2.shape:", emb.shape)
-        #emb2.shape: torch.Size([32, 32, 1024])
         emb = self.instance_color(emb)
-        #print("emb3.shape:", emb.shape)
-        #emb3.shape: torch.Size([32, 64, 1024])
         inst_local = torch.cat((points, emb), dim=1)     # bs x 128 x n_pts
         inst_global = self.instance_global(inst_local)    # bs x 1024 x 1
         # category-specific features
