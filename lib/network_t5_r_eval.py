@@ -186,8 +186,8 @@ class DeformNet(nn.Module):
         deltas0 = deltas + deltas0
 #stage2
 
-        prior1 = prior0 + deltas0
-        #prior1 = prior + deltas0
+        #prior1 = prior0 + deltas0
+        prior1 = prior + deltas0
         cat_prior1 = prior1.permute(0, 2, 1)
         cat_local1 = self.category_local(cat_prior1)    # bs x 64 x n_pts
         cat_global1 = self.category_global(cat_local1)  # bs x 1024 x 1

@@ -217,7 +217,7 @@ class DeformNet(nn.Module):
         loss2, corr_loss2, cd_loss2, entropy_loss2, deform_loss2 = self.loss(assign_mat1, deltas1, prior1, nocs, model)
 
 
-        loss = loss0 + loss1 + loss2
+        loss = loss0*2 + loss1 + loss2*0.5
         corr_loss = corr_loss0 + corr_loss1 + corr_loss2
         cd_loss = cd_loss0 + cd_loss1 + cd_loss2
         entropy_loss = entropy_loss0 + entropy_loss1 + entropy_loss2
