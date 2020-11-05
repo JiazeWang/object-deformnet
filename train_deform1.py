@@ -28,7 +28,7 @@ parser.add_argument('--lr', type=float, default=0.0001, help='initial learning r
 parser.add_argument('--start_epoch', type=int, default=1, help='which epoch to start')
 parser.add_argument('--max_epoch', type=int, default=50, help='max number of epochs to train')
 parser.add_argument('--resume_model', type=str, default='', help='resume from saved model')
-parser.add_argument('--result_dir', type=str, default='results/T1_transformer_fast', help='directory to save train results')
+parser.add_argument('--result_dir', type=str, default='results/T1_transformer_slow', help='directory to save train results')
 parser.add_argument('--relation', type=str, default='transformer')
 opt = parser.parse_args()
 
@@ -69,7 +69,7 @@ def train_net():
     st_time = time.time()
     #train_steps = 3000
     #train_steps = 400
-    train_steps = 800
+    train_steps = 3200
     global_step = train_steps * (opt.start_epoch - 1)
     n_decays = len(opt.decay_epoch)
     assert len(opt.decay_rate) == n_decays
