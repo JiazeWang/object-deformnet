@@ -106,7 +106,7 @@ def single_detect(estimator, raw_rgb, depth, segmentation, savename):
         points = np.concatenate((pt0, pt1, pt2), axis=1)
         rgb = raw_rgb[rmin:rmax, cmin:cmax, :]
         rgb = cv2.resize(rgb, (opt.img_size, opt.img_size), interpolation=cv2.INTER_LINEAR)
-        cv.imwrite(savename + '_crop.png', rgb)
+        cv2.imwrite(savename + '_crop.png', rgb)
         rgb = norm_color(rgb)
         crop_w = rmax - rmin
         ratio = opt.img_size / crop_w
