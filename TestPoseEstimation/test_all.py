@@ -10,7 +10,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torchvision.transforms as transforms
-from lib.network import DeformNet
+from lib.network_spd import DeformNet
 #from lib.network_t5_eval import DeformNet
 from lib.align import estimateSimilarityTransform
 from lib.utils import load_depth, get_bbox, compute_mAP, plot_mAP
@@ -163,7 +163,7 @@ def single_detect(estimator, raw_rgb, depth, segmentation):
     return {'predict_RT': f_sRT, 'predict_Size': f_size, 'predict_Category': f_catId}
 
 def detect():
-    model_path = "lib/real_50.pth"
+    model_path = "lib/spd_real.pth"
     estimator = DeformNet(opt.n_cat, opt.nv_prior)
     estimator.cuda()
     estimator = nn.DataParallel(estimator)
@@ -201,7 +201,7 @@ def detect():
         name = path.split('/')
         savename = name[-3]+'_'+name[-2]+'_'+name[-1]
         #print(savename)
-        visualize('./real_vis', savename, '0', raw_rgb, intrinsics, results, gt)
+        visualize('./spd_real_vis', savename, '0', raw_rgb, intrinsics, results, gt)
 
     """
     rgbimg_path = "data/0001_color.png"
