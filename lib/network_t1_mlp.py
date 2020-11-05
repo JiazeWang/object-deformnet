@@ -106,8 +106,8 @@ class DeformNet(nn.Module):
             nn.ReLU(),
             nn.Conv1d(256, n_cat*3, 1),
         )
-        self.transformer64 = RelationModule(1024, 1024)
-        self.transformer128 = RelationModule(1024, 1024)
+        self.transformer64 = RelationModule(64, 64)
+        self.transformer128 = RelationModule(128, 128)
         # Initialize weights to be small so initial deformations aren't so big
         self.deformation[4].weight.data.normal_(0, 0.0001)
 
