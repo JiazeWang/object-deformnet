@@ -106,7 +106,7 @@ def single_detect(estimator, raw_rgb, depth, segmentation, savename):
         points = np.concatenate((pt0, pt1, pt2), axis=1)
         rgb = raw_rgb[rmin:rmax, cmin:cmax, :]
         rgb = cv2.resize(rgb, (opt.img_size, opt.img_size), interpolation=cv2.INTER_LINEAR)
-        cv2.imwrite(savename + '_crop.png', rgb)
+        cv2.imwrite(savename +'i' +'_crop.png', rgb)
         rgb = norm_color(rgb)
         crop_w = rmax - rmin
         ratio = opt.img_size / crop_w
@@ -127,7 +127,8 @@ def single_detect(estimator, raw_rgb, depth, segmentation, savename):
         f_choose = torch.cuda.LongTensor(f_choose)
         f_catId = torch.cuda.LongTensor(f_catId)
         f_prior = torch.cuda.FloatTensor(f_prior)
-        np.savetxt(savename + '_point.xyz', f_points, fmt="%.6f")
+        f_points_cpu = f_points.cpu()
+        np.savetxt(savename + 'i'+'_point.xyz', f_points_cpu, fmt="%.6f")
         assign_mat, deltas = estimator(f_points, f_rgb, f_choose, f_catId, f_prior)
         inst_shape = f_prior + deltas
         assign_mat = F.softmax(assign_mat, dim=2)
