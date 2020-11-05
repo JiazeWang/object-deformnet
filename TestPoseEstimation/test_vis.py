@@ -131,7 +131,7 @@ def single_detect(estimator, raw_rgb, depth, segmentation, savename):
         f_points_cpu = f_points.cpu()
         for j in range(len(valid_inst)):
             save_point_name = savename + str(j) +'_point.xyz'
-            np.savetxt(save_point_name, f_points_cpu[i], fmt="%.6f")
+            np.savetxt(save_point_name, f_points_cpu[j], fmt="%.6f")
         assign_mat, deltas = estimator(f_points, f_rgb, f_choose, f_catId, f_prior)
         inst_shape = f_prior + deltas
         assign_mat = F.softmax(assign_mat, dim=2)
