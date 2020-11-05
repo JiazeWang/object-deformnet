@@ -4,6 +4,7 @@ from lib.pspnet import PSPNet
 from lib.transformer import Transformer
 #add two transformer on point and image fusion
 
+"""
 class RelationModule(nn.Module):
 
     def __init__(self, img_feature_dim, output_dim):
@@ -26,6 +27,29 @@ class RelationModule(nn.Module):
         input = input.permute(0, 2, 1)
         input = self.classifier(input)
         input = input.permute(0, 2, 1)
+        return input, input
+"""
+
+class RelationModule(nn.Module):
+
+    def __init__(self, img_feature_dim, output_dim):
+        super(RelationModule, self).__init__()
+        self.output_dim = output_dim
+        self.img_feature_dim = img_feature_dim
+        self.classifier = self.fc_fusion()
+    def fc_fusion(self):
+        # naive concatenate
+        num_bottleneck = 512
+        classifier = nn.Sequential(
+                nn.ReLU(),
+                nn.Linear(2 * self.img_feature_dim, num_bottleneck),
+                nn.ReLU(),
+                nn.Linear(num_bottleneck, self.output_dim),
+                )
+        return classifier
+    def forward(self, input0, input1):
+        input = torch.cat((input0, input1), dim=2)
+        input = self.classifier(input)
         return input, input
 
 class DeformNet(nn.Module):
@@ -81,8 +105,8 @@ class DeformNet(nn.Module):
             nn.ReLU(),
             nn.Conv1d(256, n_cat*3, 1),
         )
-        self.transformer64 = RelationModule(64, 64)
-        self.transformer128 = RelationModule(128, 128)
+        self.transformer64 = RelationModule(1024, 1024)
+        self.transformer128 = RelationModule(1024, 1024)
         # Initialize weights to be small so initial deformations aren't so big
         self.deformation[4].weight.data.normal_(0, 0.0001)
 
