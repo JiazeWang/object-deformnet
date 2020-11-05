@@ -24,17 +24,27 @@ parser.add_argument('--model', type=str, default='results/real_t1_half_4/model_5
 parser.add_argument('--n_pts', type=int, default=1024, help='number of foreground points')
 parser.add_argument('--img_size', type=int, default=192, help='cropped image size')
 parser.add_argument('--gpu', type=str, default='3', help='GPU to use')
+parser.add_argument('--relation', type=str, default='transformer')
 opt = parser.parse_args()
 
 mean_shapes = np.load('assets/mean_points_emb.npy')
 
+
+if opt.relation == "non_local":
+    from lib.network_t1_non_local import DeformNet
+if opt.relation == "mlp":
+    from lib.network_t1_mlp import DeformNet
+if opt.relation == "transformer":
+    from lib.network_t1 import DeformNet
+opt.model = 'results/T1_{}_fast/model_50.pth'.format(opt.relation)
+
 assert opt.data in ['val', 'real_test']
 if opt.data == 'val':
-    result_dir = 'results/eval_camera_t1_4more_half'
+    result_dir = 'results/eval_T1_CAMERA_{}'.format(opt.relation)
     file_path = 'CAMERA/val_list.txt'
     cam_fx, cam_fy, cam_cx, cam_cy = 577.5, 577.5, 319.5, 239.5
 else:
-    result_dir = 'results/eval_real_t1_4more_half'
+    result_dir = 'results/eval_T1_REAL_{}'.format(opt.relation)
     file_path = 'Real/test_list.txt'
     cam_fx, cam_fy, cam_cx, cam_cy = 591.0125, 590.16775, 322.525, 244.11084
 
