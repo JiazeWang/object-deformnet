@@ -4,7 +4,6 @@ from lib.pspnet import PSPNet
 from lib.transformer import Transformer
 #add two transformer on point and image fusion
 
-"""
 class RelationModule(nn.Module):
 
     def __init__(self, img_feature_dim, output_dim):
@@ -28,8 +27,8 @@ class RelationModule(nn.Module):
         input = self.classifier(input)
         input = input.permute(0, 2, 1)
         return input, input
-"""
 
+"""
 class RelationModule(nn.Module):
 
     def __init__(self, img_feature_dim, output_dim):
@@ -51,6 +50,8 @@ class RelationModule(nn.Module):
         input = torch.cat((input0, input1), dim=2)
         input = self.classifier(input)
         return input, input
+"""
+
 
 class DeformNet(nn.Module):
     def __init__(self, n_cat=6, nv_prior=1024):
