@@ -57,13 +57,14 @@ def load_depth2(img_path):
         assert False, '[ Error ]: Unsupported depth type.'
     return depth16
 
-def single_detect(estimator, raw_rgb, depth, segmentation):
+def single_detect(estimator, raw_rgb, depth, segmentation, savename):
     '''
     input:
         1. model file
         2. RGB image file
         3. depth file
         4. mask r-cnn segmentation result
+        5. savename
     '''
     raw_rgb = raw_rgb[:, :, ::-1]
     # number of instances
@@ -105,6 +106,7 @@ def single_detect(estimator, raw_rgb, depth, segmentation):
         points = np.concatenate((pt0, pt1, pt2), axis=1)
         rgb = raw_rgb[rmin:rmax, cmin:cmax, :]
         rgb = cv2.resize(rgb, (opt.img_size, opt.img_size), interpolation=cv2.INTER_LINEAR)
+        cv.imwrite(savename + '_crop.png', rgb)
         rgb = norm_color(rgb)
         crop_w = rmax - rmin
         ratio = opt.img_size / crop_w
@@ -125,9 +127,8 @@ def single_detect(estimator, raw_rgb, depth, segmentation):
         f_choose = torch.cuda.LongTensor(f_choose)
         f_catId = torch.cuda.LongTensor(f_catId)
         f_prior = torch.cuda.FloatTensor(f_prior)
-
+        np.savetxt(savename + '_point.xyz', f_points, fmt="%.6f")
         assign_mat, deltas = estimator(f_points, f_rgb, f_choose, f_catId, f_prior)
-
         inst_shape = f_prior + deltas
         assign_mat = F.softmax(assign_mat, dim=2)
         f_coords = torch.bmm(assign_mat, inst_shape)  # bs x n_pts x 3
@@ -166,7 +167,7 @@ def detect():
     gt_path = "data/0001_label.pkl"
     with open(gt_path, 'rb') as f:
             gts = cPickle.load(f)
-
+    savename = rgbimg_path.split('/')[-1].split('.png')[0]
     raw_rgb = cv2.imread(rgbimg_path)[:, :, :3]
     # raw_rgb[:,:,1] = raw_rgb[:,:,0]
     # raw_rgb[:,:,2] = raw_rgb[:,:,0]
@@ -175,7 +176,7 @@ def detect():
     with open(segmentation_path, 'rb') as f:
         mrcnn_result = cPickle.load(f)
 
-    results = single_detect(estimator, raw_rgb, raw_depth, mrcnn_result)
+    results = single_detect(estimator, raw_rgb, raw_depth, mrcnn_result, savename)
     gt = {}
     gt['gt_class_ids'] = gts['class_ids']
     gt['gt_RTs'] = gts['poses']
