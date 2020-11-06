@@ -132,6 +132,7 @@ def single_detect(estimator, raw_rgb, depth, segmentation, savename, intrinsics)
         f_catId = torch.cuda.LongTensor(f_catId)
         f_prior = torch.cuda.FloatTensor(f_prior)
         f_points_cpu = f_points.cpu()
+        print("f_rgb.shape:", f_rgb.shape)
         assign_mat, deltas = estimator(f_points, f_rgb, f_choose, f_catId, f_prior)
         inst_shape = f_prior + deltas
         assign_mat = F.softmax(assign_mat, dim=2)
