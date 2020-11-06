@@ -147,14 +147,13 @@ class DecoderLayer(nn.Module):
         self.src_attn = src_attn
         self.feed_forward = feed_forward
         self.sublayer = clones(SublayerConnection(size, dropout), 3)
-        self.attn = self_attn
 
     def forward(self, x, memory, src_mask, tgt_mask):
         "Follow Figure 1 (right) for connections."
         m = memory
         x = self.sublayer[0](x, lambda x: self.self_attn(x, x, x, tgt_mask))
         x = self.sublayer[1](x, lambda x: self.src_attn(x, m, m, src_mask))
-        return self.sublayer[2](x, self.feed_forward) #, self.attn
+        return self.sublayer[2](x, self.feed_forward)
 
 
 class MultiHeadedAttention(nn.Module):
@@ -188,9 +187,7 @@ class MultiHeadedAttention(nn.Module):
         # 3) "Concat" using a view and apply a final linear.
         x = x.transpose(1, 2).contiguous() \
             .view(nbatches, -1, self.h * self.d_k)
-        self.attn_save = self.attn.cpu().numpy()
-        np.save("attention_save", self.attn_save)
-        return self.linears[-1](x), self.attn
+        return self.linears[-1](x)
 
 
 class PositionwiseFeedForward(nn.Module):
