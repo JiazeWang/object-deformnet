@@ -10,11 +10,11 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torchvision.transforms as transforms
-from lib.network import DeformNet
+from lib.network_att import DeformNet
 from lib.align import estimateSimilarityTransform
 from lib.utils import load_depth, get_bbox, compute_mAP, plot_mAP
 from lib.utils import draw_detections2
-
+from lib.utils import calculate_2d_projections
 parser = argparse.ArgumentParser()
 parser.add_argument('--data', type=str, default='val', help='val, real_test')
 parser.add_argument('--data_dir', type=str, default='data', help='data directory')
@@ -57,7 +57,7 @@ def load_depth2(img_path):
         assert False, '[ Error ]: Unsupported depth type.'
     return depth16
 
-def single_detect(estimator, raw_rgb, depth, segmentation, savename):
+def single_detect(estimator, raw_rgb, depth, segmentation, savename, intrinsics):
     '''
     input:
         1. model file
@@ -108,10 +108,9 @@ def single_detect(estimator, raw_rgb, depth, segmentation, savename):
         rgb = cv2.resize(rgb, (opt.img_size, opt.img_size), interpolation=cv2.INTER_LINEAR)
         image_save_name = savename + str(i) +'_crop.png'
         cv2.imwrite(image_save_name, rgb)
-
-        
         save_point_name = savename + str(i) +'_point.xyz'
         np.savetxt(save_point_name, points, fmt="%.6f")
+        #point_2d = calculate_2d_projections(points, intrinsics)
         rgb = norm_color(rgb)
         crop_w = rmax - rmin
         ratio = opt.img_size / crop_w
@@ -181,7 +180,7 @@ def detect():
     with open(segmentation_path, 'rb') as f:
         mrcnn_result = cPickle.load(f)
 
-    results = single_detect(estimator, raw_rgb, raw_depth, mrcnn_result, savename)
+    results = single_detect(estimator, raw_rgb, raw_depth, mrcnn_result, savename, intrinsics)
     gt = {}
     gt['gt_class_ids'] = gts['class_ids']
     gt['gt_RTs'] = gts['poses']
