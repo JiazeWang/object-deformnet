@@ -185,7 +185,7 @@ class MultiHeadedAttention(nn.Module):
                                  dropout=self.dropout)
 
         # 3) "Concat" using a view and apply a final linear.
-        saveattn = self.attn.cpu().numpy()
+        saveattn = self.attn.detach().cpu().numpy()
         np.save("attention_save.npy", saveattn)
         x = x.transpose(1, 2).contiguous() \
             .view(nbatches, -1, self.h * self.d_k)
