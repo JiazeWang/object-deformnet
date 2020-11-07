@@ -24,9 +24,9 @@ class DeformNet(nn.Module):
         self.instance_global = nn.Sequential(
             nn.Conv1d(128, 128, 1),
             nn.ReLU(),
-            nn.Conv1d(128, 1024, 1),
-            nn.ReLU(),
-            nn.AdaptiveAvgPool1d(1),
+            #nn.Conv1d(128, 1024, 1),
+            #nn.ReLU(),
+            #nn.AdaptiveAvgPool1d(1),
         )
         self.category_local = nn.Sequential(
             nn.Conv1d(3, 64, 1),
@@ -39,12 +39,12 @@ class DeformNet(nn.Module):
         self.category_global = nn.Sequential(
             nn.Conv1d(64, 128, 1),
             nn.ReLU(),
-            nn.Conv1d(128, 1024, 1),
-            nn.ReLU(),
-            nn.AdaptiveAvgPool1d(1),
+            #nn.Conv1d(128, 1024, 1),
+            #nn.ReLU(),
+            #nn.AdaptiveAvgPool1d(1),
         )
         self.assignment = nn.Sequential(
-            nn.Conv1d(2176, 512, 1),
+            nn.Conv1d(128, 512, 1),
             nn.ReLU(),
             nn.Conv1d(512, 256, 1),
             nn.ReLU(),
