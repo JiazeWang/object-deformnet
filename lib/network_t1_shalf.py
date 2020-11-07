@@ -24,9 +24,9 @@ class DeformNet(nn.Module):
         self.instance_global = nn.Sequential(
             nn.Conv1d(128, 128, 1),
             nn.ReLU(),
-            #nn.Conv1d(128, 1024, 1),
-            #nn.ReLU(),
-            #nn.AdaptiveAvgPool1d(1),
+            nn.Conv1d(128, 1024, 1),
+            nn.ReLU(),
+            nn.AdaptiveAvgPool1d(1),
         )
         self.category_local = nn.Sequential(
             nn.Conv1d(3, 64, 1),
@@ -106,7 +106,7 @@ class DeformNet(nn.Module):
         inst_global = inst_global + inst_global_p
         cat_global = cat_global + cat_global_p
         assign_feat = inst_global
-        assign_feat = torch.cat((inst_local, inst_global.repeat(1, 1, n_pts), cat_global.repeat(1, 1, n_pts)), dim=1)     # bs x 2176 x n_pts
+        #assign_feat = torch.cat((inst_local, inst_global.repeat(1, 1, n_pts), cat_global.repeat(1, 1, n_pts)), dim=1)     # bs x 2176 x n_pts
         assign_mat = self.assignment(assign_feat)
         assign_mat = assign_mat.view(-1, nv, n_pts).contiguous()   # bs, nc*nv, n_pts -> bs*nc, nv, n_pts
         index = cat_id + torch.arange(bs, dtype=torch.long).cuda() * self.n_cat
