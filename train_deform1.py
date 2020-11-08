@@ -48,7 +48,7 @@ def train_net():
     if opt.relation == "mlp":
         from lib.network_t1_mlp import DeformNet
     if opt.relation == "transformer":
-        from lib.network_t1_shalf import DeformNet
+        from lib.network_t1 import DeformNet
 
     if not os.path.exists(opt.result_dir):
         os.makedirs(opt.result_dir)
@@ -71,8 +71,8 @@ def train_net():
     st_time = time.time()
     #train_steps = 3000
     #train_steps = 400
-    train_steps = 800
-    #train_steps = 3200
+    #train_steps = 800
+    train_steps = 3200
     global_step = train_steps * (opt.start_epoch - 1)
     n_decays = len(opt.decay_epoch)
     assert len(opt.decay_rate) == n_decays
