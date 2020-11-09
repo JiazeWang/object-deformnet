@@ -206,6 +206,6 @@ class DeformNet(nn.Module):
         entropy_loss = entropy_loss0 + entropy_loss1 + entropy_loss2
         deform_loss = deform_loss0 + deform_loss1 + deform_loss2
         """
-        return assign_mat0, deltas0 #, loss, corr_loss, cd_loss, entropy_loss, deform_loss
+        return assign_mat, deltas #, loss, corr_loss, cd_loss, entropy_loss, deform_loss
         #points.shape: torch.Size([32, 1024, 3])
         #img.shape: torch.Size([32, 3, 192, 192])
