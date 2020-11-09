@@ -1,6 +1,8 @@
 import torch
 
 from transformer1 import DeformNet
+
+os.environ['CUDA_VISIBLE_DEVICES'] = 1
 estimator = DeformNet(6, opt.1024)
 estimator.cuda()
 estimator = nn.DataParallel(estimator)
