@@ -37,14 +37,13 @@ if opt.relation == "mlp":
 if opt.relation == "transformer":
     from lib.network_t1 import DeformNet
 #opt.model = 'results/T1_{}_fast/model_50.pth'.format(opt.relation)
-from lib.network_t1_shalf import DeformNet
 assert opt.data in ['val', 'real_test']
 if opt.data == 'val':
-    result_dir = 'results/eval_T1_shalf_CAMERA_{}'.format(opt.relation)
+    result_dir = 'results/eval_T1_CAMERA_{}'.format(opt.relation)
     file_path = 'CAMERA/val_list.txt'
     cam_fx, cam_fy, cam_cx, cam_cy = 577.5, 577.5, 319.5, 239.5
 else:
-    result_dir = 'results/eval_T1_shalf_REAL_{}'.format(opt.relation)
+    result_dir = 'results/eval_T1_REAL_{}'.format(opt.relation)
     file_path = 'Real/test_list.txt'
     cam_fx, cam_fy, cam_cx, cam_cy = 591.0125, 590.16775, 322.525, 244.11084
 
