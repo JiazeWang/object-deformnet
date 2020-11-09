@@ -28,7 +28,7 @@ parser.add_argument('--lr', type=float, default=0.0001, help='initial learning r
 parser.add_argument('--start_epoch', type=int, default=1, help='which epoch to start')
 parser.add_argument('--max_epoch', type=int, default=50, help='max number of epochs to train')
 parser.add_argument('--resume_model', type=str, default='', help='resume from saved model')
-parser.add_argument('--result_dir', type=str, default='results/T1_transformer_shalf', help='directory to save train results')
+parser.add_argument('--result_dir', type=str, default='results/T1_transformer_half_real', help='directory to save train results')
 parser.add_argument('--relation', type=str, default='transformer')
 opt = parser.parse_args()
 
@@ -49,7 +49,7 @@ def train_net():
         from lib.network_t1_mlp import DeformNet
     if opt.relation == "transformer":
         from lib.network_t1 import DeformNet
-
+    from lib.network_t1_half import DeformNet
     if not os.path.exists(opt.result_dir):
         os.makedirs(opt.result_dir)
     tb_writer = tf.summary.FileWriter(opt.result_dir)
