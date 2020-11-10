@@ -31,12 +31,12 @@ parser.add_argument('--num_workers', type=int, default=24, help='number of data 
 parser.add_argument('--gpu', type=str, default='0', help='GPU to use')
 parser.add_argument('--lr', type=float, default=0.0001, help='initial learning rate')
 parser.add_argument('--start_epoch', type=int, default=1, help='which epoch to start')
-parser.add_argument('--max_epoch', type=int, default=50, help='max number of epochs to train')
+parser.add_argument('--max_epoch', type=int, default=75, help='max number of epochs to train')
 parser.add_argument('--resume_model', type=str, default='', help='resume from saved model')
 parser.add_argument('--result_dir', type=str, default='results/T5_2105_three_stage_real_1110', help='directory to save train results')
 opt = parser.parse_args()
 
-opt.decay_epoch = [0, 15, 30, 45, 60, 75]
+opt.decay_epoch = [0, 15, 30, 45, 60]
 opt.decay_rate = [1.0, 0.6, 0.3, 0.1, 0.01]
 opt.corr_wt = 1.0
 opt.cd_wt = 5.0
