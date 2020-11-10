@@ -49,7 +49,7 @@ def train_net():
         from lib.network_t1_mlp import DeformNet
     if opt.relation == "transformer":
         from lib.network_t1 import DeformNet
-    from lib.network_t1_half import DeformNet
+    #from lib.network_t1_half import DeformNet
     if not os.path.exists(opt.result_dir):
         os.makedirs(opt.result_dir)
     tb_writer = tf.summary.FileWriter(opt.result_dir)
