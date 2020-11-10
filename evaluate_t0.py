@@ -20,7 +20,7 @@ parser.add_argument('--data', type=str, default='val', help='val, real_test')
 parser.add_argument('--data_dir', type=str, default='data', help='data directory')
 parser.add_argument('--n_cat', type=int, default=6, help='number of object categories')
 parser.add_argument('--nv_prior', type=int, default=1024, help='number of vertices in shape priors')
-parser.add_argument('--model', type=str, default='results/T1_transformer_shalf/model_50.pth', help='resume from saved model')
+parser.add_argument('--model', type=str, default='results/T1_transformer_half_real/model_43.pth', help='resume from saved model')
 parser.add_argument('--n_pts', type=int, default=1024, help='number of foreground points')
 parser.add_argument('--img_size', type=int, default=192, help='cropped image size')
 parser.add_argument('--gpu', type=str, default='3', help='GPU to use')
@@ -36,6 +36,7 @@ if opt.relation == "mlp":
     from lib.network_t1_mlp import DeformNet
 if opt.relation == "transformer":
     from lib.network_t1 import DeformNet
+from lib.network_t1_half import DeformNet
 #opt.model = 'results/T1_{}_fast/model_50.pth'.format(opt.relation)
 assert opt.data in ['val', 'real_test']
 if opt.data == 'val':
