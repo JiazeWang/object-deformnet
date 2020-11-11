@@ -7,7 +7,7 @@ import numpy as np
 from tqdm import tqdm
 import _pickle as cPickle
 from lib.align import estimateSimilarityTransform
-from lib.utils import load_depth, get_bbox, compute_mAP, plot_mAP
+from lib.utils import load_depth, get_bbox, compute_mAP, plot_mAP2
 
 
 parser = argparse.ArgumentParser()
@@ -45,7 +45,7 @@ def evaluate():
     shift_thres_list = [i / 2 for i in range(21)]
     iou_thres_list = [i / 100 for i in range(101)]
     # predictions
-    result_dir = "results/eval_T1_CAMERA_non_local/"
+    result_dir = "results/eval_T5_f_STAGE3_R_CAMERA_2_1_0.5/"
     result_pkl_list = glob.glob(os.path.join(result_dir, 'results_*.pkl'))
     result_pkl_list = sorted(result_pkl_list)
     assert len(result_pkl_list)
@@ -98,7 +98,8 @@ def evaluate():
         fw.write(msg + '\n')
     fw.close()
     # load NOCS results
-    pkl_path = os.path.join('results/nocs_results', opt.data, 'mAP_Acc.pkl')
+    #pkl_path = os.path.join('results/nocs_results', opt.data, 'mAP_Acc.pkl')
+    pkl_path = os.path.join('results/eval_spd_camera', 'mAP_Acc.pkl')
     with open(pkl_path, 'rb') as f:
         nocs_results = cPickle.load(f)
     nocs_iou_aps = nocs_results['iou_aps'][-1, :]
@@ -106,7 +107,7 @@ def evaluate():
     iou_aps = np.concatenate((iou_aps, nocs_iou_aps[None, :]), axis=0)
     pose_aps = np.concatenate((pose_aps, nocs_pose_aps[None, :, :]), axis=0)
     # plot
-    plot_mAP(iou_aps, pose_aps, result_dir, iou_thres_list, degree_thres_list, shift_thres_list)
+    plot_mAP2(iou_aps, pose_aps, result_dir, iou_thres_list, degree_thres_list, shift_thres_list)
 
 
 if __name__ == '__main__':
