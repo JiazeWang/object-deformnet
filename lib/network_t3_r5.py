@@ -180,6 +180,10 @@ class DeformNet(nn.Module):
         inst_global = self.instance_global(inst_local)    # bs x 1024 x 1
         inst_global0 = inst_global
         inst_global1 = inst_global
+        inst_global2 = inst_global
+        inst_global3 = inst_global
+        inst_global4 = inst_global
+        inst_global5 = inst_global
         # category-specific features
         cat_prior = prior.permute(0, 2, 1)
         cat_local = self.category_local(cat_prior)    # bs x 64 x n_pts
