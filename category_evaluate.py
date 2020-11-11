@@ -33,7 +33,7 @@ parser.add_argument('--lr', type=float, default=0.0001, help='initial learning r
 parser.add_argument('--start_epoch', type=int, default=1, help='which epoch to start')
 parser.add_argument('--max_epoch', type=int, default=75, help='max number of epochs to train')
 parser.add_argument('--resume_model', type=str, default='', help='resume from saved model')
-parser.add_argument('--result_dir', type=str, default='t5_three_stage_final/model_47.pth', help='directory to save train results')
+parser.add_argument('--result_dir', type=str, default='results/T5_2105_three_stage_eval', help='directory to save train results')
 opt = parser.parse_args()
 
 opt.decay_epoch = [0, 15, 30, 45, 60]
@@ -198,7 +198,7 @@ def train_net():
         logger.info('>>>>>>>>----------Epoch {:02d} test finish---------<<<<<<<<'.format(epoch))
         # save model after each epoch
         logger.info('>>>>>>>>----------Epoch {:02d} model saved---------<<<<<<<<'.format(epoch))
-        torch.save(estimator.state_dict(), '{0}/model_{1:02d}.pth'.format(opt.result_dir, epoch))
+        #torch.save(estimator.state_dict(), '{0}/model_{1:02d}.pth'.format(opt.result_dir, epoch))
 
 
 
