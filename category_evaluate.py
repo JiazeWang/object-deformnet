@@ -176,7 +176,7 @@ def train_net():
         strict_acc = 100 * (strict_success / total_count)
         easy_acc = 100 * (easy_success / total_count)
         iou_acc = 100 * (iou_success / total_count)
-        category_cd_loss = category_cd_loss / total_count
+        category_cd_loss = 1000 / 5*category_cd_loss / total_count
         for i in range(opt.n_cat):
             logger.info('{} accuracies:'.format(val_dataset.cat_names[i]))
             logger.info('cd_loss:{:5f}'.format(category_cd_loss[i]))
