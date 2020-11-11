@@ -9,7 +9,7 @@ import torch.nn.functional as F
 import tensorflow as tf
 #from lib.network_t4_psp import DeformNet
 #from lib.network_t5_r import DeformNet
-from lib.network_t3_r import DeformNet
+from lib.network_t3_r5 import DeformNet
 #from lib.network_t5 import DeformNet5
 from lib.loss import Loss
 from data.pose_dataset import PoseDataset
@@ -18,7 +18,7 @@ from lib.align import estimateSimilarityTransform
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--dataset', type=str, default='CAMERA+Real', help='CAMERA or CAMERA+Real')
+parser.add_argument('--dataset', type=str, default='CAMERA', help='CAMERA or CAMERA+Real')
 parser.add_argument('--data_dir', type=str, default='data', help='data directory')
 parser.add_argument('--n_pts', type=int, default=1024, help='number of foreground points')
 parser.add_argument('--n_cat', type=int, default=6, help='number of object categories')
@@ -33,7 +33,7 @@ parser.add_argument('--lr', type=float, default=0.0001, help='initial learning r
 parser.add_argument('--start_epoch', type=int, default=1, help='which epoch to start')
 parser.add_argument('--max_epoch', type=int, default=50, help='max number of epochs to train')
 parser.add_argument('--resume_model', type=str, default='', help='resume from saved model')
-parser.add_argument('--result_dir', type=str, default='results/T3_R_real', help='directory to save train results')
+parser.add_argument('--result_dir', type=str, default='results/T3_R5_camera_fast', help='directory to save train results')
 opt = parser.parse_args()
 
 opt.decay_epoch = [0, 10, 20, 30, 40]
@@ -67,7 +67,7 @@ def train_net():
     # start training
     st_time = time.time()
     #train_steps =  4000 #5334
-    train_steps = 1600
+    train_steps = 400
     #train_steps = 107
     global_step = train_steps * (opt.start_epoch - 1)
     n_decays = len(opt.decay_epoch)
