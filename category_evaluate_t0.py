@@ -147,11 +147,11 @@ def train_net():
             inst_shape = prior + deltas
             assign_mat = F.softmax(assign_mat, dim=2)
             nocs_coords = torch.bmm(assign_mat, inst_shape)
-            nocs_coords = nocs_coords.detach().cpu().numpy()
+            nocs_coords = nocs_coords.detach().cpu().numpy()[0]
             points = points.cpu().numpy()[0]
             # use choose to remove repeated points
             choose = choose.cpu().numpy()[0]
-            cd_loss = cd_loss.detach().cpu().numpy()[0]
+            cd_loss = cd_loss.detach().cpu().numpy()
             _, choose = np.unique(choose, return_index=True)
             nocs_coords = nocs_coords[choose, :]
             points = points[choose, :]
