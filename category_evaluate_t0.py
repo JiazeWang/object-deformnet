@@ -151,6 +151,7 @@ def train_net():
             points = points.cpu().numpy()[0]
             # use choose to remove repeated points
             choose = choose.cpu().numpy()[0]
+            print(cd_loss.shape)
             cd_loss = cd_loss.detach().cpu().numpy()[0]
             _, choose = np.unique(choose, return_index=True)
             nocs_coords = nocs_coords[choose, :]
