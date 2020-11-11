@@ -31,7 +31,7 @@ parser.add_argument('--num_workers', type=int, default=24, help='number of data 
 parser.add_argument('--gpu', type=str, default='0', help='GPU to use')
 parser.add_argument('--lr', type=float, default=0.0001, help='initial learning rate')
 parser.add_argument('--start_epoch', type=int, default=1, help='which epoch to start')
-parser.add_argument('--max_epoch', type=int, default=75, help='max number of epochs to train')
+parser.add_argument('--max_epoch', type=int, default=1, help='max number of epochs to train')
 parser.add_argument('--resume_model', type=str, default='', help='resume from saved model')
 parser.add_argument('--result_dir', type=str, default='results/T5_2105_three_stage_eval', help='directory to save train results')
 opt = parser.parse_args()
@@ -124,10 +124,10 @@ def train_net():
         val_size = 100
         val_idx = random.sample(list(range(val_dataset.length)), val_size)
         val_sampler = torch.utils.data.sampler.SubsetRandomSampler(val_idx)
-        #val_dataloader = torch.utils.data.DataLoader(val_dataset, batch_size=1,
-        #                                         num_workers=opt.num_workers, pin_memory=True)
-        val_dataloader = torch.utils.data.DataLoader(val_dataset, batch_size=1, sampler=val_sampler,
+        val_dataloader = torch.utils.data.DataLoader(val_dataset, batch_size=1,
                                                  num_workers=opt.num_workers, pin_memory=True)
+        #val_dataloader = torch.utils.data.DataLoader(val_dataset, batch_size=1, sampler=val_sampler,
+        #                                         num_workers=opt.num_workers, pin_memory=True)
 
         estimator.eval()
         for i, data in enumerate(val_dataloader, 1):
