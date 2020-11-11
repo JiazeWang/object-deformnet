@@ -830,7 +830,7 @@ def plot_mAP2(iou_aps, pose_aps, out_dir, iou_thres_list, degree_thres_list, shi
     """ Draw iou 3d AP vs. iou thresholds.
     """
 
-    labels = ['bottle', 'bowl', 'camera', 'can', 'laptop', 'mug', 'mean', 'spd']
+    labels = ['bottle', 'bowl', 'camera', 'can', 'laptop', 'mug', 'mean', 'SPD']
     colors = ['tab:blue', 'tab:orange', 'tab:green', 'tab:pink', 'tab:olive', 'tab:purple', 'tab:red', 'tab:gray']
     styles = ['-', '-', '-', '-', '-', '-', '--', ':']
 
