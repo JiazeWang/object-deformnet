@@ -6,10 +6,6 @@ import glob
 import numpy as np
 from tqdm import tqdm
 import _pickle as cPickle
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
-import torchvision.transforms as transforms
 from lib.network_t5_r_eval import DeformNet
 from lib.align import estimateSimilarityTransform
 from lib.utils import load_depth, get_bbox, compute_mAP, plot_mAP
@@ -43,11 +39,6 @@ if not os.path.exists(result_dir):
 
 xmap = np.array([[i for i in range(640)] for j in range(480)])
 ymap = np.array([[j for i in range(640)] for j in range(480)])
-norm_scale = 1000.0
-norm_color = transforms.Compose(
-    [transforms.ToTensor(),
-     transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])]
-)
 
 
 def evaluate():
