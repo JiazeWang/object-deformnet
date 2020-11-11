@@ -10,7 +10,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torchvision.transforms as transforms
-from lib.network_t1 import DeformNet
+#from lib.network_t1 import DeformNet
+from lib.network import DeformNet
 from lib.align import estimateSimilarityTransform
 from lib.utils import load_depth, get_bbox, compute_mAP, plot_mAP
 
@@ -55,8 +56,9 @@ def detect():
     #os.environ['CUDA_VISIBLE_DEVICES'] = opt.gpu
     estimator = DeformNet(opt.n_cat, opt.nv_prior)
     estimator.cuda()
-    estimator = nn.DataParallel(estimator)
     estimator.load_state_dict(torch.load(opt.model))
+    estimator = nn.DataParallel(estimator)
+    #estimator.load_state_dict(torch.load(opt.model))
     estimator.eval()
     # get test data list
     img_list = [os.path.join(file_path.split('/')[0], line.rstrip('\n'))
