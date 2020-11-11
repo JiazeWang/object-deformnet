@@ -249,22 +249,64 @@ class DeformNet(nn.Module):
         cat_global2 = self.category_global(cat_local2)  # bs x 1024 x 1
 
         assign_feat2 = torch.cat((inst_local, inst_global2.repeat(1, 1, n_pts), cat_global2.repeat(1, 1, n_pts)), dim=1)
-        assign_mat2 = self.assignment1(assign_feat1)
-        assign_mat2 = assign_mat1.view(-1, nv, n_pts).contiguous()   # bs, nc*nv, n_pts -> bs*nc, nv, n_pts
+        assign_mat2 = self.assignment2(assign_feat2)
+        assign_mat2 = assign_mat2.view(-1, nv, n_pts).contiguous()   # bs, nc*nv, n_pts -> bs*nc, nv, n_pts
         index = cat_id + torch.arange(bs, dtype=torch.long).cuda() * self.n_cat
-        assign_mat1 = torch.index_select(assign_mat1, 0, index)   # bs x nv x n_pts
-        assign_mat1 = assign_mat1.permute(0, 2, 1).contiguous()    # bs x n_pts x nv
+        assign_mat2 = torch.index_select(assign_mat2, 0, index)   # bs x nv x n_pts
+        assign_mat2 = assign_mat2.permute(0, 2, 1).contiguous()    # bs x n_pts x nv
         # deformation field
-        deform_feat1 = torch.cat((cat_local1, cat_global1.repeat(1, 1, nv), inst_global1.repeat(1, 1, nv)), dim=1)       # bs x 2112 x n_pts
-        deltas1 = self.deformation1(deform_feat1)
-        deltas1 = deltas1.view(-1, 3, nv).contiguous()   # bs, nc*3, nv -> bs*nc, 3, nv
-        deltas1 = torch.index_select(deltas1, 0, index)   # bs x 3 x nv
-        deltas1 = deltas1.permute(0, 2, 1).contiguous()   # bs x nv x 3
+        deform_feat2 = torch.cat((cat_local2, cat_global2.repeat(1, 1, nv), inst_global2.repeat(1, 1, nv)), dim=1)       # bs x 2112 x n_pts
+        deltas2 = self.deformation2(deform_feat2)
+        deltas2 = deltas2.view(-1, 3, nv).contiguous()   # bs, nc*3, nv -> bs*nc, 3, nv
+        deltas2 = torch.index_select(deltas2, 0, index)   # bs x 3 x nv
+        deltas2 = deltas2.permute(0, 2, 1).contiguous()   # bs x nv x 3
 
-        assign_mat1 = torch.bmm(assign_mat0, assign_mat1)
-        deltas1 = deltas0 + deltas1
+        assign_mat2 = torch.bmm(assign_mat1, assign_mat2)
+        deltas2 = deltas1 + deltas2
 
+#stage4
+        prior3 = prior + deltas2
+        cat_prior3 = prior3.permute(0, 2, 1)
+        cat_local3 = self.category_local(cat_prior3)    # bs x 64 x n_pts
+        cat_global3 = self.category_global(cat_local3)  # bs x 1024 x 1
 
+        assign_feat3 = torch.cat((inst_local, inst_global3.repeat(1, 1, n_pts), cat_global3.repeat(1, 1, n_pts)), dim=1)
+        assign_mat3 = self.assignment3(assign_feat3)
+        assign_mat3 = assign_mat3.view(-1, nv, n_pts).contiguous()   # bs, nc*nv, n_pts -> bs*nc, nv, n_pts
+        index = cat_id + torch.arange(bs, dtype=torch.long).cuda() * self.n_cat
+        assign_mat3 = torch.index_select(assign_mat3, 0, index)   # bs x nv x n_pts
+        assign_mat3 = assign_mat3.permute(0, 2, 1).contiguous()    # bs x n_pts x nv
+        # deformation field
+        deform_feat3 = torch.cat((cat_local3, cat_global3.repeat(1, 1, nv), inst_global3.repeat(1, 1, nv)), dim=1)       # bs x 2112 x n_pts
+        deltas3 = self.deformation3(deform_feat3)
+        deltas3 = deltas3.view(-1, 3, nv).contiguous()   # bs, nc*3, nv -> bs*nc, 3, nv
+        deltas3 = torch.index_select(deltas3, 0, index)   # bs x 3 x nv
+        deltas3 = deltas3.permute(0, 2, 1).contiguous()   # bs x nv x 3
+
+        assign_mat3 = torch.bmm(assign_mat2, assign_mat3)
+        deltas3 = deltas2 + deltas3
+
+#stage4
+        prior4 = prior + deltas3
+        cat_prior4 = prior4.permute(0, 2, 1)
+        cat_local4 = self.category_local(cat_prior4)    # bs x 64 x n_pts
+        cat_global4 = self.category_global(cat_local4)  # bs x 1024 x 1
+
+        assign_feat4 = torch.cat((inst_local, inst_global4.repeat(1, 1, n_pts), cat_global4.repeat(1, 1, n_pts)), dim=1)
+        assign_mat4 = self.assignment4(assign_feat4)
+        assign_mat4 = assign_mat4.view(-1, nv, n_pts).contiguous()   # bs, nc*nv, n_pts -> bs*nc, nv, n_pts
+        index = cat_id + torch.arange(bs, dtype=torch.long).cuda() * self.n_cat
+        assign_mat4 = torch.index_select(assign_mat4, 0, index)   # bs x nv x n_pts
+        assign_mat4 = assign_mat4.permute(0, 2, 1).contiguous()    # bs x n_pts x nv
+        # deformation field
+        deform_feat4 = torch.cat((cat_local4, cat_global4.repeat(1, 1, nv), inst_global4.repeat(1, 1, nv)), dim=1)       # bs x 2112 x n_pts
+        deltas4 = self.deformation4(deform_feat4)
+        deltas4 = deltas4.view(-1, 3, nv).contiguous()   # bs, nc*3, nv -> bs*nc, 3, nv
+        deltas4 = torch.index_select(deltas4, 0, index)   # bs x 3 x nv
+        deltas4 = deltas4.permute(0, 2, 1).contiguous()   # bs x nv x 3
+
+        assign_mat4 = torch.bmm(assign_mat3, assign_mat4)
+        deltas4 = deltas3 + deltas4
 #loss
         loss0, corr_loss0, cd_loss0, entropy_loss0, deform_loss0 = self.loss(assign_mat, deltas, prior, nocs, model)
         loss1, corr_loss1, cd_loss1, entropy_loss1, deform_loss1 = self.loss(assign_mat0, deltas0, prior, nocs, model)
@@ -272,11 +314,11 @@ class DeformNet(nn.Module):
         loss3, corr_loss3, cd_loss3, entropy_loss3, deform_loss3 = self.loss(assign_mat2, deltas2, prior, nocs, model)
         loss4, corr_loss4, cd_loss4, entropy_loss4, deform_loss4 = self.loss(assign_mat3, deltas3, prior, nocs, model)
         loss5, corr_loss5, cd_loss5, entropy_loss5, deform_loss5 = self.loss(assign_mat4, deltas4, prior, nocs, model)
-        loss = loss0*0.5 + loss1 + loss2*2
-        corr_loss = corr_loss0 + corr_loss1 + corr_loss2
-        cd_loss = cd_loss0 + cd_loss1 + cd_loss2
-        entropy_loss = entropy_loss0 + entropy_loss1 + entropy_loss2
-        deform_loss = deform_loss0 + deform_loss1 + deform_loss2
-        return assign_mat1, deltas1, loss, corr_loss, cd_loss, entropy_loss, deform_loss
+        loss = (loss0 + loss1 + loss2 + loss3 + loss4 + loss5) / 2
+        corr_loss = corr_loss0 + corr_loss1 + corr_loss2 + corr_loss3 + corr_loss4 + corr_loss5
+        cd_loss = cd_loss0 + cd_loss1 + cd_loss2 + cd_loss3 + cd_loss4 + cd_loss5
+        entropy_loss = entropy_loss0 + entropy_loss1 + entropy_loss2 + entropy_loss3 + entropy_loss4 + entropy_loss5
+        deform_loss = deform_loss0 + deform_loss1 + deform_loss2 + deform_loss3 + deform_loss4 + deform_loss5
+        return assign_mat4, deltas4, loss, corr_loss, cd_loss, entropy_loss, deform_loss
         #points.shape: torch.Size([32, 1024, 3])
         #img.shape: torch.Size([32, 3, 192, 192])
