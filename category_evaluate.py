@@ -179,7 +179,7 @@ def train_net():
         category_cd_loss = category_cd_loss / total_count
         for i in range(opt.n_cat):
             logger.info('{} accuracies:'.format(val_dataset.cat_names[i]))
-            logger.info('cd_loss:'.format(category_cd_loss[i]))
+            logger.info('cd_loss:{:5f}'.format(category_cd_loss[i]))
             logger.info('5^o 5cm: {:4f}'.format(strict_acc[i]))
             logger.info('10^o 5cm: {:4f}'.format(easy_acc[i]))
             logger.info('IoU < 0.1: {:4f}'.format(iou_acc[i]))
