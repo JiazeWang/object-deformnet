@@ -11,7 +11,7 @@ from lib.utils import load_depth, get_bbox, compute_mAP, plot_mAP2
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--data', type=str, default='val', help='val, real_test')
+parser.add_argument('--data', type=str, default='real_test', help='val, real_test')
 parser.add_argument('--data_dir', type=str, default='data', help='data directory')
 parser.add_argument('--n_cat', type=int, default=6, help='number of object categories')
 parser.add_argument('--nv_prior', type=int, default=1024, help='number of vertices in shape priors')
@@ -45,7 +45,7 @@ def evaluate():
     shift_thres_list = [i / 2 for i in range(21)]
     iou_thres_list = [i / 100 for i in range(101)]
     # predictions
-    result_dir = "results/eval_T5_f_STAGE3_R_CAMERA_2_1_0.5/"
+    result_dir = "results/final_transformers"
     #result_dir = 'results/eval_spd_camera'
     result_pkl_list = glob.glob(os.path.join(result_dir, 'results_*.pkl'))
     result_pkl_list = sorted(result_pkl_list)
@@ -100,7 +100,7 @@ def evaluate():
     fw.close()
     # load NOCS results
     #pkl_path = os.path.join('results/nocs_results', opt.data, 'mAP_Acc.pkl')
-    pkl_path = os.path.join('results/eval_spd_camera', 'mAP_Acc.pkl')
+    pkl_path = os.path.join('results/eval_spd_real/', 'mAP_Acc.pkl')
     with open(pkl_path, 'rb') as f:
         nocs_results = cPickle.load(f)
     nocs_iou_aps = nocs_results['iou_aps'][-1, :]
