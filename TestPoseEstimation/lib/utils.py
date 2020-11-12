@@ -772,14 +772,14 @@ def draw_bboxes(img, img_pts, color):
     # draw ground layer in darker color
     color_ground = (int(color[0]*0.3), int(color[1]*0.3), int(color[2]*0.3))
     for i, j in zip([4, 5, 6, 7], [5, 7, 4, 6]):
-        img = cv2.line(img, tuple(img_pts[i]), tuple(img_pts[j]), color_ground, 2)
+        img = cv2.line(img, tuple(img_pts[i]), tuple(img_pts[j]), color_ground, 3)
     # draw pillars in minor darker color
     color_pillar = (int(color[0]*0.6), int(color[1]*0.6), int(color[2]*0.6))
     for i, j in zip(range(4), range(4, 8)):
-        img = cv2.line(img, tuple(img_pts[i]), tuple(img_pts[j]), color_pillar, 2)
+        img = cv2.line(img, tuple(img_pts[i]), tuple(img_pts[j]), color_pillar, 3)
     # draw top layer in original color
     for i, j in zip([0, 1, 2, 3], [1, 3, 0, 2]):
-        img = cv2.line(img, tuple(img_pts[i]), tuple(img_pts[j]), color, 2)
+        img = cv2.line(img, tuple(img_pts[i]), tuple(img_pts[j]), color, 3)
 
     return img
 
@@ -787,13 +787,13 @@ def draw_axis(img, img_pts):
     img_pts = np.int32(img_pts).reshape(-1, 2)
 
     # draw the x-axis
-    img = cv2.line(img, tuple(img_pts[0]), tuple(img_pts[1]), (0, 0, 255), 2)
+    img = cv2.line(img, tuple(img_pts[0]), tuple(img_pts[1]), (0, 0, 255), 3)
 
     # draw the y-axis
-    img = cv2.line(img, tuple(img_pts[0]), tuple(img_pts[2]), (0, 255, 0), 2)
+    img = cv2.line(img, tuple(img_pts[0]), tuple(img_pts[2]), (0, 255, 0), 3)
 
     # draw the z-axis
-    img = cv2.line(img, tuple(img_pts[0]), tuple(img_pts[3]), (255, 0, 0), 2)
+    img = cv2.line(img, tuple(img_pts[0]), tuple(img_pts[3]), (255, 0, 0), 3)
 
     return img
 
@@ -893,7 +893,7 @@ def draw_detections2(img, out_dir, data_name, img_id, intrinsics, pred_sRT, pred
             bbox_3d = get_3d_bbox(pred_size[i, :], 0)
             transformed_bbox_3d = transform_coordinates_3d(bbox_3d, sRT)
             projected_bbox = calculate_2d_projections(transformed_bbox_3d, intrinsics)
-            img = draw_bboxes(img, projected_bbox, (0, 255, 255))
+            img = draw_bboxes(img, projected_bbox, (0, 0, 255))
 
             if need_draw_axis:
                 axis_endopoints = np.array([[0.0, 0.4, 0.0, 0.0], [0.0, 0.0, 0.4, 0.0], [0.0, 0.0, 0.0, 0.4]])
