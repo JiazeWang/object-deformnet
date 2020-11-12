@@ -10,17 +10,17 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torchvision.transforms as transforms
-from lib.network_t1_shalf import DeformNet
+from lib.network_t1 import DeformNet
 from lib.align import estimateSimilarityTransform
 from lib.utils import load_depth, get_bbox, compute_mAP, plot_mAP
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--data', type=str, default='val', help='val, real_test')
+parser.add_argument('--data', type=str, default='real_test', help='val, real_test')
 parser.add_argument('--data_dir', type=str, default='data', help='data directory')
 parser.add_argument('--n_cat', type=int, default=6, help='number of object categories')
 parser.add_argument('--nv_prior', type=int, default=1024, help='number of vertices in shape priors')
-parser.add_argument('--model', type=str, default='results/T1_transformer_half_real/model_43.pth', help='resume from saved model')
+parser.add_argument('--model', type=str, default='TestPoseEstimation/lib/real_50.pth', help='resume from saved model')
 parser.add_argument('--n_pts', type=int, default=1024, help='number of foreground points')
 parser.add_argument('--img_size', type=int, default=192, help='cropped image size')
 parser.add_argument('--gpu', type=str, default='3', help='GPU to use')
@@ -44,7 +44,8 @@ if opt.data == 'val':
     file_path = 'CAMERA/val_list.txt'
     cam_fx, cam_fy, cam_cx, cam_cy = 577.5, 577.5, 319.5, 239.5
 else:
-    result_dir = 'results/eval_T1_REAL_{}_half'.format(opt.relation)
+    #result_dir = 'results/eval_T1_REAL_{}_half'.format(opt.relation)
+    result_dir = 'results/final_transformers'
     file_path = 'Real/test_list.txt'
     cam_fx, cam_fy, cam_cx, cam_cy = 591.0125, 590.16775, 322.525, 244.11084
 
