@@ -36,7 +36,7 @@ if opt.relation == "mlp":
     from lib.network_t1_mlp import DeformNet
 if opt.relation == "transformer":
     from lib.network_t1 import DeformNet
-from lib.network_t1_half import DeformNet
+#from lib.network_t1_half import DeformNet
 #opt.model = 'results/T1_{}_fast/model_50.pth'.format(opt.relation)
 assert opt.data in ['val', 'real_test']
 if opt.data == 'val':
