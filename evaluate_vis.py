@@ -100,6 +100,7 @@ def evaluate():
     fw.close()
     # load NOCS results
     #pkl_path = os.path.join('results/nocs_results', opt.data, 'mAP_Acc.pkl')
+    """
     pkl_path = os.path.join('results/eval_spd_real/', 'mAP_Acc.pkl')
     with open(pkl_path, 'rb') as f:
         nocs_results = cPickle.load(f)
@@ -107,6 +108,7 @@ def evaluate():
     nocs_pose_aps = nocs_results['pose_aps'][-1, :, :]
     iou_aps = np.concatenate((iou_aps, nocs_iou_aps[None, :]), axis=0)
     pose_aps = np.concatenate((pose_aps, nocs_pose_aps[None, :, :]), axis=0)
+    """
     # plot
     plot_mAP2(iou_aps, pose_aps, result_dir, iou_thres_list, degree_thres_list, shift_thres_list)
 
