@@ -312,6 +312,6 @@ class DeformNet(nn.Module):
         #assign_mat4 = torch.bmm(assign_mat3, assign_mat4)
         deltas4 = deltas3 + deltas4
 #loss
-        return assign_mat, deltas
+        return assign_mat0, deltas0
         #points.shape: torch.Size([32, 1024, 3])
         #img.shape: torch.Size([32, 3, 192, 192])
