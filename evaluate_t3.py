@@ -35,7 +35,7 @@ if opt.data == 'val':
     cam_fx, cam_fy, cam_cx, cam_cy = 577.5, 577.5, 319.5, 239.5
 else:
     result_dir = 'results/'+str(opt.model).split('/')[1]+'_real_test-1'
-    file_path = 'results/real_test_final'
+    file_path = 'Real/test_list.txt'
     cam_fx, cam_fy, cam_cx, cam_cy = 591.0125, 590.16775, 322.525, 244.11084
 
 if not os.path.exists(result_dir):
