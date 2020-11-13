@@ -16,7 +16,7 @@ from lib.utils import load_depth, get_bbox, compute_mAP, plot_mAP
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--data', type=str, default='val', help='val, real_test')
+parser.add_argument('--data', type=str, default='real_test', help='val, real_test')
 parser.add_argument('--data_dir', type=str, default='data', help='data directory')
 parser.add_argument('--n_cat', type=int, default=6, help='number of object categories')
 parser.add_argument('--nv_prior', type=int, default=1024, help='number of vertices in shape priors')
