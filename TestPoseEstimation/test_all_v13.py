@@ -166,9 +166,9 @@ def detect():
     model_path = "lib/T5_real.pth"
     estimator = DeformNet(opt.n_cat, opt.nv_prior)
     estimator.cuda()
-    estimator.load_state_dict(torch.load(model_path))
-    estimator = nn.DataParallel(estimator)
     #estimator.load_state_dict(torch.load(model_path))
+    estimator = nn.DataParallel(estimator)
+    estimator.load_state_dict(torch.load(model_path))
     estimator.eval()
     # get test data list
     img_list = [os.path.join(file_path.split('/')[0], line.rstrip('\n'))
