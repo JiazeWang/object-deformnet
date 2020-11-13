@@ -145,7 +145,7 @@ class DeformNet(nn.Module):
         self.deform_wt = 0.01
         self.loss = Loss(self.corr_wt, self.cd_wt, self.entropy_wt, self.deform_wt)
 
-    def forward(self, points, img, choose, cat_id, prior, nocs, model):
+    def forward(self, points, img, choose, cat_id, prior):
         """
         Args:
             points: bs x n_pts x 3
@@ -312,17 +312,6 @@ class DeformNet(nn.Module):
         #assign_mat4 = torch.bmm(assign_mat3, assign_mat4)
         deltas4 = deltas3 + deltas4
 #loss
-        loss0, corr_loss0, cd_loss0, entropy_loss0, deform_loss0 = self.loss(assign_mat, deltas, prior, nocs, model)
-        loss1, corr_loss1, cd_loss1, entropy_loss1, deform_loss1 = self.loss(assign_mat0, deltas0, prior, nocs, model)
-        loss2, corr_loss2, cd_loss2, entropy_loss2, deform_loss2 = self.loss(assign_mat1, deltas1, prior, nocs, model)
-        loss3, corr_loss3, cd_loss3, entropy_loss3, deform_loss3 = self.loss(assign_mat2, deltas2, prior, nocs, model)
-        loss4, corr_loss4, cd_loss4, entropy_loss4, deform_loss4 = self.loss(assign_mat3, deltas3, prior, nocs, model)
-        loss5, corr_loss5, cd_loss5, entropy_loss5, deform_loss5 = self.loss(assign_mat4, deltas4, prior, nocs, model)
-        loss = (loss0 + loss1 + loss2 + loss3 + loss4 + loss5) / 2
-        corr_loss = corr_loss0 + corr_loss1 + corr_loss2 + corr_loss3 + corr_loss4 + corr_loss5
-        cd_loss = cd_loss0 + cd_loss1 + cd_loss2 + cd_loss3 + cd_loss4 + cd_loss5
-        entropy_loss = entropy_loss0 + entropy_loss1 + entropy_loss2 + entropy_loss3 + entropy_loss4 + entropy_loss5
-        deform_loss = deform_loss0 + deform_loss1 + deform_loss2 + deform_loss3 + deform_loss4 + deform_loss5
-        return assign_mat4, deltas4, loss, corr_loss, cd_loss, entropy_loss, deform_loss
+        return assign_mat4, deltas4
         #points.shape: torch.Size([32, 1024, 3])
         #img.shape: torch.Size([32, 3, 192, 192])
