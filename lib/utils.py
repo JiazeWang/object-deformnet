@@ -904,7 +904,7 @@ def plot_mAP3(iou_aps, pose_aps, out_dir, iou_thres_list, degree_thres_list, shi
     ax_degree.set_xlim(0, 60)
     ax_degree.xaxis.set_ticks([0, 20, 40, 60])
     ax_degree.grid()
-    for i in range(1, pose_aps.shape[0]):
+    for i in range(0, pose_aps.shape[0]):
         ax_degree.plot(np.array(degree_thres_list), 100*pose_aps[i, :len(degree_thres_list), -1],
                        color=colors[i-1], linestyle=styles[i-1], label=labels[i-1])
     # translation subplot
@@ -915,7 +915,7 @@ def plot_mAP3(iou_aps, pose_aps, out_dir, iou_thres_list, degree_thres_list, shi
     ax_shift.set_xlim(0, 10)
     ax_shift.xaxis.set_ticks([0, 5, 10])
     ax_shift.grid()
-    for i in range(1, pose_aps.shape[0]):
+    for i in range(0, pose_aps.shape[0]):
         ax_shift.plot(np.array(shift_thres_list), 100*pose_aps[i, -1, :len(shift_thres_list)],
                       color=colors[i-1], linestyle=styles[i-1], label=labels[i-1])
     ax_shift.legend(loc='lower right', fontsize='small')
