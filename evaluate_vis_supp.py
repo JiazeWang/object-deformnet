@@ -78,16 +78,16 @@ def evaluate():
     shift_thres_list = [i / 2 for i in range(21)]
     iou_thres_list = [i / 100 for i in range(101)]
     # predictions
-    result_dir = "results/final_transformers"
+    result_dir = "vis"
 
 
-    pkl_path = os.path.join('results/final_transformers/', 'mAP_Acc.pkl')
+    pkl_path = os.path.join('results/eval_T5_f_STAGE3_R_CAMERA_2_1_0.5/', 'mAP_Acc.pkl')
     with open(pkl_path, 'rb') as f:
         nocs_results = cPickle.load(f)
     nocs_iou_aps = nocs_results['iou_aps'][1, :]
     nocs_pose_aps = nocs_results['pose_aps'][1, :, :]
 
-    pkl_path_new = os.path.join('results/final_transformers/', 'mAP_Acc.pkl')
+    pkl_path_new = os.path.join('results/eval_spd_camera/', 'mAP_Acc.pkl')
     with open(pkl_path_new, 'rb') as f:
         nocs_results_new = cPickle.load(f)
     nocs_iou_aps_new = nocs_results_new['iou_aps'][1, :]
