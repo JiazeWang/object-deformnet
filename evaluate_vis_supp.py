@@ -81,12 +81,12 @@ def evaluate():
     result_dir = "vis"
 
 
-    pkl_path = os.path.join('results/T5_2105_three_stage_real_val/', 'mAP_Acc.pkl')
+    pkl_path = os.path.join('results/final_transformers/', 'mAP_Acc.pkl')
     with open(pkl_path, 'rb') as f:
         nocs_results = cPickle.load(f)
 
 
-    pkl_path_new = os.path.join('results/eval_spd_camera/', 'mAP_Acc.pkl')
+    pkl_path_new = os.path.join('supp/real_ours/', 'mAP_Acc.pkl')
     with open(pkl_path_new, 'rb') as f:
         nocs_results_new = cPickle.load(f)
 
