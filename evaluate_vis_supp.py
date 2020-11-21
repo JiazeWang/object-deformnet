@@ -74,7 +74,11 @@ def evaluate():
     # load NOCS results
     #pkl_path = os.path.join('results/nocs_results', opt.data, 'mAP_Acc.pkl')
     """
-
+    degree_thres_list = list(range(0, 61, 1))
+    shift_thres_list = [i / 2 for i in range(21)]
+    iou_thres_list = [i / 100 for i in range(101)]
+    # predictions
+    result_dir = "results/final_transformers"
 
 
     pkl_path = os.path.join('results/final_transformers/', 'mAP_Acc.pkl')
@@ -94,7 +98,7 @@ def evaluate():
     pose_aps = np.concatenate((nocs_pose_aps, nocs_pose_aps_new), axis=0)
 
 
-    plot_mAP3(iou_aps, pose_aps, result_dir, iou_thres_list, degree_thres_list, shift_thres_list, name = 'first')
+    plot_mAP3(iou_aps, pose_aps, result_dir, iou_thres_list, degree_thres_list, shift_thres_list, name = 'first.png')
 
 
 if __name__ == '__main__':
