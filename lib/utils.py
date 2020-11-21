@@ -924,3 +924,53 @@ def plot_mAP3(iou_aps, pose_aps, out_dir, iou_thres_list, degree_thres_list, shi
     plt.savefig(os.path.join(out_dir, name), dpi = 600)
     plt.close(fig)
     return
+
+def plot_mAP4(iou_aps, pose_aps, out_dir, iou_thres_list, degree_thres_list, shift_thres_list, name):
+    """ Draw iou 3d AP vs. iou thresholds.
+    """
+
+    #labels = ['bottle', 'bowl', 'camera', 'can', 'laptop', 'mug', 'mean']
+    labels = ['Ours', 'SPD', 'NOCS']
+    colors = ['tab:blue', 'tab:pink', 'tab:gray']
+    #styles = ['-', '-', '-', '-', '-', '-', '--']
+    styles = ['-', '-', '-']
+    fig, (ax_iou, ax_degree, ax_shift) = plt.subplots(1, 3, figsize=(8, 3.5))
+    # IoU subplot
+    ax_iou.set_title('3D IoU', fontsize=10)
+    ax_iou.set_ylabel('Average Precision')
+    ax_iou.set_ylim(0, 100)
+    ax_iou.set_xlabel('Percent')
+    ax_iou.set_xlim(0, 100)
+    ax_iou.xaxis.set_ticks([0, 25, 50, 75, 100])
+    ax_iou.grid()
+    for i in range(0, iou_aps.shape[0]):
+        ax_iou.plot(100*np.array(iou_thres_list), 100*iou_aps[i, :],
+                    color=colors[i-1], linestyle=styles[i-1], label=labels[i-1])
+    # rotation subplot
+    ax_degree.set_title('Rotation', fontsize=10)
+    ax_degree.set_ylim(0, 100)
+    ax_degree.yaxis.set_ticklabels([])
+    ax_degree.set_xlabel('Degree')
+    ax_degree.set_xlim(0, 60)
+    ax_degree.xaxis.set_ticks([0, 20, 40, 60])
+    ax_degree.grid()
+    for i in range(0, pose_aps.shape[0]):
+        ax_degree.plot(np.array(degree_thres_list), 100*pose_aps[i, :len(degree_thres_list), -1],
+                       color=colors[i-1], linestyle=styles[i-1], label=labels[i-1])
+    # translation subplot
+    ax_shift.set_title('Translation', fontsize=10)
+    ax_shift.set_ylim(0, 100)
+    ax_shift.yaxis.set_ticklabels([])
+    ax_shift.set_xlabel('Centimeter')
+    ax_shift.set_xlim(0, 10)
+    ax_shift.xaxis.set_ticks([0, 5, 10])
+    ax_shift.grid()
+    for i in range(0, pose_aps.shape[0]):
+        ax_shift.plot(np.array(shift_thres_list), 100*pose_aps[i, -1, :len(shift_thres_list)],
+                      color=colors[i-1], linestyle=styles[i-1], label=labels[i-1])
+    ax_shift.legend(loc='lower right', fontsize='small')
+    plt.tight_layout()
+    # plt.show()
+    plt.savefig(os.path.join(out_dir, name), dpi = 600)
+    plt.close(fig)
+    return
