@@ -273,5 +273,5 @@ def evaluate():
 if __name__ == '__main__':
     print('Detecting ...')
     detect()
-    #print('Evaluating ...')
-    #evaluate()
+    print('Evaluating ...')
+    evaluate()
