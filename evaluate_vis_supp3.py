@@ -100,7 +100,7 @@ def evaluate():
     nocs_iou_aps_new = nocs_results_new['iou_aps'][1, :]
     nocs_pose_aps_new = nocs_results_new['pose_aps'][1, :, :]
     nocs_iou_aps_nocs = nocs_results_nocs['iou_aps'][1, :]
-    nocs_pose_aps_nocs = nocs_pose_aps_nocs['pose_aps'][1, :, :]
+    nocs_pose_aps_nocs = nocs_results_nocs['pose_aps'][1, :, :]
     iou_aps = np.concatenate((nocs_iou_aps[None, :], nocs_iou_aps_new[None, :], nocs_iou_aps_nocs[None, :]), axis=0)
     pose_aps = np.concatenate((nocs_pose_aps[None, :, :], nocs_pose_aps_new[None, :, :], nocs_pose_aps_nocs[None, :, :]), axis=0)
     plot_mAP4(iou_aps, pose_aps, result_dir, iou_thres_list, degree_thres_list, shift_thres_list, name = '1.png')
@@ -110,7 +110,7 @@ def evaluate():
     nocs_iou_aps_new = nocs_results_new['iou_aps'][2, :]
     nocs_pose_aps_new = nocs_results_new['pose_aps'][2, :, :]
     nocs_iou_aps_nocs = nocs_results_nocs['iou_aps'][2, :]
-    nocs_pose_aps_nocs = nocs_pose_aps_nocs['pose_aps'][2, :, :]
+    nocs_pose_aps_nocs = nocs_results_nocs['pose_aps'][2, :, :]
     iou_aps = np.concatenate((nocs_iou_aps[None, :], nocs_iou_aps_new[None, :], nocs_iou_aps_nocs[None, :]), axis=0)
     pose_aps = np.concatenate((nocs_pose_aps[None, :, :], nocs_pose_aps_new[None, :, :], nocs_pose_aps_nocs[None, :, :]), axis=0)
     plot_mAP4(iou_aps, pose_aps, result_dir, iou_thres_list, degree_thres_list, shift_thres_list, name = '2.png')
@@ -120,7 +120,7 @@ def evaluate():
     nocs_iou_aps_new = nocs_results_new['iou_aps'][3, :]
     nocs_pose_aps_new = nocs_results_new['pose_aps'][3, :, :]
     nocs_iou_aps_nocs = nocs_results_nocs['iou_aps'][3, :]
-    nocs_pose_aps_nocs = nocs_pose_aps_nocs['pose_aps'][3, :, :]
+    nocs_pose_aps_nocs = nocs_results_nocs['pose_aps'][3, :, :]
     iou_aps = np.concatenate((nocs_iou_aps[None, :], nocs_iou_aps_new[None, :], nocs_iou_aps_nocs[None, :]), axis=0)
     pose_aps = np.concatenate((nocs_pose_aps[None, :, :], nocs_pose_aps_new[None, :, :], nocs_pose_aps_nocs[None, :, :]), axis=0)
     plot_mAP4(iou_aps, pose_aps, result_dir, iou_thres_list, degree_thres_list, shift_thres_list, name = '3.png')
@@ -130,7 +130,7 @@ def evaluate():
     nocs_iou_aps_new = nocs_results_new['iou_aps'][4, :]
     nocs_pose_aps_new = nocs_results_new['pose_aps'][4, :, :]
     nocs_iou_aps_nocs = nocs_results_nocs['iou_aps'][4, :]
-    nocs_pose_aps_nocs = nocs_pose_aps_nocs['pose_aps'][4, :, :]
+    nocs_pose_aps_nocs = nocs_results_nocs['pose_aps'][4, :, :]
     iou_aps = np.concatenate((nocs_iou_aps[None, :], nocs_iou_aps_new[None, :], nocs_iou_aps_nocs[None, :]), axis=0)
     pose_aps = np.concatenate((nocs_pose_aps[None, :, :], nocs_pose_aps_new[None, :, :], nocs_pose_aps_nocs[None, :, :]), axis=0)
     plot_mAP4(iou_aps, pose_aps, result_dir, iou_thres_list, degree_thres_list, shift_thres_list, name = '4.png')
@@ -140,7 +140,7 @@ def evaluate():
     nocs_iou_aps_new = nocs_results_new['iou_aps'][5, :]
     nocs_pose_aps_new = nocs_results_new['pose_aps'][5, :, :]
     nocs_iou_aps_nocs = nocs_results_nocs['iou_aps'][5, :]
-    nocs_pose_aps_nocs = nocs_pose_aps_nocs['pose_aps'][5, :, :]
+    nocs_pose_aps_nocs = nocs_results_nocs['pose_aps'][5, :, :]
     iou_aps = np.concatenate((nocs_iou_aps[None, :], nocs_iou_aps_new[None, :], nocs_iou_aps_nocs[None, :]), axis=0)
     pose_aps = np.concatenate((nocs_pose_aps[None, :, :], nocs_pose_aps_new[None, :, :], nocs_pose_aps_nocs[None, :, :]), axis=0)
     plot_mAP4(iou_aps, pose_aps, result_dir, iou_thres_list, degree_thres_list, shift_thres_list, name = '5.png')
@@ -150,7 +150,7 @@ def evaluate():
     nocs_iou_aps_new = nocs_results_new['iou_aps'][6, :]
     nocs_pose_aps_new = nocs_results_new['pose_aps'][6, :, :]
     nocs_iou_aps_nocs = nocs_results_nocs['iou_aps'][6, :]
-    nocs_pose_aps_nocs = nocs_pose_aps_nocs['pose_aps'][6, :, :]
+    nocs_pose_aps_nocs = nocs_results_nocs['pose_aps'][6, :, :]
     iou_aps = np.concatenate((nocs_iou_aps[None, :], nocs_iou_aps_new[None, :], nocs_iou_aps_nocs[None, :]), axis=0)
     pose_aps = np.concatenate((nocs_pose_aps[None, :, :], nocs_pose_aps_new[None, :, :], nocs_pose_aps_nocs[None, :, :]), axis=0)
     plot_mAP4(iou_aps, pose_aps, result_dir, iou_thres_list, degree_thres_list, shift_thres_list, name = '6.png')
