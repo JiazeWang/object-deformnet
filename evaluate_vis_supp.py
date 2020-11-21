@@ -81,7 +81,7 @@ def evaluate():
     result_dir = "vis"
 
 
-    pkl_path = os.path.join('results/eval_T5_f_STAGE3_R_CAMERA_2_1_0.5/', 'mAP_Acc.pkl')
+    pkl_path = os.path.join('results/T5_2105_three_stage_real_val/', 'mAP_Acc.pkl')
     with open(pkl_path, 'rb') as f:
         nocs_results = cPickle.load(f)
 
