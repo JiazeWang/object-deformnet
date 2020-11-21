@@ -77,13 +77,13 @@ def evaluate():
 
 
 
-    pkl_path = os.path.join('results/eval_spd_real/', 'mAP_Acc.pkl')
+    pkl_path = os.path.join('results/final_transformers/', 'mAP_Acc.pkl')
     with open(pkl_path, 'rb') as f:
         nocs_results = cPickle.load(f)
     nocs_iou_aps = nocs_results['iou_aps'][1, :]
     nocs_pose_aps = nocs_results['pose_aps'][1, :, :]
 
-    pkl_path_new = os.path.join('results/eval_spd_real/', 'mAP_Acc.pkl')
+    pkl_path_new = os.path.join('results/final_transformers/', 'mAP_Acc.pkl')
     with open(pkl_path_new, 'rb') as f:
         nocs_results_new = cPickle.load(f)
     nocs_iou_aps_new = nocs_results_new['iou_aps'][1, :]
