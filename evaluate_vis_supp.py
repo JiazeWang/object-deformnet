@@ -95,8 +95,9 @@ def evaluate():
 
 
     iou_aps = np.concatenate((nocs_iou_aps, nocs_iou_aps_new), axis=0)
+    print("iou_aps:",iou_aps.shape)
     pose_aps = np.concatenate((nocs_pose_aps, nocs_pose_aps_new), axis=0)
-
+    print("pose_aps:",pose_aps.shape)
 
     plot_mAP3(iou_aps, pose_aps, result_dir, iou_thres_list, degree_thres_list, shift_thres_list, name = 'first.png')
 
