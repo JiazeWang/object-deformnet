@@ -87,7 +87,7 @@ def evaluate():
         nocs_results = cPickle.load(f)
 
 
-    pkl_path_new = os.path.join('results/real_spd/', 'mAP_Acc.pkl')
+    pkl_path_new = os.path.join('supp/real_spd/', 'mAP_Acc.pkl')
     with open(pkl_path_new, 'rb') as f:
         nocs_results_new = cPickle.load(f)
 
