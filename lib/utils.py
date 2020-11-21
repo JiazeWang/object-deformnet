@@ -931,7 +931,7 @@ def plot_mAP4(iou_aps, pose_aps, out_dir, iou_thres_list, degree_thres_list, shi
 
     #labels = ['bottle', 'bowl', 'camera', 'can', 'laptop', 'mug', 'mean']
     labels = ['Ours', 'SPD', 'NOCS']
-    colors = ['tab:blue', 'tab:pink', 'tab:gray']
+    colors = ['tab:pink', 'tab:blue', 'tab:gray']
     #styles = ['-', '-', '-', '-', '-', '-', '--']
     styles = ['-', '-', '-']
     fig, (ax_iou, ax_degree, ax_shift) = plt.subplots(1, 3, figsize=(8, 3.5))
