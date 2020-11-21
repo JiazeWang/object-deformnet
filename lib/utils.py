@@ -883,7 +883,7 @@ def plot_mAP3(iou_aps, pose_aps, out_dir, iou_thres_list, degree_thres_list, shi
     labels = ['Ours', 'SPD']
     colors = ['tab:blue', 'tab:gray']
     #styles = ['-', '-', '-', '-', '-', '-', '--']
-    styles = ['-', '--']
+    styles = ['-', '-']
     fig, (ax_iou, ax_degree, ax_shift) = plt.subplots(1, 3, figsize=(8, 3.5))
     # IoU subplot
     ax_iou.set_title('3D IoU', fontsize=10)
