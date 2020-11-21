@@ -99,7 +99,7 @@ def evaluate():
     nocs_pose_aps = nocs_results['pose_aps'][1, :, :]
     nocs_iou_aps_new = nocs_results_new['iou_aps'][1, :]
     nocs_pose_aps_new = nocs_results_new['pose_aps'][1, :, :]
-    nocs_iou_aps_nocs = nocs_results_nocs[1, :, :]
+    nocs_iou_aps_nocs = nocs_results_nocs[1, :]
     nocs_pose_aps_nocs = nocs_pose_aps_nocs['pose_aps'][1, :, :]
     iou_aps = np.concatenate((nocs_iou_aps[None, :], nocs_iou_aps_new[None, :], nocs_iou_aps_nocs[None, :]), axis=0)
     pose_aps = np.concatenate((nocs_pose_aps[None, :, :], nocs_pose_aps_new[None, :, :], nocs_pose_aps_nocs[None, :, :]), axis=0)
@@ -109,7 +109,7 @@ def evaluate():
     nocs_pose_aps = nocs_results['pose_aps'][2, :, :]
     nocs_iou_aps_new = nocs_results_new['iou_aps'][2, :]
     nocs_pose_aps_new = nocs_results_new['pose_aps'][2, :, :]
-    nocs_iou_aps_nocs = nocs_results_nocs[2, :, :]
+    nocs_iou_aps_nocs = nocs_results_nocs[2, :]
     nocs_pose_aps_nocs = nocs_pose_aps_nocs['pose_aps'][2, :, :]
     iou_aps = np.concatenate((nocs_iou_aps[None, :], nocs_iou_aps_new[None, :], nocs_iou_aps_nocs[None, :]), axis=0)
     pose_aps = np.concatenate((nocs_pose_aps[None, :, :], nocs_pose_aps_new[None, :, :], nocs_pose_aps_nocs[None, :, :]), axis=0)
@@ -119,7 +119,7 @@ def evaluate():
     nocs_pose_aps = nocs_results['pose_aps'][3, :, :]
     nocs_iou_aps_new = nocs_results_new['iou_aps'][3, :]
     nocs_pose_aps_new = nocs_results_new['pose_aps'][3, :, :]
-    nocs_iou_aps_nocs = nocs_results_nocs[3, :, :]
+    nocs_iou_aps_nocs = nocs_results_nocs[3, :]
     nocs_pose_aps_nocs = nocs_pose_aps_nocs['pose_aps'][3, :, :]
     iou_aps = np.concatenate((nocs_iou_aps[None, :], nocs_iou_aps_new[None, :], nocs_iou_aps_nocs[None, :]), axis=0)
     pose_aps = np.concatenate((nocs_pose_aps[None, :, :], nocs_pose_aps_new[None, :, :], nocs_pose_aps_nocs[None, :, :]), axis=0)
@@ -129,7 +129,7 @@ def evaluate():
     nocs_pose_aps = nocs_results['pose_aps'][4, :, :]
     nocs_iou_aps_new = nocs_results_new['iou_aps'][4, :]
     nocs_pose_aps_new = nocs_results_new['pose_aps'][4, :, :]
-    nocs_iou_aps_nocs = nocs_results_nocs[4, :, :]
+    nocs_iou_aps_nocs = nocs_results_nocs[4, :]
     nocs_pose_aps_nocs = nocs_pose_aps_nocs['pose_aps'][4, :, :]
     iou_aps = np.concatenate((nocs_iou_aps[None, :], nocs_iou_aps_new[None, :], nocs_iou_aps_nocs[None, :]), axis=0)
     pose_aps = np.concatenate((nocs_pose_aps[None, :, :], nocs_pose_aps_new[None, :, :], nocs_pose_aps_nocs[None, :, :]), axis=0)
@@ -139,7 +139,7 @@ def evaluate():
     nocs_pose_aps = nocs_results['pose_aps'][5, :, :]
     nocs_iou_aps_new = nocs_results_new['iou_aps'][5, :]
     nocs_pose_aps_new = nocs_results_new['pose_aps'][5, :, :]
-    nocs_iou_aps_nocs = nocs_results_nocs[5, :, :]
+    nocs_iou_aps_nocs = nocs_results_nocs[5, :]
     nocs_pose_aps_nocs = nocs_pose_aps_nocs['pose_aps'][5, :, :]
     iou_aps = np.concatenate((nocs_iou_aps[None, :], nocs_iou_aps_new[None, :], nocs_iou_aps_nocs[None, :]), axis=0)
     pose_aps = np.concatenate((nocs_pose_aps[None, :, :], nocs_pose_aps_new[None, :, :], nocs_pose_aps_nocs[None, :, :]), axis=0)
@@ -149,7 +149,7 @@ def evaluate():
     nocs_pose_aps = nocs_results['pose_aps'][6, :, :]
     nocs_iou_aps_new = nocs_results_new['iou_aps'][6, :]
     nocs_pose_aps_new = nocs_results_new['pose_aps'][6, :, :]
-    nocs_iou_aps_nocs = nocs_results_nocs[6, :, :]
+    nocs_iou_aps_nocs = nocs_results_nocs[6, :]
     nocs_pose_aps_nocs = nocs_pose_aps_nocs['pose_aps'][6, :, :]
     iou_aps = np.concatenate((nocs_iou_aps[None, :], nocs_iou_aps_new[None, :], nocs_iou_aps_nocs[None, :]), axis=0)
     pose_aps = np.concatenate((nocs_pose_aps[None, :, :], nocs_pose_aps_new[None, :, :], nocs_pose_aps_nocs[None, :, :]), axis=0)
