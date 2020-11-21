@@ -90,7 +90,7 @@ def evaluate():
     nocs_pose_aps_new = nocs_results_new['pose_aps'][1, :, :]
 
 
-    iou_aps = np.concatenate((nocs_iou_aps, nocs_pose_aps_new), axis=0)
+    iou_aps = np.concatenate((nocs_iou_aps, nocs_iou_aps_new), axis=0)
     pose_aps = np.concatenate((nocs_pose_aps, nocs_pose_aps_new), axis=0)
 
 
