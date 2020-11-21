@@ -893,7 +893,7 @@ def plot_mAP3(iou_aps, pose_aps, out_dir, iou_thres_list, degree_thres_list, shi
     ax_iou.set_xlim(0, 100)
     ax_iou.xaxis.set_ticks([0, 25, 50, 75, 100])
     ax_iou.grid()
-    for i in range(1, iou_aps.shape[0]):
+    for i in range(0, iou_aps.shape[0]):
         ax_iou.plot(100*np.array(iou_thres_list), 100*iou_aps[i, :],
                     color=colors[i-1], linestyle=styles[i-1], label=labels[i-1])
     # rotation subplot
