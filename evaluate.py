@@ -10,8 +10,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torchvision.transforms as transforms
-#from lib.network_t1 import DeformNet
-from lib.network import DeformNet
+from lib.network_t1 import DeformNet
+#from lib.network import DeformNet
 from lib.align import estimateSimilarityTransform
 from lib.utils import load_depth, get_bbox, compute_mAP, plot_mAP
 
@@ -21,7 +21,8 @@ parser.add_argument('--data', type=str, default='real_test', help='val, real_tes
 parser.add_argument('--data_dir', type=str, default='data', help='data directory')
 parser.add_argument('--n_cat', type=int, default=6, help='number of object categories')
 parser.add_argument('--nv_prior', type=int, default=1024, help='number of vertices in shape priors')
-parser.add_argument('--model', type=str, default='results/real/model_50.pth', help='resume from saved model')
+#parser.add_argument('--model', type=str, default='results/real/model_50.pth', help='resume from saved model')
+parser.add_argument('--model', type=str, default='TestPoseEstimation/lib/real_50.pth', help='resume from saved model')
 parser.add_argument('--n_pts', type=int, default=1024, help='number of foreground points')
 parser.add_argument('--img_size', type=int, default=192, help='cropped image size')
 parser.add_argument('--gpu', type=str, default='1', help='GPU to use')
@@ -56,9 +57,9 @@ def detect():
     #os.environ['CUDA_VISIBLE_DEVICES'] = opt.gpu
     estimator = DeformNet(opt.n_cat, opt.nv_prior)
     estimator.cuda()
-    estimator.load_state_dict(torch.load(opt.model))
-    estimator = nn.DataParallel(estimator)
     #estimator.load_state_dict(torch.load(opt.model))
+    estimator = nn.DataParallel(estimator)
+    estimator.load_state_dict(torch.load(opt.model))
     estimator.eval()
     # get test data list
     img_list = [os.path.join(file_path.split('/')[0], line.rstrip('\n'))
