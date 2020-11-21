@@ -11,7 +11,7 @@ from lib.utils import load_depth, get_bbox, compute_mAP, plot_mAP4
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--data', type=str, default='val', help='val, real_test')
+parser.add_argument('--data', type=str, default='real_test', help='val, real_test')
 parser.add_argument('--data_dir', type=str, default='data', help='data directory')
 parser.add_argument('--n_cat', type=int, default=6, help='number of object categories')
 parser.add_argument('--nv_prior', type=int, default=1024, help='number of vertices in shape priors')
@@ -78,18 +78,16 @@ def evaluate():
     shift_thres_list = [i / 2 for i in range(21)]
     iou_thres_list = [i / 100 for i in range(101)]
     # predictions
-    result_dir = "vis_camera_three"
+    result_dir = "vis_real_three"
 
 
     #pkl_path = os.path.join('results/eval_T5_f_STAGE3_R_CAMERA_2_1_0.5/', 'mAP_Acc.pkl')
-    #pkl_path = os.path.join('supp/real_ours/', 'mAP_Acc.pkl')
-    pkl_path = os.path.join('supp/val/', 'mAP_Acc.pkl')
+    pkl_path = os.path.join('supp/real_ours/', 'mAP_Acc.pkl')
     with open(pkl_path, 'rb') as f:
         nocs_results = cPickle.load(f)
 
 
-    #pkl_path_new = os.path.join('supp/real_spd/', 'mAP_Acc.pkl')
-    pkl_path_new = os.path.join('results/eval_spd_camera/', 'mAP_Acc.pkl')
+    pkl_path_new = os.path.join('supp/real_spd/', 'mAP_Acc.pkl')
     with open(pkl_path_new, 'rb') as f:
         nocs_results_new = cPickle.load(f)
 
