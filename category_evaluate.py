@@ -176,7 +176,7 @@ def train_net():
         strict_acc = 100 * (strict_success / total_count)
         easy_acc = 100 * (easy_success / total_count)
         iou_acc = 100 * (iou_success / total_count)
-        category_cd_loss = 1000 / 5*category_cd_loss / total_count
+        category_cd_loss = 1000 * category_cd_loss / total_count
         print("total_count", total_count)
         for i in range(opt.n_cat):
             logger.info('{} accuracies:'.format(val_dataset.cat_names[i]))
@@ -196,6 +196,7 @@ def train_net():
         logger.info('Epoch {0:02d} test average loss: {1:06f}'.format(epoch, val_loss))
         logger.info('Overall accuracies:')
         logger.info('5^o 5cm: {:4f} 10^o 5cm: {:4f} IoU: {:4f}'.format(strict_acc, easy_acc, iou_acc))
+        logg
         logger.info('>>>>>>>>----------Epoch {:02d} test finish---------<<<<<<<<'.format(epoch))
         # save model after each epoch
         logger.info('>>>>>>>>----------Epoch {:02d} model saved---------<<<<<<<<'.format(epoch))
