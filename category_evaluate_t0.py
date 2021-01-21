@@ -57,11 +57,12 @@ def train_net():
     # model & loss
     estimator = DeformNet(opt.n_cat, opt.nv_prior)
     estimator.cuda()
-    estimator = nn.DataParallel(estimator)
+
     criterion = Loss(opt.corr_wt, opt.cd_wt, opt.entropy_wt, opt.deform_wt)
     if opt.resume_model != '':
         estimator.load_state_dict(torch.load(opt.resume_model))
     # dataset
+    estimator = nn.DataParallel(estimator)
     train_dataset = PoseDataset(opt.dataset, 'train', opt.data_dir, opt.n_pts, opt.img_size)
     val_dataset = PoseDataset(opt.dataset, 'test', opt.data_dir, opt.n_pts, opt.img_size)
     # start training
