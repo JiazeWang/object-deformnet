@@ -28,12 +28,12 @@ parser.add_argument('--img_size', type=int, default=192, help='cropped image siz
 parser.add_argument('--batch_size', type=int, default=36, help='batch size')
 #parser.add_argument('--batch_size', type=int, default=48, help='batch size')
 parser.add_argument('--num_workers', type=int, default=24, help='number of data loading workers')
-parser.add_argument('--gpu', type=str, default='1', help='GPU to use')
+parser.add_argument('--gpu', type=str, default='2', help='GPU to use')
 parser.add_argument('--lr', type=float, default=0.0001, help='initial learning rate')
 parser.add_argument('--start_epoch', type=int, default=1, help='which epoch to start')
 parser.add_argument('--max_epoch', type=int, default=1, help='max number of epochs to train')
 parser.add_argument('--resume_model', type=str, default='rebuttal/r3.pth', help='resume from saved model')
-parser.add_argument('--result_dir', type=str, default='rebuttal/t3_2', help='directory to save train results')
+parser.add_argument('--result_dir', type=str, default='rebuttal/t3_1', help='directory to save train results')
 opt = parser.parse_args()
 
 opt.decay_epoch = [0, 15, 30, 45, 60]
