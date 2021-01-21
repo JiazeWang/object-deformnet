@@ -9,7 +9,7 @@ import torch.nn.functional as F
 import tensorflow as tf
 #from lib.network_t4_psp import DeformNet
 #from lib.network_t5_r import DeformNet
-from lib.network_t1 import DeformNet
+from lib.network import DeformNet
 #from lib.network_t5 import DeformNet
 from lib.loss import Loss
 from data.pose_dataset import PoseDataset
@@ -32,8 +32,8 @@ parser.add_argument('--gpu', type=str, default='0', help='GPU to use')
 parser.add_argument('--lr', type=float, default=0.0001, help='initial learning rate')
 parser.add_argument('--start_epoch', type=int, default=1, help='which epoch to start')
 parser.add_argument('--max_epoch', type=int, default=1, help='max number of epochs to train')
-parser.add_argument('--resume_model', type=str, default='', help='resume from saved model')
-parser.add_argument('--result_dir', type=str, default='results/T5_2105_three_stage_eval', help='directory to save train results')
+parser.add_argument('--resume_model', type=str, default='results/real/modle_50.pth', help='resume from saved model')
+parser.add_argument('--result_dir', type=str, default='rebuttal/network', help='directory to save train results')
 opt = parser.parse_args()
 
 opt.decay_epoch = [0, 15, 30, 45, 60]
