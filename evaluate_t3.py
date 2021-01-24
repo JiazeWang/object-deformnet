@@ -31,11 +31,11 @@ mean_shapes = np.load('assets/mean_points_emb.npy')
 assert opt.data in ['val', 'real_test']
 if opt.data == 'val':
     result_dir = 'results/'+str(opt.model).split('/')[1]+'_val-1'
-    result_dir = 'rebuttal/val/ours'
+    result_dir = 'rebuttal/val/ours_new'
     file_path = 'CAMERA/val_list.txt'
     cam_fx, cam_fy, cam_cx, cam_cy = 577.5, 577.5, 319.5, 239.5
 else:
-    result_dir = 'rebuttal/real_ours'
+    result_dir = 'rebuttal/real_ours_new'
     file_path = 'Real/test_list.txt'
     cam_fx, cam_fy, cam_cx, cam_cy = 591.0125, 590.16775, 322.525, 244.11084
 
@@ -75,7 +75,7 @@ def detect():
         raw_depth = load_depth(img_path)
         # load mask-rcnn detection results
         img_path_parsing = img_path.split('/')
-        mrcnn_path = os.path.join('results/mrcnn_results', opt.data, 'results_{}_{}_{}.pkl'.format(
+        mrcnn_path = os.path.join('results/mrcnn_results_p', opt.data, 'results_{}_{}_{}.pkl'.format(
             opt.data.split('_')[-1], img_path_parsing[-2], img_path_parsing[-1]))
         with open(mrcnn_path, 'rb') as f:
             mrcnn_result = cPickle.load(f)
